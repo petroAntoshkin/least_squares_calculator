@@ -12,14 +12,17 @@ class MyLocalization{
     en.putIfAbsent('title', () => 'Least Squares Calculator');
     en.putIfAbsent('calculateButtonName', () => 'Add &\nCalculate');
     en.putIfAbsent('nanMessage', () => 'Is not a Number');
+    en.putIfAbsent('nanData', () => 'No data');
     ///ua
     ua.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     ua.putIfAbsent('calculateButtonName', () => 'Додати\nзначення');
     ua.putIfAbsent('nanMessage', () => 'Результат не є числом');
+    en.putIfAbsent('nanData', () => 'Відсутні дані');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('calculateButtonName', () => 'Добавить\nзначения');
     ru.putIfAbsent('nanMessage', () => 'Is not a Number');
+    en.putIfAbsent('nanData', () => 'Нет данных');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('ua', () => ua);

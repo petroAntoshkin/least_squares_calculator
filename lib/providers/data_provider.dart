@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/localization.dart';
+import 'package:least_squares/my_translations.dart';
 import 'package:least_squares/utils/string_utils.dart';
 
 class DataProvider extends ChangeNotifier{
@@ -11,12 +11,9 @@ class DataProvider extends ChangeNotifier{
   String _nanString;
   String _locName = 'en';
 
-  void initData(String locale){
-    _locName = locale;
-    _nanString = _nanString = MyLocalization().getLocale(_locName, 'nanMessage');
-    _xValues = [];
-    _yValues = [];
-    _initSum();
+  DataProvider(){
+    _nanString = _nanString = MyTranslations().getLocale(_locName, 'nanMessage');
+    _onlyDataClean();
   }
 
   String getLocale(){
@@ -28,7 +25,18 @@ class DataProvider extends ChangeNotifier{
   }
 
   void _initSum() {
-    _a = _b = /*_currentX = _currentY =*/ 0;
+    _a = _b = 0;
+  }
+  void _onlyDataClean() {
+    _xValues = [];
+    _yValues = [];
+    _initSum();
+  }
+
+  void clearAllData(){
+    // print('clearAllData!!!!!!!!!!!!!');
+    _onlyDataClean();
+    notifyListeners();
   }
 
   bool addMoreValues(String xText, String yText) {
@@ -75,6 +83,7 @@ class DataProvider extends ChangeNotifier{
   String getA(){
     return _a.isNaN ? _nanString : 'A = $_a';
   }
+
   String getB(){
     return _b.isNaN ? _nanString : 'B = $_b';
   }

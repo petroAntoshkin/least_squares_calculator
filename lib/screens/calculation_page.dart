@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/data_provider.dart';
-import 'package:least_squares/localization.dart';
+import 'package:least_squares/elements/values_pair.dart';
+import 'package:least_squares/providers/data_provider.dart';
+// import 'package:least_squares/my_translations.dart';
 
-import 'package:least_squares/styles_and_presets.dart';
+//
+// import 'package:least_squares/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 class CalculationPage extends StatefulWidget {
@@ -10,8 +12,7 @@ class CalculationPage extends StatefulWidget {
 }
 
 class _CalculationPageState extends State<CalculationPage> {
-  String _loc;
-  double _currentX, _currentY;
+  // double _currentX, _currentY;
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
 
@@ -21,69 +22,28 @@ class _CalculationPageState extends State<CalculationPage> {
   @override
   void initState() {
     super.initState();
-    _loc = 'en'; //Localizations.localeOf(context).languageCode;
-    _controllerX.text = _currentX.toString();
-    _controllerY.text = _currentY.toString();
-    _clearControllers();
+    // _loc = 'en'; //Localizations.localeOf(context).languageCode;
+    _controllerX.text = '';//_currentX.toString();
+    _controllerY.text = '';//_currentY.toString();
+    // _clearControllers();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Provider.of<DataProvider>(context).initData(_loc);
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   // Provider.of<DataProvider>(context).initData(_loc);
+  // }
 
   @override
   Widget build(BuildContext context) {
+    int _dataLen = Provider.of<DataProvider>(context).getValuesLenght();
+    // print('CalculationPage build $_dataLen');
     return Center(
       child: Stack(children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Container(
-              color: Colors.red,
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.09,
-                    width: MediaQuery.of(context).size.width * 0.47,
-                    child: _valueText(Provider.of<DataProvider>(context).getA(),
-                        Presets.resultsValueStyle),
-                  ),
-                  Expanded(child: Container()),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.09,
-                    width: MediaQuery.of(context).size.width * 0.47,
-                    child: _valueText(Provider.of<DataProvider>(context).getB(),
-                        Presets.resultsValueStyle),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: Container(
-              color: Colors.green,
-              child: LimitedBox(
-                  maxHeight: 200,
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Flexible(
-                      child: ListView(
-                        children: [
-                          for (int i = 0; i < Provider.of<DataProvider>(context, listen: false).getValuesLenght(); i++)
-                            _oneValueRow(i)
-                        ],
-                      ),
-                    ),
-                  ])),
-            ),
-          ),
-        ),
+        ListView(children: [
+          for (int i = 0; i < _dataLen; i++)
+            ValuesPair(pairIndex: i)
+        ]),
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
@@ -100,20 +60,29 @@ class _CalculationPageState extends State<CalculationPage> {
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
                         // margin: EdgeInsets.all(2.0),
-                        child: Text(
-                          MyLocalization()
-                              .getLocale(_loc, 'calculateButtonName'),
-                          style: TextStyle(fontSize: 15.0),
-                          textAlign: TextAlign.center,
+                        child: Row(
+                          children: [
+                            // Text(
+                            //   '+',
+                            //   style: TextStyle(fontSize: 25.0),
+                            //   textAlign: TextAlign.center,
+                            // ),
+                            Icon(Icons.calculate),
+                          ],
                         ),
                       ),
                       color: Colors.red,
                       highlightedBorderColor: Colors.blue,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      onPressed: () => Provider.of<DataProvider>(context,
-                              listen: false)
-                          .addMoreValues(_controllerX.text, _controllerY.text),
+                      onPressed: () {
+                        print(
+                            'x = ${_controllerX.text} y = ${_controllerY.text}');
+                        Provider.of<DataProvider>(context, listen: false)
+                            .addMoreValues(
+                                _controllerX.text, _controllerY.text);
+                        _clearControllers();
+                      },
                     ),
                   ),
                   SizedBox(
@@ -142,47 +111,26 @@ class _CalculationPageState extends State<CalculationPage> {
   void _clearControllers() {
     _controllerX.clear();
     _controllerY.clear();
-    _controllerX.text = '0';
-    _controllerY.text = '0';
+    // _controllerX.text = '';
+    // _controllerY.text = '';
   }
 
   Widget _editTextField(TextEditingController controller, String prefix) {
-    return TextField(
-      decoration: InputDecoration(
-        filled: true,
-        labelText: prefix,
-      ),
-    );
-  }
-
-  Widget _valueText(String text, TextStyle style) {
     return Container(
-      padding: EdgeInsets.all(4.0),
-      child: Card(
-          color: Colors.white,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 7.0),
-            child: Text(text,),
-          )),
-    );
-  }
-
-  Widget _oneValueRow(int index) {
-    return Card(
-      color: Colors.white38,
-      child: Row(
-        children: [
-          IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () => Provider.of<DataProvider>(context, listen: false)
-                  .removeOneValue(index)),
-          _valueText(
-              'X = ${Provider.of<DataProvider>(context, listen: false).getValueX(index)}',
-              Presets.currrentValueStyle),
-          _valueText(
-              'Y = ${Provider.of<DataProvider>(context, listen: false).getValueY(index)}',
-              Presets.currrentValueStyle),
-        ],
+      decoration: BoxDecoration(),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: prefix,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff777777), width: 1.0),
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff333333), width: 1.0),
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+        ),
       ),
     );
   }

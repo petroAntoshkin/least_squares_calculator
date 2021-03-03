@@ -8,7 +8,7 @@ import '../styles_and_presets.dart';
 // ignore: must_be_immutable
 class ValuesPair extends StatelessWidget{
   int pairIndex;
-  double _dragStartX;
+  // double _dragStartX;
   ValuesPair({@required this.pairIndex});
   @override
   Widget build(BuildContext context){
@@ -28,10 +28,10 @@ class ValuesPair extends StatelessWidget{
                 onPressed: () => Provider.of<DataProvider>(context, listen: false)
                     .removeOneValue(pairIndex)),
             ValueText(text:
-                'X = ${Provider.of<DataProvider>(context, listen: false).getValueX(pairIndex)}',
+                'X = ${Provider.of<DataProvider>(context, listen: false).getValue('x', pairIndex)}',
                 style: Presets.currrentValueStyle),
             ValueText(text:
-                'Y = ${Provider.of<DataProvider>(context, listen: false).getValueY(pairIndex)}',
+                'Y = ${Provider.of<DataProvider>(context, listen: false).getValue('y', pairIndex)}',
                 style: Presets.currrentValueStyle),
           ],
         ),

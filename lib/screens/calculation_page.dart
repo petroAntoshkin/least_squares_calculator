@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:least_squares/elements/values_pair.dart';
 import 'package:least_squares/providers/data_provider.dart';
@@ -36,7 +37,7 @@ class _CalculationPageState extends State<CalculationPage> {
 
   @override
   Widget build(BuildContext context) {
-    int _dataLen = Provider.of<DataProvider>(context).getValuesLenght();
+    int _dataLen = Provider.of<DataProvider>(context).getValuesLength();
     // print('CalculationPage build $_dataLen');
     return Center(
       child: Stack(children: [
@@ -54,28 +55,28 @@ class _CalculationPageState extends State<CalculationPage> {
                 children: [
                   // ignore: deprecated_member_use
                   Container(
-                    padding: EdgeInsets.all(5.0),
+                    padding: EdgeInsets.all(10.0),
                     // ignore: deprecated_member_use
-                    child: OutlineButton(
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0),
-                        // margin: EdgeInsets.all(2.0),
-                        child: Row(
-                          children: [
-                            // Text(
-                            //   '+',
-                            //   style: TextStyle(fontSize: 25.0),
-                            //   textAlign: TextAlign.center,
-                            // ),
-                            Icon(Icons.calculate),
-                          ],
+                    child: GestureDetector(
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        // color: Colors.white54,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white60,
+                          border: Border.all(
+                            color: Colors.black54,
+                            width: 1.0
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(4.0),
+                          // margin: EdgeInsets.all(2.0),
+                          child: Icon(Icons.calculate),
                         ),
                       ),
-                      color: Colors.red,
-                      highlightedBorderColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      onPressed: () {
+                      onTap: () {
                         print(
                             'x = ${_controllerX.text} y = ${_controllerY.text}');
                         Provider.of<DataProvider>(context, listen: false)
@@ -111,17 +112,18 @@ class _CalculationPageState extends State<CalculationPage> {
   void _clearControllers() {
     _controllerX.clear();
     _controllerY.clear();
-    // _controllerX.text = '';
-    // _controllerY.text = '';
   }
 
   Widget _editTextField(TextEditingController controller, String prefix) {
     return Container(
       decoration: BoxDecoration(),
       child: TextField(
+        keyboardType: TextInputType.phone,
         controller: controller,
         decoration: InputDecoration(
           hintText: prefix,
+          fillColor: Colors.white54,
+          filled: true,
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xff777777), width: 1.0),
             borderRadius: BorderRadius.circular(6.0),

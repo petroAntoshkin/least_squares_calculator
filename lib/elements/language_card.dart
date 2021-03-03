@@ -4,6 +4,7 @@ import 'package:least_squares/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
+// ignore: must_be_immutable
 class LanguageCard extends StatelessWidget {
   LanguageModel languageModel;
 
@@ -22,7 +23,7 @@ class LanguageCard extends StatelessWidget {
         color: Colors.white54,
         child: GestureDetector(
           onTap: () => Provider.of<DataProvider>(context, listen: false)
-              .setLocale(languageModel.prefix),
+              .changeLocale(languageModel.prefix),
           child: Padding(
             padding: const EdgeInsets.all(6.0),
             child: Row(

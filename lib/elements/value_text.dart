@@ -13,7 +13,10 @@ class ValueText extends StatelessWidget{
           color: Colors.white,
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 7.0),
-            child: Text(text,),
+            child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(text,)
+            ),
           )),
     );
   }

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:least_squares/elements/appbar_title.dart';
-import 'package:least_squares/my_translations.dart';
+import 'package:least_squares/mocks/my_translations.dart';
 // import 'package:least_squares/my_translations.dart';
 import 'package:least_squares/screens/calculation_page.dart';
 import 'package:least_squares/screens/draw_page.dart';

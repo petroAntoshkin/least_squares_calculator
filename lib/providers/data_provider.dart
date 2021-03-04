@@ -98,7 +98,8 @@ class DataProvider extends ChangeNotifier{
 
   bool addMoreValues(String xText, String yText) {
     bool _err = true;
-    String _x = _replaceLoop(xText), _y = _replaceLoop(yText);
+    String _x = _replaceLoop(xText.isNotEmpty ? xText: '0'),
+        _y = _replaceLoop(yText.isNotEmpty ? yText : '0');
 
     _x = StringUtils.addLeadNul(_x);
     _y = StringUtils.addLeadNul(_y);
@@ -130,9 +131,9 @@ class DataProvider extends ChangeNotifier{
       _sumXY += _allValues['x'][i] * _allValues['y'][i];
       _sumXSquare += _allValues['x'][i] * _allValues['x'][i];
     }
-    _a = (_sumY * _sumXSquare - _sumX * _sumXY) /
+    _b = (_sumY * _sumXSquare - _sumX * _sumXY) /
         (_len * _sumXSquare - _sumX * _sumX);
-    _b = (_len * _sumXY - _sumX * _sumY) /
+    _a = (_len * _sumXY - _sumX * _sumY) /
         (_len * _sumXSquare - _sumX * _sumX);
   }
 

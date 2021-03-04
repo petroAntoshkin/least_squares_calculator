@@ -24,7 +24,7 @@ class DrawPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final paintDots = Paint()
-      ..color = Colors.red
+      ..color = Colors.green
       ..strokeWidth = 1.0;
 
     if(_graphicData.gridCount > 0){
@@ -69,17 +69,19 @@ class DrawPainter extends CustomPainter {
         Offset(_maxSize - AXIS_OFFSET * 2 + _graphicData.displaceX, _maxSize / 2 + AXIS_OFFSET + _graphicData.displaceY),
         paintAxis);
 
-   //     draw dots
+   //     draw approximation
 
-    for(int i = 0; i < _graphicData.dataDots.length; i++) {
-      canvas.drawCircle(_graphicData.dataDots[i], 2.0, paintDots);
-    }
     if (_graphicData.trendDots.length == 2) {
       canvas.drawLine(_graphicData.trendDots[0], _graphicData.trendDots[1],
           paintMainLine);
     } else if (_graphicData.trendDots.length > 0) {
       for(int i = 0; i < _graphicData.trendDots.length; i++)
         canvas.drawCircle(_graphicData.trendDots[i], 1.0, paintMainLine);
+    }
+
+    // draw dots
+    for(int i = 0; i < _graphicData.dataDots.length; i++) {
+      canvas.drawCircle(_graphicData.dataDots[i], 2.0, paintDots);
     }
 
   }

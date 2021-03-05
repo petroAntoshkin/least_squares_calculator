@@ -18,6 +18,17 @@ class DrawPage extends StatefulWidget {
 
   DrawPage() {
     _appMap = Map();
+    _graphicData.dataDots = [];
+    _graphicData.trendDots = [];
+    _graphicData.displaceY = 0;
+    _graphicData.displaceX = 0;
+    _appMap[0] = 'linear';
+    _appMap[1] = 'parabolic';
+    _appMap[2] = 'pow';
+    _appMap[3] = 'log';
+    // widget._appMap[4] = 'exponential';
+    // widget._appMap[5] = 'hyperbolic';
+
   }
 
   @override
@@ -29,8 +40,11 @@ class _DrawPageState extends State<DrawPage> {
   int _approximationType = 0;
   double _maxSize, _dotsPerGrid, _a, _b;
   final double _sizeMultiplier = 0.95;
-  final double _mainLineOffset = 14.0;
+  // final double _mainLineOffset = 14.0;
   double _divider;
+  bool _keyboardIsVisible() {
+    return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
+  }
 
   @override
   void initState() {
@@ -40,20 +54,12 @@ class _DrawPageState extends State<DrawPage> {
     _a = Provider.of<DataProvider>(context, listen: false).getAValue();
     _b = Provider.of<DataProvider>(context, listen: false).getBValue();
     widget._graphicData.gridCount = widget._drawGrid ? widget._gridCount : 0;
-    widget._graphicData.dataDots = [];
-    widget._graphicData.trendDots = [];
-    widget._graphicData.displaceY = 0;
-    widget._graphicData.displaceX = 0;
-    widget._appMap[0] = 'linear';
-    widget._appMap[1] = 'parabolic';
-    widget._appMap[2] = 'exponential';
-    widget._appMap[3] = 'pow';
-    widget._appMap[4] = 'hyperbolic';
-    widget._appMap[5] = 'log';
   }
 
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    FocusManager.instance.primaryFocus.unfocus();
     int _len = Provider.of<DataProvider>(context).getValuesLength();
     widget._loc = Provider.of<DataProvider>(context).getLocale();
 
@@ -70,67 +76,72 @@ class _DrawPageState extends State<DrawPage> {
     widget._graphicData.dataDots =
         _fillDataPoints(_allValues['x'], _allValues['y']);
     if (_allValues['x'].isNotEmpty) {
-      _divider = widget._graphicData.zoomFactor == 0? 1: pow(widget._gridCount, widget._graphicData.zoomFactor);
+      // if(widget._graphicData.zoomFactor == 0){
+      //   _divider = 1.0;
+      // } else {
+      //   _divider = pow(widget._gridCount, widget._graphicData.zoomFactor).toDouble();
+      // }
+      _divider = widget._graphicData.zoomFactor == 0 ? 1.0 : pow(widget._gridCount, widget._graphicData.zoomFactor).toDouble();
       widget._graphicData.trendDots = _approximationDotsCount(_allValues['x'], _allValues['y'], widget._appMap[_approximationType]);
     }
 
-    return Column(
+    return _keyboardIsVisible() ? Container() :
+    Stack(
       children: [
-        SizedBox(
-          width: _maxSize * _sizeMultiplier,
-          height: _maxSize * _sizeMultiplier,
-          child: _len != 0
-              ? CustomPaint(
-                  size: Size(_maxSize, _maxSize),
-                  painter: DrawPainter(widget._graphicData),
-                )
-              : Center(
-                  child:
-                      Text(MyTranslations().getLocale(widget._loc, 'nanData')),
-                ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: widget._drawGrid,
-                    onChanged: (value) {
-                      // print('chane checkBox value to $value');
-                      Provider.of<DataProvider>(context, listen: false)
-                          .setGridShow(value);
-                      widget._graphicData.gridCount =
-                          value ? widget._gridCount : 0;
-                      setState(() {
-                        widget._drawGrid = value;
-                      });
-                    },
+        Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: _maxSize * _sizeMultiplier,
+            height: _maxSize * _sizeMultiplier,
+            child: _len != 0
+                ? CustomPaint(
+                    size: Size(_maxSize, _maxSize),
+                    painter: DrawPainter(widget._graphicData),
+                  )
+                : Center(
+                    child:
+                        Text(MyTranslations().getLocale(widget._loc, 'nanData')),
                   ),
-                  Text(MyTranslations().getLocale(widget._loc, 'show_grid')),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropDownList(
-                  itemsList:  widget._appMap,
-                  currentValue: 0,
-                  callBack: _changeApproximationType,
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                      value: widget._drawGrid,
+                      onChanged: (value) {
+                        // print('chane checkBox value to $value');
+                        Provider.of<DataProvider>(context, listen: false)
+                            .setGridShow(value);
+                        widget._graphicData.gridCount =
+                            value ? widget._gridCount : 0;
+                        setState(() {
+                          widget._drawGrid = value;
+                        });
+                      },
+                    ),
+                    Text(MyTranslations().getLocale(widget._loc, 'show_grid')),
+                  ],
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DropDownList(
+                    itemsList:  widget._appMap,
+                    currentValue: 0,
+                    callBack: _changeApproximationType,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
-  }
-
-  void _changeApproximationType(int index) {
-    print('changeApproximationType to $index');
-    setState(() {
-      _approximationType = index;
-    });
   }
 
   int _getZoom(double distance, int gridCount) {
@@ -173,6 +184,13 @@ class _DrawPageState extends State<DrawPage> {
   }
 
   ///approximation functions
+  ///
+  void _changeApproximationType(int index) {
+    print('changeApproximationType to $index');
+    setState(() {
+      _approximationType = index;
+    });
+  }
   Offset _scaleOffset(Offset source) {
     // print('before scale x=${source.dx}; y=${source.dy}');
     double _x, _y;
@@ -196,6 +214,9 @@ class _DrawPageState extends State<DrawPage> {
     Offset _offset;
     for(double _x = -(widget._gridCount / 2) / _divider; _x <= (widget._gridCount / 2) / _divider; _x+=0.1){
       switch(countType){
+        case 'parabolic':
+          _y = _a * _x * _x + _b * _x;
+          break;
         case 'exponential':
           _y = exp(_a) * _b;
           break;

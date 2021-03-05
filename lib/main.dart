@@ -44,6 +44,11 @@ class LSMHomePage extends StatelessWidget {
 //
 // class _LSMHomePageState extends State<LSMHomePage> {
 
+  void _tabBarController(){
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // String _loc = 'en'; //Localizations.localeOf(context).languageCode;

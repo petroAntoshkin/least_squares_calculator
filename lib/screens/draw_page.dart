@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:least_squares/elements/drop_down_list.dart';
 import 'dart:math';
 import 'package:least_squares/elements/graph_painter.dart';
-import 'package:least_squares/models/approximation_model.dart';
 import 'package:least_squares/models/graphic_data.dart';
 import 'package:least_squares/providers/data_provider.dart';
 import 'package:least_squares/mocks/my_translations.dart';
@@ -15,7 +14,7 @@ class DrawPage extends StatefulWidget {
   GraphicData _graphicData = GraphicData();
   final int _gridCount = 10;
 
-  Map<int, ApproximationModel> _appMap;
+  Map<int, String> _appMap;
 
   DrawPage() {
     _appMap = Map();
@@ -31,6 +30,7 @@ class _DrawPageState extends State<DrawPage> {
   double _maxSize, _dotsPerGrid, _a, _b;
   final double _sizeMultiplier = 0.95;
   final double _mainLineOffset = 14.0;
+  double _divider;
 
   @override
   void initState() {
@@ -44,24 +44,12 @@ class _DrawPageState extends State<DrawPage> {
     widget._graphicData.trendDots = [];
     widget._graphicData.displaceY = 0;
     widget._graphicData.displaceX = 0;
-    widget._appMap[0] = ApproximationModel(
-        approximationFunction: _approximationLinear, index: 0, name: 'linear');
-    widget._appMap[1] = ApproximationModel(
-        approximationFunction: _approximationParabolic,
-        index: 1,
-        name: 'parabolic');
-    widget._appMap[2] = ApproximationModel(
-        approximationFunction: _approximationExponential,
-        index: 2,
-        name: 'exponential');
-    widget._appMap[3] = ApproximationModel(
-        approximationFunction: _approximationPow, index: 3, name: 'pow');
-    widget._appMap[4] = ApproximationModel(
-        approximationFunction: _approximationHyperbolic,
-        index: 4,
-        name: 'hyperbolic');
-    widget._appMap[5] = ApproximationModel(
-        approximationFunction: _approximationLog, index: 5, name: 'log');
+    widget._appMap[0] = 'linear';
+    widget._appMap[1] = 'parabolic';
+    widget._appMap[2] = 'exponential';
+    widget._appMap[3] = 'pow';
+    widget._appMap[4] = 'hyperbolic';
+    widget._appMap[5] = 'log';
   }
 
   @override
@@ -82,8 +70,8 @@ class _DrawPageState extends State<DrawPage> {
     widget._graphicData.dataDots =
         _fillDataPoints(_allValues['x'], _allValues['y']);
     if (_allValues['x'].isNotEmpty) {
-      widget._graphicData.trendDots = widget._appMap[_approximationType]
-          .approximationFunction(_allValues['x'], _allValues['y']);
+      _divider = widget._graphicData.zoomFactor == 0? 1: pow(widget._gridCount, widget._graphicData.zoomFactor);
+      widget._graphicData.trendDots = _approximationDotsCount(_allValues['x'], _allValues['y'], widget._appMap[_approximationType]);
     }
 
     return Column(
@@ -126,7 +114,7 @@ class _DrawPageState extends State<DrawPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropDownList(
-                  itemsList: _approximationTypesMap(),
+                  itemsList:  widget._appMap,
                   currentValue: 0,
                   callBack: _changeApproximationType,
                 ),
@@ -136,14 +124,6 @@ class _DrawPageState extends State<DrawPage> {
         ),
       ],
     );
-  }
-
-  Map<int, String> _approximationTypesMap() {
-    Map<int, String> _res = new Map<int, String>();
-    widget._appMap.forEach((key, value) {
-      _res[value.index] = value.name;
-    });
-    return _res;
   }
 
   void _changeApproximationType(int index) {
@@ -210,67 +190,40 @@ class _DrawPageState extends State<DrawPage> {
     return Offset(_x, _y);
   }
 
-  List<Offset> _approximationLinear(
-      List<double> xValues, List<double> yValues) {
-    double _x = widget._graphicData.maxSize / 2, _y = _b;
+  List<Offset> _approximationDotsCount(List<double> xValues, List<double> yValues, String countType) {
     List<Offset> _result = [];
-    Offset _offset = _scaleOffset(Offset(_x, _y));
-    while (_offset.dy + _mainLineOffset < widget._graphicData.maxSize &&
-        _offset.dx - _mainLineOffset > 0) {
-      _offset = _scaleOffset(Offset(_x, _y));
-      _x -= 0.1;
-      _y = _a * _x + _b;
-    }
-    _result.add(_offset);
-    _x = 0;
-    _y = _b;
-    _offset = _scaleOffset(Offset(_x, _y));
-    while (_offset.dy - _mainLineOffset > 0 &&
-        _offset.dx + _mainLineOffset < widget._graphicData.maxSize) {
-      _offset = _scaleOffset(Offset(_x, _y));
-      _x += 0.1;
-      _y = _a * _x + _b;
-    }
-    _result.add(_scaleOffset(Offset(_x, _y)));
-    return _result;
-  }
-
-  List<Offset> _approximationParabolic(
-      List<double> xValues, List<double> yValues) {
-    List<Offset> _result = [];
-    return _result;
-  }
-
-  List<Offset> _approximationExponential(
-      List<double> xValues, List<double> yValues) {
-    List<Offset> _result = [];
-    return _result;
-  }
-
-  List<Offset> _approximationPow(List<double> xValues, List<double> yValues) {
     double _y;
-    List<Offset> _result = [];
-    // _x = - widget._gridCount / 2;
-    // _y = pow(_b, _x) * _a;
-    for (double i = -widget._gridCount / 2;
-        i < widget._gridCount / 2;
-        i += 0.1) {
-      _y = pow(_b, i) * _a;
-      if (_y.abs() > widget._gridCount / 2) {
-        _result.add(_scaleOffset(Offset(i, _y)));
+    Offset _offset;
+    for(double _x = -(widget._gridCount / 2) / _divider; _x <= (widget._gridCount / 2) / _divider; _x+=0.1){
+      switch(countType){
+        case 'exponential':
+          _y = exp(_a) * _b;
+          break;
+        case 'pow':
+          _y = pow(_x, _a) * _b;
+          break;
+        case 'hyperbolic':
+          _y = _a / _x + _b;
+          break;
+        case 'log':
+          _y = _a * log(_x) + _b;
+          break;
+        default:
+          _y = _x * _a + _b;
+          break;
       }
+      _offset = _scaleOffset(Offset(_x, _y));
+      if(_offset.dx > 0 && _offset.dy > 0 && _offset.dx < widget._graphicData.maxSize && _offset.dy < widget._graphicData.maxSize)
+        _result.add(_offset);
     }
     return _result;
+    /*
+    'parabolic';
+    widget._appMap[2] = 'exponential';
+    widget._appMap[3] = 'pow';
+    widget._appMap[4] = 'hyperbolic';
+    widget._appMap[5] = 'log';
+     */
   }
 
-  List<Offset> _approximationHyperbolic(
-      List<double> xValues, List<double> yValues) {
-    List<Offset> _result = [];
-    return _result;
-  }
-
-  List<Offset> _approximationLog(List<double> xValues, List<double> yValues) {
-    List<Offset> _result = [];
-    return _result;
-  }
 }

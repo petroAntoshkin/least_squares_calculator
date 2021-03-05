@@ -71,12 +71,12 @@ class DrawPainter extends CustomPainter {
 
    //     draw approximation
 
-    if (_graphicData.trendDots.length == 2) {
+    /*if (_graphicData.trendDots.length == 2) {
       canvas.drawLine(_graphicData.trendDots[0], _graphicData.trendDots[1],
           paintMainLine);
-    } else if (_graphicData.trendDots.length > 0) {
-      for(int i = 0; i < _graphicData.trendDots.length; i++)
-        canvas.drawCircle(_graphicData.trendDots[i], 1.0, paintMainLine);
+    } else */if (_graphicData.trendDots.length > 0) {
+      for(int i = 1; i < _graphicData.trendDots.length; i++)
+        canvas.drawLine(_graphicData.trendDots[i - 1],_graphicData.trendDots[i], paintMainLine);
     }
 
     // draw dots

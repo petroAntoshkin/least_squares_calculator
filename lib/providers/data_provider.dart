@@ -12,6 +12,7 @@ class DataProvider extends ChangeNotifier{
   final String _settingsJson = '/settings.json';
   final List<String> _replaceWhat = [',', '+'];
   final List<String> _replaceTo = ['.', ''];
+  int approximationType = 0;
 
 
   double _a, _b;

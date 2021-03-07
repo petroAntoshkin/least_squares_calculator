@@ -53,15 +53,16 @@ class _DrawPageState extends State<DrawPage> {
         Provider.of<DataProvider>(context, listen: false).getGridShow();
     _a = Provider.of<DataProvider>(context, listen: false).getAValue();
     _b = Provider.of<DataProvider>(context, listen: false).getBValue();
-    widget._graphicData.gridCount = widget._drawGrid ? widget._gridCount : 0;
+    // widget._graphicData.gridCount = widget._drawGrid ? widget._gridCount : 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    FocusScopeNode currentFocus = FocusScope.of(context);
+    // FocusScopeNode currentFocus = FocusScope.of(context);
     FocusManager.instance.primaryFocus.unfocus();
     int _len = Provider.of<DataProvider>(context).getValuesLength();
     widget._loc = Provider.of<DataProvider>(context).getLocale();
+    _approximationType = Provider.of<DataProvider>(context).approximationType;
 
     _maxSize =
         MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
@@ -72,7 +73,7 @@ class _DrawPageState extends State<DrawPage> {
     _dotsPerGrid = widget._graphicData.maxSize / widget._gridCount;
     _allValues = Provider.of<DataProvider>(context).getAllValues();
     widget._graphicData.zoomFactor =
-        _getZoom(_getMaximumDisplace(), widget._gridCount ~/ 2);
+        _getZoom(_getMaximumDisplace(), widget._gridCount);
     widget._graphicData.dataDots =
         _fillDataPoints(_allValues['x'], _allValues['y']);
     if (_allValues['x'].isNotEmpty) {
@@ -82,7 +83,9 @@ class _DrawPageState extends State<DrawPage> {
       //   _divider = pow(widget._gridCount, widget._graphicData.zoomFactor).toDouble();
       // }
       _divider = widget._graphicData.zoomFactor == 0 ? 1.0 : pow(widget._gridCount, widget._graphicData.zoomFactor).toDouble();
+      // _divider = 1;
       widget._graphicData.trendDots = _approximationDotsCount(_allValues['x'], _allValues['y'], widget._appMap[_approximationType]);
+      widget._graphicData.gridCount = widget._drawGrid ? widget._gridCount : 0;
     }
 
     return _keyboardIsVisible() ? Container() :
@@ -132,7 +135,7 @@ class _DrawPageState extends State<DrawPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: DropDownList(
                     itemsList:  widget._appMap,
-                    currentValue: 0,
+                    currentValue: _approximationType,
                     callBack: _changeApproximationType,
                   ),
                 ),
@@ -150,7 +153,7 @@ class _DrawPageState extends State<DrawPage> {
       _multiplier = -1;
       _res = 0;
     }
-    while (distance > gridCount || distance < 0) {
+    while (distance > gridCount / 2 || distance < 0) {
       _multiplier > 0 ? distance *= gridCount : distance /= gridCount;
       _res += _multiplier;
     }
@@ -189,6 +192,7 @@ class _DrawPageState extends State<DrawPage> {
     print('changeApproximationType to $index');
     setState(() {
       _approximationType = index;
+      Provider.of<DataProvider>(context, listen: false).approximationType = index;
     });
   }
   Offset _scaleOffset(Offset source) {

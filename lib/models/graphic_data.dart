@@ -8,6 +8,7 @@ class GraphicData{
   double displaceX;
   double displaceY;
   double maxSize;
+  double axisArrowOffset;
   GraphicData({
     this.gridCount,
     this.dataDots,
@@ -15,6 +16,7 @@ class GraphicData{
     this.zoomFactor,
     this.displaceX,
     this.displaceY,
-    this.maxSize
+    this.maxSize,
+    this.axisArrowOffset : 4.0
   });
 }

@@ -20,7 +20,7 @@ class MyTranslations{
     en.putIfAbsent('nanMessage', () => 'Is not a Number');
     en.putIfAbsent('nanData', () => 'No data');
     en.putIfAbsent('settings', () => 'Settings');
-    en.putIfAbsent('reset', () => 'Reset\ndata');
+    en.putIfAbsent('reset', () => 'Reset data');
     en.putIfAbsent('show_grid', () => 'Show grid');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
@@ -36,7 +36,7 @@ class MyTranslations{
     hi.putIfAbsent('nanMessage', () => 'एक संख्या नहीं है');
     hi.putIfAbsent('nanData', () => 'कोई आकड़ा उपलब्ध नहीं है');
     hi.putIfAbsent('settings', () => 'समायोजन');
-    hi.putIfAbsent('reset', () => 'रीसेट\nडेटा');
+    hi.putIfAbsent('reset', () => 'रीसेट डेटा');
     hi.putIfAbsent('show_grid', () => 'ग्रिड दिखाएं');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
@@ -44,7 +44,7 @@ class MyTranslations{
     es.putIfAbsent('nanMessage', () => 'No es un número');
     es.putIfAbsent('nanData', () => 'Sin datos');
     es.putIfAbsent('settings', () => 'Configuración');
-    es.putIfAbsent('reset', () => 'Reset\ndata');
+    es.putIfAbsent('reset', () => 'Reiniciar datos');
     es.putIfAbsent('show_grid', () => 'Mostrar cuadrícula');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
@@ -52,7 +52,7 @@ class MyTranslations{
     fr.putIfAbsent('nanMessage', () => 'N\'est pas un nombre');
     fr.putIfAbsent('nanData', () => 'Aucune donnée');
     fr.putIfAbsent('settings', () => 'Paramètres');
-    fr.putIfAbsent('reset', () => 'Réinitialiser\ndonnées');
+    fr.putIfAbsent('reset', () => 'Réinitialiser données');
     fr.putIfAbsent('show_grid', () => 'Afficher la grille');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
@@ -60,7 +60,7 @@ class MyTranslations{
     de.putIfAbsent('nanMessage', () => 'Ist keine Zahl');
     de.putIfAbsent('nanData', () => 'Keine Daten');
     de.putIfAbsent('settings', () => 'die Einstellungen');
-    de.putIfAbsent('reset', () => 'Daten\nzurücksetzen');
+    de.putIfAbsent('reset', () => 'Daten zurücksetzen');
     de.putIfAbsent('show_grid', () => 'Rasteranzeige');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
@@ -68,7 +68,7 @@ class MyTranslations{
     pt.putIfAbsent('nanMessage', () => 'Não é um número');
     pt.putIfAbsent('nanData', () => 'Sem dados');
     pt.putIfAbsent('settings', () => 'Configurações');
-    pt.putIfAbsent('reset', () => 'Redefinir\ndados');
+    pt.putIfAbsent('reset', () => 'Redefinir dados');
     pt.putIfAbsent('show_grid', () => 'Mostre as grades');
     ///ua
     ua.putIfAbsent('title', () => 'Обчислення найменших квадратів');
@@ -76,7 +76,7 @@ class MyTranslations{
     ua.putIfAbsent('nanMessage', () => 'Результат не є числом');
     ua.putIfAbsent('nanData', () => 'Відсутні дані');
     ua.putIfAbsent('settings', () => 'Налаштування');
-    ua.putIfAbsent('reset', () => 'Очистити\nдані');
+    ua.putIfAbsent('reset', () => 'Очистити дані');
     ua.putIfAbsent('show_grid', () => 'Відобразити сітку');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
@@ -84,7 +84,7 @@ class MyTranslations{
     ru.putIfAbsent('nanMessage', () => 'Is not a Number');
     ru.putIfAbsent('nanData', () => 'Нет данных');
     ru.putIfAbsent('settings', () => 'Настройки');
-    ru.putIfAbsent('reset', () => 'Очистить\nданные');
+    ru.putIfAbsent('reset', () => 'Очистить данные');
     ru.putIfAbsent('show_grid', () => 'Показать сетку');
 
     _allTexts.putIfAbsent('en', () => en);

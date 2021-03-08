@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:least_squares/elements/appbar_title.dart';
+import 'package:least_squares/elements/bottom_nav_painter.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 // import 'package:least_squares/my_translations.dart';
 import 'package:least_squares/screens/calculation_page.dart';
@@ -78,32 +79,42 @@ class LSMHomePage extends StatelessWidget {
           bottomNavigationBar: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.08,
-            child: Container(
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              // ignore: deprecated_member_use
+            child: CustomPaint(
+              size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.width * 0.08),
+              painter: BottomNavPainter(),
               child: FlatButton(
-                onPressed: () => Provider.of<DataProvider>(context, listen: false).clearAllData(),
-                child: Row(
-                  children: [
-                    Text(
-                        MyTranslations().getLocale(Provider.of<DataProvider>(context).getLocale(), 'reset'),
-                      textAlign: TextAlign.center,
+                  onPressed: () => Provider.of<DataProvider>(context, listen: false).clearAllData(),
+                  child: Container(
+                    // color: Colors.green,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.height * 0.07,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            child: Icon(Icons.cleaning_services)
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: Text(
+                              MyTranslations().getLocale(Provider.of<DataProvider>(context).getLocale(), 'reset'),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+
+                        SizedBox(
+                            width: MediaQuery.of(context).size.height * 0.07,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            child: Icon(Icons.cleaning_services)
+                        ),
+                      ],
                     ),
-                    Icon(Icons.cleaning_services),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: null,
-          //   tooltip: 'Reset',
-          //   child: Icon(Icons.close),
-          // ),
-        ),
     );
   }
 }

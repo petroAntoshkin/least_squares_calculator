@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:least_squares/models/graphic_data.dart';
 
 class DrawPainter extends CustomPainter {
+  ThemeData themeData;
   GraphicData graphicData;
   Listenable repaint;
 
-  DrawPainter({this.repaint, this.graphicData});
+  DrawPainter({this.repaint, this.graphicData, this.themeData});
 
   void paint(Canvas canvas, Size size) {
     final double _maxSize = size.width > size.height ? size.height : size.width;
     final double _gridStep = _maxSize / graphicData.gridCount;
 
     final paintAxis = Paint()
-      ..color = Colors.black
+      ..color = themeData.primaryTextTheme.bodyText1.color
       ..strokeWidth = 2.0
       ..strokeCap = StrokeCap.round;
 

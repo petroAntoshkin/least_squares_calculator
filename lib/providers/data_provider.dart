@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:least_squares/mocks/my_translations.dart';
+import 'package:least_squares/mocks/themes_mock.dart';
 import 'package:least_squares/models/settings_model.dart';
+import 'package:least_squares/models/theme_list_model.dart';
 import 'package:least_squares/utils/string_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:validators/validators.dart';
@@ -13,6 +15,8 @@ class DataProvider extends ChangeNotifier{
   final List<String> _replaceWhat = [',', '+'];
   final List<String> _replaceTo = ['.', ''];
   int approximationType = 0;
+  ThemeData _themeData;
+  int _themeID = 0;
 
 
   double _a, _b;
@@ -20,9 +24,10 @@ class DataProvider extends ChangeNotifier{
   String _nanString;
   // String _locName = 'en';
   // String _theme = 'default';
-  SettingsModel _settingsModel = SettingsModel(language: 'en', theme: 'default', showGrid: true);
+  SettingsModel _settingsModel = SettingsModel(language: 'en', themeId: 0, showGrid: true);
 
   DataProvider(){
+    _themeData = ThemesMock().themes[_themeID].data;
     _nanString = _nanString = MyTranslations().getLocale(_settingsModel.language, 'nanMessage');
     _allValues = new Map();
     _onlyDataClean();
@@ -51,19 +56,36 @@ class DataProvider extends ChangeNotifier{
     // notifyListeners();
   }
 
-  void changeTheme(String theme){
-    if(theme != _settingsModel.theme) {
-      _setTheme(theme);
+
+  ///theme functions
+  void changeTheme(int themeId){
+    if(themeId != _settingsModel.themeId) {
+      _setTheme(themeId);
       writeLocalJson();
       notifyListeners();
     }
   }
-
-  void _setTheme(String theme){
-    _settingsModel.theme = theme;
+  void _setTheme(int id){
+    _themeID = id;
+    _themeData = ThemesMock().themes[_themeID].data;
+    _settingsModel.themeId = _themeID;
     // notifyListeners();
   }
 
+  int get themeId{
+    return _themeID;
+  }
+
+  get theme{
+    return _themeData;
+  }
+
+  ThemeListModel getThemeModelById(int index){
+    return ThemesMock().themes[index];
+  }
+
+
+  ///   grid
   void setGridShow(bool value){
     _settingsModel.showGrid = value;
   }
@@ -194,7 +216,7 @@ class DataProvider extends ChangeNotifier{
       String contents = await file.readAsString();
       // var _dec = json.decode(contents);
       _result.parseJson(contents);
-      changeTheme(_result.theme);
+      changeTheme(_result.themeId);
       changeLocale(_result.language);
     } catch (e) {
       // If encountering an error, return 0

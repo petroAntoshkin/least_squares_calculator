@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:least_squares/providers/data_provider.dart';
+import 'package:provider/provider.dart';
 
 typedef IntValue = void Function(int);
 
@@ -31,6 +33,7 @@ class _DropDownListState extends State<DropDownList> {
   Map<int, String> itemsList;
   IntValue callBack;
   int currentValue;
+  ThemeData _themeData;
 
   _DropDownListState(
       {@required this.itemsList, this.currentValue, this.callBack});
@@ -43,24 +46,32 @@ class _DropDownListState extends State<DropDownList> {
     super.initState();
     if (currentValue == null) currentValue = 0;
     itemsList.forEach((key, value) {_dropdownItems.putIfAbsent(key, () => value);});
+    // _themeData = Provider.of<DataProvider>(context).theme;
     _selectedItem = buildDropDownMenuItems(_dropdownItems)[currentValue].value;
   }
 
   List<DropdownMenuItem> buildDropDownMenuItems(Map<int, String> listItems) {
     List<DropdownMenuItem> items = [];
     listItems.forEach((key, value) {
-      items.add(DropdownMenuItem(child: Text(value), value: key,));
+      items.add(DropdownMenuItem(child: Text(
+        value,
+        style: TextStyle(
+          color: _themeData != null ? _themeData.primaryTextTheme.bodyText1.color : Colors.white54,
+        ),
+      ), value: key,));
     });
     return items;
   }
 
   @override
   Widget build(BuildContext context) {
+    _themeData = Provider.of<DataProvider>(context).theme;
     // print('build list ${this.itemsList.length}');
     return Container(
       child: Container(
         padding: EdgeInsets.all(5.0),
         child: DropdownButton(
+          dropdownColor: _themeData.backgroundColor,
             value: _selectedItem,
             items: buildDropDownMenuItems(_dropdownItems),
             onChanged: (value) {

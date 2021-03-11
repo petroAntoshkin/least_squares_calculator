@@ -2,10 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:least_squares/elements/values_pair.dart';
 import 'package:least_squares/providers/data_provider.dart';
-// import 'package:least_squares/my_translations.dart';
-
-//
-// import 'package:least_squares/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 class CalculationPage extends StatefulWidget {
@@ -13,20 +9,15 @@ class CalculationPage extends StatefulWidget {
 }
 
 class _CalculationPageState extends State<CalculationPage> {
-  // double _currentX, _currentY;
+  ThemeData _themeData;
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
-
-  // List<double> _xValues;
-  // List<double> _yValues;
 
   @override
   void initState() {
     super.initState();
-    // _loc = 'en'; //Localizations.localeOf(context).languageCode;
-    _controllerX.text = '';//_currentX.toString();
-    _controllerY.text = '';//_currentY.toString();
-    // _clearControllers();
+    _controllerX.text = '';
+    _controllerY.text = '';
   }
 
   // @override
@@ -38,6 +29,7 @@ class _CalculationPageState extends State<CalculationPage> {
   @override
   Widget build(BuildContext context) {
     int _dataLen = Provider.of<DataProvider>(context).getValuesLength();
+    _themeData = Provider.of<DataProvider>(context).theme;
     // print('CalculationPage build $_dataLen');
     return Center(
       child: Stack(children: [
@@ -50,7 +42,7 @@ class _CalculationPageState extends State<CalculationPage> {
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.1,
             child: Container(
-              color: Colors.blue,
+              color: _themeData.primaryColor,
               child: Row(
                 children: [
                   // ignore: deprecated_member_use
@@ -59,21 +51,22 @@ class _CalculationPageState extends State<CalculationPage> {
                     // ignore: deprecated_member_use
                     child: GestureDetector(
                       child: Container(
-                        padding: EdgeInsets.all(8.0),
-                        // color: Colors.white54,
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        // color: Colors.red,
                         decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white60,
+                          color: _themeData.primaryColorDark,
                           border: Border.all(
                             color: Colors.black54,
                             width: 1.0
                           ),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.all(4.0),
-                          // margin: EdgeInsets.all(2.0),
-                          child: Icon(Icons.calculate),
+                        child: Center(
+                          child: Icon(
+                            Icons.calculate,
+                            color: _themeData.accentColor,
+                          ),
                         ),
                       ),
                       onTap: () {

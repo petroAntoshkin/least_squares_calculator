@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 class BottomNavPainter extends CustomPainter {
 
+  Color color;
+
+  BottomNavPainter({this.color});
+
   final _tumbWidth = 0.17;
   final _arcSize = 8.0;
 
@@ -10,7 +14,7 @@ class BottomNavPainter extends CustomPainter {
     final Path _path = new Path();
     final paintBgrCurve = Paint()
       ..style = PaintingStyle.fill
-      ..color = Colors.red
+      ..color = color//Colors.red
       ..strokeWidth = 0.0;
 
     _path.moveTo(0, 0);

@@ -2,7 +2,7 @@
     package="com.example.least_squares">
    <application
         android:label="Least Squares Calculator"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

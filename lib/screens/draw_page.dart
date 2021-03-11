@@ -49,6 +49,7 @@ class _DrawPageState extends State<DrawPage> {
   String dragDirection;
   double _startDXPoint, _startDYPoint, _startDisplaceX, _startDisplaceY;
 
+  ThemeData _themeData;
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
@@ -56,15 +57,14 @@ class _DrawPageState extends State<DrawPage> {
   @override
   void initState() {
     super.initState();
-    _drawGrid =
-        Provider.of<DataProvider>(context, listen: false).getGridShow();
     _a = Provider.of<DataProvider>(context, listen: false).getAValue();
     _b = Provider.of<DataProvider>(context, listen: false).getBValue();
-    // widget._graphicData.gridCount = widget._drawGrid ? widget._gridCount : 0;
   }
 
   @override
   Widget build(BuildContext context) {
+    _drawGrid = Provider.of<DataProvider>(context, listen: false).getGridShow();
+    _themeData = Provider.of<DataProvider>(context, listen: false).theme;
     // FocusScopeNode currentFocus = FocusScope.of(context);
     FocusManager.instance.primaryFocus.unfocus();
     int _len = Provider.of<DataProvider>(context).getValuesLength();
@@ -109,20 +109,24 @@ class _DrawPageState extends State<DrawPage> {
                   height: _maxSize * _sizeMultiplier,
                   child: _len != 0
                       ? GestureDetector(
-                          onHorizontalDragStart: _onHorizontalDragStartHandler,
-                          onVerticalDragStart: _onVerticalDragStartHandler,
-                          onHorizontalDragUpdate: _onHorizontalDragUpdateHandler,
-                          onVerticalDragUpdate: _onVerticalDragUpdateHandler,
+                          onPanStart: _onPanStartHandler,
+                          onPanUpdate: _onPanUpdateHandler,
                           child: CustomPaint(
                             size: Size(_maxSize, _maxSize),
                             painter: DrawPainter(
                                 repaint: _displaceNotifier,
-                                graphicData: widget._graphicData),
+                                graphicData: widget._graphicData,
+                              themeData: _themeData,
+                            ),
                           ),
                         )
                       : Center(
                           child: Text(MyTranslations()
-                              .getLocale(widget._loc, 'nanData')),
+                              .getLocale(widget._loc, 'nanData'),
+                            style: TextStyle(
+                              color: _themeData.primaryTextTheme.bodyText1.color,
+                            ),
+                          ),
                         ),
                 ),
               ),
@@ -135,6 +139,8 @@ class _DrawPageState extends State<DrawPage> {
                       Row(
                         children: [
                           Checkbox(
+                            activeColor: _themeData.primaryColorDark,
+                            checkColor: _themeData.accentColor,
                             value: _drawGrid,
                             onChanged: (value) {
                               // print('chane checkBox value to $value');
@@ -148,7 +154,11 @@ class _DrawPageState extends State<DrawPage> {
                             },
                           ),
                           Text(MyTranslations()
-                              .getLocale(widget._loc, 'show_grid')),
+                              .getLocale(widget._loc, 'show_grid'),
+                            style: TextStyle(
+                                color: _themeData.primaryTextTheme.bodyText1.color,
+                            ),
+                          ),
                         ],
                       ),
                       Padding(
@@ -178,8 +188,7 @@ class _DrawPageState extends State<DrawPage> {
       _multiplier > 0 ? distance *= gridCount : distance /= gridCount;
       _res += _multiplier;
     }
-    _metamorphosisFactor =
-        _dotsPerGrid * pow(_gridCount, _res).toDouble();
+    _metamorphosisFactor = _dotsPerGrid * pow(_gridCount, _res).toDouble();
     return _res;
   }
 
@@ -256,8 +265,8 @@ class _DrawPageState extends State<DrawPage> {
     List<Offset> _result = [];
     double _y;
     Offset _offset;
-    for (double _x = -(_gridCount / 2) / _divider;
-        _x <= (_gridCount / 2) / _divider;
+    for (double _x = -(_gridCount) / _divider;
+        _x <= (_gridCount) / _divider;
         _x += 0.1) {
       switch (countType) {
         case 'parabolic':
@@ -286,44 +295,38 @@ class _DrawPageState extends State<DrawPage> {
           _offset.dy < widget._graphicData.maxSize) _result.add(_offset);
     }
     return _result;
-    /*
-    'parabolic';
-    widget._appMap[2] = 'exponential';
-    widget._appMap[3] = 'pow';
-    widget._appMap[4] = 'hyperbolic';
-    widget._appMap[5] = 'log';
-     */
   }
 
   /// gesture functions
-  void _onHorizontalDragStartHandler(DragStartDetails details) {
+  ///
+  void _onPanStartHandler(DragStartDetails details) {
     this._startDXPoint = details.globalPosition.dx.floorToDouble();
     this._startDYPoint = details.globalPosition.dy.floorToDouble();
     _startDisplaceX = widget._graphicData.displaceX;
-  }
-
-  void _onVerticalDragStartHandler(DragStartDetails details) {
-    this._startDXPoint = details.globalPosition.dx.floorToDouble();
-    this._startDYPoint = details.globalPosition.dy.floorToDouble();
     _startDisplaceY = widget._graphicData.displaceY;
   }
-  void _onHorizontalDragUpdateHandler(DragUpdateDetails details) {
+
+  void _onPanUpdateHandler(DragUpdateDetails details) {
     double _tempDisplace = details.globalPosition.dx - this._startDXPoint;
     final _half = widget._graphicData.maxSize / 2;
-    if(_tempDisplace + _startDisplaceX < _half - widget._graphicData.axisArrowOffset && _tempDisplace + _startDisplaceX > - _half + widget._graphicData.axisArrowOffset) {
+    if (_tempDisplace + _startDisplaceX <
+            _half - widget._graphicData.axisArrowOffset &&
+        _tempDisplace + _startDisplaceX >
+            -_half + widget._graphicData.axisArrowOffset) {
       setState(() {
-        widget._graphicData.displaceX = _displaceNotifier.value = _tempDisplace + _startDisplaceX;
+        widget._graphicData.displaceX =
+            _displaceNotifier.value = _tempDisplace + _startDisplaceX;
+      });
+    }
+    _tempDisplace = details.globalPosition.dy - this._startDYPoint;
+    if (_tempDisplace + _startDisplaceY <
+            _half - widget._graphicData.axisArrowOffset &&
+        _tempDisplace + _startDisplaceY >
+            -_half + widget._graphicData.axisArrowOffset) {
+      setState(() {
+        widget._graphicData.displaceY =
+            _displaceNotifier.value = _tempDisplace + _startDisplaceY;
       });
     }
   }
-  void _onVerticalDragUpdateHandler(DragUpdateDetails details) {
-    double _tempDisplace = details.globalPosition.dy - this._startDYPoint;
-    final _half = widget._graphicData.maxSize / 2;
-    if(_tempDisplace + _startDisplaceY < _half - widget._graphicData.axisArrowOffset && _tempDisplace + _startDisplaceY > - _half + widget._graphicData.axisArrowOffset) {
-      setState(() {
-        widget._graphicData.displaceY = _displaceNotifier.value = _tempDisplace + _startDisplaceY;
-      });
-    }
-  }
-
 }

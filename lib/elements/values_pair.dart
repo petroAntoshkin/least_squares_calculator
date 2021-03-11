@@ -13,7 +13,7 @@ class ValuesPair extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Card(
-      color: Colors.white38,
+      color: Provider.of<DataProvider>(context).theme.primaryColor,
       child: GestureDetector(
         onHorizontalDragStart: (DragStartDetails details){
           print('on start details: $details');

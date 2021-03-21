@@ -15,6 +15,7 @@ class DataProvider extends ChangeNotifier{
   final List<String> _replaceWhat = [',', '+'];
   final List<String> _replaceTo = ['.', ''];
   int approximationType = 0;
+  int dotType = 0;
   ThemeData _themeData;
   int _themeID = 0;
 

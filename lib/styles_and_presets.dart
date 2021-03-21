@@ -6,6 +6,8 @@ class Presets{
   static const TEXT_SIZE_SMALL = 14.0;
   static const TEXT_SIZE_DEFAULT = 16.0;
   static const MINUTE_STEP = 5;
+  static const LINE_WIDTH = 30.0;
+  static const DOT_SIZE = 10.0;
   static final BorderRadius defaultBorderRadius = BorderRadius.circular(4.0);
   static final Color _textColorDefault = Color(0xff666666);
   static final headerColor = Colors.lightBlue;

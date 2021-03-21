@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:least_squares/models/named_widget.dart';
 import 'package:least_squares/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
 typedef IntValue = void Function(int);
 
-
 // ignore: must_be_immutable
 class DropDownList extends StatefulWidget {
-  Map<int, String> itemsList;
+  Map<int, NamedWidget> itemsList;
   int currentValue;
   IntValue callBack;
   _DropDownListState listState;
@@ -18,11 +18,12 @@ class DropDownList extends StatefulWidget {
 
   @override
   _DropDownListState createState() {
-    listState = _DropDownListState(itemsList: itemsList, currentValue: currentValue, callBack: callBack);
+    listState = _DropDownListState(
+        itemsList: itemsList, currentValue: currentValue, callBack: callBack);
     return listState;
   }
 
-  void rebuildList(Map<int, String> itemsList){
+  void rebuildList(Map<int, NamedWidget> itemsList) {
     // print('update list ${listState.itemsList}');
     listState._updateList(itemsList);
   }
@@ -30,7 +31,7 @@ class DropDownList extends StatefulWidget {
 
 /// This is the private State class that goes with DropDownList.
 class _DropDownListState extends State<DropDownList> {
-  Map<int, String> itemsList;
+  Map<int, NamedWidget> itemsList;
   IntValue callBack;
   int currentValue;
   ThemeData _themeData;
@@ -38,27 +39,35 @@ class _DropDownListState extends State<DropDownList> {
   _DropDownListState(
       {@required this.itemsList, this.currentValue, this.callBack});
 
-  Map<int, String> _dropdownItems = new Map<int, String>();
+  Map<int, NamedWidget> _dropdownItems = new Map<int, NamedWidget>();
 
   int _selectedItem;
 
   void initState() {
     super.initState();
     if (currentValue == null) currentValue = 0;
-    itemsList.forEach((key, value) {_dropdownItems.putIfAbsent(key, () => value);});
+    itemsList.forEach((key, value) {
+      _dropdownItems.putIfAbsent(key, () => value);
+    });
     // _themeData = Provider.of<DataProvider>(context).theme;
     _selectedItem = buildDropDownMenuItems(_dropdownItems)[currentValue].value;
   }
 
-  List<DropdownMenuItem> buildDropDownMenuItems(Map<int, String> listItems) {
+  List<DropdownMenuItem> buildDropDownMenuItems(Map<int, NamedWidget> listItems) {
     List<DropdownMenuItem> items = [];
     listItems.forEach((key, value) {
-      items.add(DropdownMenuItem(child: Text(
-        value,
-        style: TextStyle(
-          color: _themeData != null ? _themeData.primaryTextTheme.bodyText1.color : Colors.white54,
-        ),
-      ), value: key,));
+      items.add(DropdownMenuItem(
+        child: value.widget,
+        // child: Text(
+        //   value,
+        //   style: TextStyle(
+        //     color: _themeData != null
+        //         ? _themeData.primaryTextTheme.bodyText1.color
+        //         : Colors.white54,
+        //   ),
+        // ),
+        value: key,
+      ));
     });
     return items;
   }
@@ -71,7 +80,8 @@ class _DropDownListState extends State<DropDownList> {
       child: Container(
         padding: EdgeInsets.all(5.0),
         child: DropdownButton(
-          dropdownColor: _themeData.backgroundColor,
+            //underline: SizedBox(child: Container(color: Colors.red,),),
+            dropdownColor: _themeData.primaryColor,
             value: _selectedItem,
             items: buildDropDownMenuItems(_dropdownItems),
             onChanged: (value) {
@@ -85,14 +95,15 @@ class _DropDownListState extends State<DropDownList> {
     );
   }
 
-  void _updateList(Map<int, String> _itemsList){
+  void _updateList(Map<int, NamedWidget> _itemsList) {
     setState(() {
       this.itemsList = _itemsList;
       _dropdownItems = new Map();
-      this.itemsList.forEach((key, value) {_dropdownItems.putIfAbsent(key, () => value);});
-      _selectedItem = buildDropDownMenuItems(_dropdownItems)[currentValue].value;
+      this.itemsList.forEach((key, value) {
+        _dropdownItems.putIfAbsent(key, () => value);
+      });
+      _selectedItem =
+          buildDropDownMenuItems(_dropdownItems)[currentValue].value;
     });
   }
-
 }
-

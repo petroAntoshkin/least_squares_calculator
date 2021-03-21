@@ -9,6 +9,8 @@ class GraphicData{
   double displaceY;
   double maxSize;
   double axisArrowOffset;
+  String dotType;
+  double dotSize;
   GraphicData({
     this.gridCount,
     this.dataDots,
@@ -17,6 +19,8 @@ class GraphicData{
     this.displaceX,
     this.displaceY,
     this.maxSize,
-    this.axisArrowOffset : 4.0
+    this.axisArrowOffset : 4.0,
+    this.dotType : 'circle',
+    this.dotSize : 5.0
   });
 }

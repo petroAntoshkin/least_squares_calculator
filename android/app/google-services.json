@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1043456575082",
+    "project_id": "least-squares-calculator",
+    "storage_bucket": "least-squares-calculator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043456575082:android:71aea4d080ddff26d86c13",
+        "android_client_info": {
+          "package_name": "com.antstudio.leastsquarescalculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043456575082-6csifih4oo4h8uarttcpfdojmjkaurvs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5v3NHhVB7Id_2rijiT_4trkHNj_pKxLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043456575082-6csifih4oo4h8uarttcpfdojmjkaurvs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

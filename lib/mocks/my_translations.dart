@@ -22,6 +22,10 @@ class MyTranslations{
     en.putIfAbsent('settings', () => 'Settings');
     en.putIfAbsent('reset', () => 'Reset data');
     en.putIfAbsent('show_grid', () => 'Show grid');
+    en.putIfAbsent('del_approve', () => 'Are you sure? you can\'t undo this action');
+    en.putIfAbsent('cancel', () => 'Cancel');
+    en.putIfAbsent('delete', () => 'Delete');
+    en.putIfAbsent('dots_size', () => 'Dots size');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('calculateButtonName', () => '加和計算');
@@ -30,6 +34,10 @@ class MyTranslations{
     zh.putIfAbsent('settings', () => '設定值');
     zh.putIfAbsent('reset', () => '重置數據');
     zh.putIfAbsent('show_grid', () => '顯示網格');
+    zh.putIfAbsent('del_approve', () => '你確定嗎？ 您無法撤消此操作');
+    zh.putIfAbsent('cancel', () => '取消');
+    zh.putIfAbsent('delete', () => '刪除');
+    zh.putIfAbsent('dots_size', () => '點尺寸');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('calculateButtonName', () => 'जोड़ें और गणना करें');
@@ -38,6 +46,10 @@ class MyTranslations{
     hi.putIfAbsent('settings', () => 'समायोजन');
     hi.putIfAbsent('reset', () => 'रीसेट डेटा');
     hi.putIfAbsent('show_grid', () => 'ग्रिड दिखाएं');
+    hi.putIfAbsent('del_approve', () => 'क्या आपको यकीन है? आप इस क्रिया को पूर्ववत नहीं कर सकते');
+    hi.putIfAbsent('cancel', () => 'रद्द करना');
+    hi.putIfAbsent('delete', () => 'हटाएं');
+    hi.putIfAbsent('dots_size', () => 'डॉट्स का आकार');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('calculateButtonName', () => 'Agregar & \ nCalculate');
@@ -46,6 +58,10 @@ class MyTranslations{
     es.putIfAbsent('settings', () => 'Configuración');
     es.putIfAbsent('reset', () => 'Reiniciar datos');
     es.putIfAbsent('show_grid', () => 'Mostrar cuadrícula');
+    es.putIfAbsent('del_approve', () => '¿Está seguro? no puedes deshacer esta acción');
+    es.putIfAbsent('cancel', () => 'Cancelar');
+    es.putIfAbsent('delete', () => 'Borrar');
+    es.putIfAbsent('dots_size', () => 'Tamaño de los puntos');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('calculateButtonName', () => 'Ajouter & \ nCalculer');
@@ -54,6 +70,10 @@ class MyTranslations{
     fr.putIfAbsent('settings', () => 'Paramètres');
     fr.putIfAbsent('reset', () => 'Réinitialiser données');
     fr.putIfAbsent('show_grid', () => 'Afficher la grille');
+    fr.putIfAbsent('del_approve', () => 'Êtes-vous sûr? vous ne pouvez pas annuler cette action');
+    fr.putIfAbsent('cancel', () => 'Annuler');
+    fr.putIfAbsent('delete', () => 'Effacer');
+    fr.putIfAbsent('dots_size', () => 'Taille des points');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('calculateButtonName', () => 'Hinzufügen &\nBerechnen');
@@ -62,6 +82,10 @@ class MyTranslations{
     de.putIfAbsent('settings', () => 'die Einstellungen');
     de.putIfAbsent('reset', () => 'Daten zurücksetzen');
     de.putIfAbsent('show_grid', () => 'Rasteranzeige');
+    de.putIfAbsent('del_approve', () => 'Sind Sie sicher? Sie können diese Aktion nicht rückgängig machen');
+    de.putIfAbsent('cancel', () => 'Stornieren');
+    de.putIfAbsent('delete', () => 'Löschen');
+    de.putIfAbsent('dots_size', () => 'Punktgröße');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('calculateButtonName', () => 'Adicionar e\ncalcular');
@@ -70,6 +94,10 @@ class MyTranslations{
     pt.putIfAbsent('settings', () => 'Configurações');
     pt.putIfAbsent('reset', () => 'Redefinir dados');
     pt.putIfAbsent('show_grid', () => 'Mostre as grades');
+    pt.putIfAbsent('del_approve', () => 'Tem certeza? você não pode desfazer esta ação');
+    pt.putIfAbsent('cancel', () => 'Cancelar');
+    pt.putIfAbsent('delete', () => 'Excluir');
+    pt.putIfAbsent('dots_size', () => 'Tamanho dos pontos');
     ///ua
     ua.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     ua.putIfAbsent('calculateButtonName', () => 'Додати\nзначення');
@@ -78,6 +106,10 @@ class MyTranslations{
     ua.putIfAbsent('settings', () => 'Налаштування');
     ua.putIfAbsent('reset', () => 'Очистити дані');
     ua.putIfAbsent('show_grid', () => 'Відобразити сітку');
+    ua.putIfAbsent('del_approve', () => 'Ви впевнені? Цю дію не можна скасувати');
+    ua.putIfAbsent('cancel', () => 'Скасувати');
+    ua.putIfAbsent('delete', () => 'Видалити');
+    ua.putIfAbsent('dots_size', () => 'Розмір точок');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('calculateButtonName', () => 'Добавить\nзначения');
@@ -86,6 +118,10 @@ class MyTranslations{
     ru.putIfAbsent('settings', () => 'Настройки');
     ru.putIfAbsent('reset', () => 'Очистить данные');
     ru.putIfAbsent('show_grid', () => 'Показать сетку');
+    ru.putIfAbsent('del_approve', () => 'Вы уверены?');
+    ru.putIfAbsent('cancel', () => 'Отменить');
+    ru.putIfAbsent('delete', () => 'Удалить');
+    ru.putIfAbsent('dots_size', () => 'Размер точек');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('zh', () => zh);

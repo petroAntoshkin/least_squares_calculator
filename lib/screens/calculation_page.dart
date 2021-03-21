@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:least_squares/elements/values_pair.dart';
 import 'package:least_squares/providers/data_provider.dart';
@@ -12,6 +11,7 @@ class _CalculationPageState extends State<CalculationPage> {
   ThemeData _themeData;
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
+  final FocusNode _xFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -33,10 +33,13 @@ class _CalculationPageState extends State<CalculationPage> {
     // print('CalculationPage build $_dataLen');
     return Center(
       child: Stack(children: [
-        ListView(children: [
-          for (int i = 0; i < _dataLen; i++)
-            ValuesPair(pairIndex: i)
-        ]),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          width: MediaQuery.of(context).size.width,
+          child: ListView(children: [
+            for (int i = 0; i < _dataLen; i++) ValuesPair(pairIndex: i)
+          ]),
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
@@ -44,55 +47,101 @@ class _CalculationPageState extends State<CalculationPage> {
             child: Container(
               color: _themeData.primaryColor,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // ignore: deprecated_member_use
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    // ignore: deprecated_member_use
-                    child: GestureDetector(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      width: MediaQuery.of(context).size.height * 0.07,
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        // color: Colors.red,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: _themeData.primaryColorDark,
-                          border: Border.all(
-                            color: Colors.black54,
-                            width: 1.0
+                        // padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        // ignore: deprecated_member_use
+                        child: GestureDetector(
+                          child: Container(
+                            // padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            // color: Colors.red,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: _themeData.primaryColorDark,
+                              border:
+                                  Border.all(color: Colors.black54, width: 1.0),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.calculate,
+                                color: _themeData.accentColor,
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.calculate,
-                            color: _themeData.accentColor,
-                          ),
+                          onTap: () {
+                            Provider.of<DataProvider>(context, listen: false)
+                                .addMoreValues(
+                                    _controllerX.text, _controllerY.text);
+                            _clearControllers();
+                            _xFocusNode.requestFocus();
+                          },
                         ),
                       ),
-                      onTap: () {
-                        print(
-                            'x = ${_controllerX.text} y = ${_controllerY.text}');
-                        Provider.of<DataProvider>(context, listen: false)
-                            .addMoreValues(
-                                _controllerX.text, _controllerY.text);
-                        _clearControllers();
-                      },
                     ),
                   ),
                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      child: Container(
-                        margin: EdgeInsets.all(4.0),
-                        child: _editTextField(_controllerX, ' X '),
-                      )),
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: Container(
+                      margin: EdgeInsets.all(4.0),
+                      child: _editTextField(_controllerX, ' X ', _xFocusNode),
+                    ),
+                  ),
                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      child: Container(
-                        margin: EdgeInsets.all(4.0),
-                        child: _editTextField(_controllerY, ' Y '),
-                      )),
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: Container(
+                      margin: EdgeInsets.all(4.0),
+                      child: _editTextField(_controllerY, ' Y ', null),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      width: MediaQuery.of(context).size.height * 0.07,
+                      child:
+                      Container(
+                        // padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        // ignore: deprecated_member_use
+                        child: GestureDetector(
+                          child: Container(
+                            // padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            // color: Colors.red,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: _themeData.primaryColorDark,
+                              border: Border.all(
+                                  color: Colors.black54,
+                                  width: 1.0
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.calculate,
+                                color: _themeData.accentColor,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            Provider.of<DataProvider>(context, listen: false)
+                                .addMoreValues(
+                                _controllerX.text, _controllerY.text);
+                            _clearControllers();
+                            _xFocusNode.requestFocus();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -107,10 +156,12 @@ class _CalculationPageState extends State<CalculationPage> {
     _controllerY.clear();
   }
 
-  Widget _editTextField(TextEditingController controller, String prefix) {
+  Widget _editTextField(
+      TextEditingController controller, String prefix, FocusNode focusNode) {
     return Container(
       decoration: BoxDecoration(),
       child: TextField(
+        focusNode: focusNode,
         keyboardType: TextInputType.phone,
         controller: controller,
         decoration: InputDecoration(

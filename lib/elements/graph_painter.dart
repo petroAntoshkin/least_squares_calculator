@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:least_squares/models/graphic_data.dart';
 
@@ -26,18 +27,24 @@ class DrawPainter extends CustomPainter {
       ..color = Colors.green
       ..strokeWidth = 1.0;
 
+    final paintTransp = Paint()..color = Color(0x00ffffff);
+
+    canvas.drawRect(
+        Rect.fromPoints(Offset.zero, Offset(_maxSize, _maxSize)), paintTransp);
     if (graphicData.gridCount > 0) {
       final paintGrid = Paint()
         ..color = Colors.grey
         ..strokeWidth = 1.0;
 
-      for (int i = -graphicData.gridCount; i < graphicData.gridCount * 2; i ++) {
+      for (int i = -graphicData.gridCount; i < graphicData.gridCount * 2; i++) {
         double _tempCoord = i * _gridStep + graphicData.displaceX;
-        if(_tempCoord > 0 && _tempCoord < _maxSize)
-          canvas.drawLine(Offset(_tempCoord, 0), Offset(_tempCoord, _maxSize), paintGrid);
+        if (_tempCoord > 0 && _tempCoord < _maxSize)
+          canvas.drawLine(
+              Offset(_tempCoord, 0), Offset(_tempCoord, _maxSize), paintGrid);
         _tempCoord = _maxSize - i * _gridStep + graphicData.displaceY;
-        if(_tempCoord > 0 && _tempCoord < _maxSize)
-          canvas.drawLine(Offset(0, _tempCoord), Offset(_maxSize, _tempCoord), paintGrid);
+        if (_tempCoord > 0 && _tempCoord < _maxSize)
+          canvas.drawLine(
+              Offset(0, _tempCoord), Offset(_maxSize, _tempCoord), paintGrid);
         // canvas.drawLine(Offset(graphicData.axisArrowOffset * 5, i), Offset(_maxSize - graphicData.axisArrowOffset * 5, i), paintGrid);
       }
     }
@@ -46,12 +53,14 @@ class DrawPainter extends CustomPainter {
         Offset(_maxSize / 2 + graphicData.displaceX, _maxSize), paintAxis);
     canvas.drawLine(
         Offset(_maxSize / 2 + graphicData.displaceX, 0),
-        Offset(_maxSize / 2 + graphicData.axisArrowOffset + graphicData.displaceX,
+        Offset(
+            _maxSize / 2 + graphicData.axisArrowOffset + graphicData.displaceX,
             graphicData.axisArrowOffset * 2),
         paintAxis);
     canvas.drawLine(
         Offset(_maxSize / 2 + graphicData.displaceX, 0),
-        Offset(_maxSize / 2 - graphicData.axisArrowOffset + graphicData.displaceX,
+        Offset(
+            _maxSize / 2 - graphicData.axisArrowOffset + graphicData.displaceX,
             graphicData.axisArrowOffset * 2),
         paintAxis);
 
@@ -83,7 +92,42 @@ class DrawPainter extends CustomPainter {
 
     // draw dots
     for (int i = 0; i < graphicData.dataDots.length; i++) {
-      canvas.drawCircle(graphicData.dataDots[i], 2.0, paintDots);
+      switch (graphicData.dotType) {
+        case 'square':
+          canvas.drawRect(
+              Rect.fromCenter(
+                center: graphicData.dataDots[i],
+                width: graphicData.dotSize * 2,
+                height: graphicData.dotSize * 2,
+              ),
+              paintDots);
+          break;
+        case 'rhomb':
+          Path _path = Path();
+          _path.moveTo(
+            graphicData.dataDots[i].dx,
+            graphicData.dataDots[i].dy - graphicData.dotSize,
+          );
+          _path.lineTo(
+            graphicData.dataDots[i].dx + graphicData.dotSize,
+            graphicData.dataDots[i].dy,
+          );
+          _path.lineTo(
+            graphicData.dataDots[i].dx,
+            graphicData.dataDots[i].dy + graphicData.dotSize,
+          );
+          _path.lineTo(
+            graphicData.dataDots[i].dx - graphicData.dotSize,
+            graphicData.dataDots[i].dy,
+          );
+          _path.close();
+          canvas.drawPath(_path, paintDots);
+          break;
+        default:
+          canvas.drawCircle(graphicData.dataDots[i], graphicData.dotSize, paintDots);
+          break;
+      }
+      // canvas.drawCircle(graphicData.dataDots[i], 2.0, paintDots);
     }
   }
 

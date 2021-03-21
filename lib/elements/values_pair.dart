@@ -22,17 +22,36 @@ class ValuesPair extends StatelessWidget{
           print('on end details: $details');
         },
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                icon: Icon(Icons.close),
+                icon: Icon(Icons.delete),
                 onPressed: () => Provider.of<DataProvider>(context, listen: false)
                     .removeOneValue(pairIndex)),
-            ValueText(text:
-                'X = ${Provider.of<DataProvider>(context, listen: false).getValue('x', pairIndex)}',
-                style: Presets.currrentValueStyle),
-            ValueText(text:
-                'Y = ${Provider.of<DataProvider>(context, listen: false).getValue('y', pairIndex)}',
-                style: Presets.currrentValueStyle),
+            Center(
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 140.0,
+                    height: 40.0,
+                    child: ValueText(text:
+                    'X = ${Provider.of<DataProvider>(context, listen: false).getValue('x', pairIndex)}',
+                        style: Presets.currrentValueStyle),
+                  ),
+                  SizedBox(
+                    width: 140.0,
+                    height: 40.0,
+                    child: ValueText(text:
+                    'Y = ${Provider.of<DataProvider>(context, listen: false).getValue('y', pairIndex)}',
+                        style: Presets.currrentValueStyle),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () => Provider.of<DataProvider>(context, listen: false)
+                    .removeOneValue(pairIndex)),
           ],
         ),
       ),

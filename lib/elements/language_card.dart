@@ -26,22 +26,25 @@ class LanguageCard extends StatelessWidget {
         child: GestureDetector(
           onTap: () => Provider.of<DataProvider>(context, listen: false)
               .changeLocale(languageModel.prefix),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Row(
-              children: [
-                SizedBox(width: 30, height: 20, child: Image.asset(_name)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(languageModel.name, style: _themeData.primaryTextTheme.bodyText1,),
-                ),
-                Expanded(child: Container()),
-                SizedBox(
-                  width: 20.0,
-                  height: 20.0,
-                  child: MyRadioButton(isSelected: _thisLangIsCurrent),
-                )
-              ],
+          child: Container(
+            color: Color(0x00ffffff),
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                children: [
+                  SizedBox(width: 30, height: 20, child: Image.asset(_name)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(languageModel.name, style: _themeData.primaryTextTheme.bodyText1,),
+                  ),
+                  Expanded(child: Container()),
+                  SizedBox(
+                    width: 20.0,
+                    height: 20.0,
+                    child: MyRadioButton(isSelected: _thisLangIsCurrent),
+                  )
+                ],
+              ),
             ),
           ),
         ),

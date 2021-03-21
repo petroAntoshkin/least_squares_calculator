@@ -16,16 +16,29 @@ class AppbarTitle extends StatelessWidget{
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // SizedBox(height: 2,),
-          _loc != null ? Text(MyTranslations().getLocale(_loc, 'title')) : Text('Least Squares Calculator'),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: _loc != null
+                ? Text(
+                  MyTranslations().getLocale(_loc, 'title'),
+                  style: TextStyle(fontSize: 18),
+                )
+                : Text(
+                  'Least Squares Calculator',
+                  style: TextStyle(fontSize: 18),
+                ),
+          ),
           Row(
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.06,
                 width: MediaQuery.of(context).size.width * 0.45,
-                child: _loc != null ? ValueText(text: Provider.of<DataProvider>(context).getAString(),
-                    style: Presets.resultsValueStyle) : Container(),
+                child: _loc != null
+                    ? ValueText(text: Provider.of<DataProvider>(context).getAString(),
+                    style: Presets.resultsValueStyle)
+                    : Container(),
               ),
-              Expanded(child: Container()),
+              //Expanded(child: Container()),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.06,
                 width: MediaQuery.of(context).size.width * 0.45,

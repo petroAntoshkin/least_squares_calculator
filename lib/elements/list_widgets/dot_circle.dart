@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:least_squares/styles_and_presets.dart';
 
+// ignore: must_be_immutable
 class DotCircle extends StatelessWidget {
+  Color color;
+  DotCircle({this.color : Colors.black});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +27,7 @@ class DotCircle extends StatelessWidget {
                 width: Presets.DOT_SIZE,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: color,
                     shape: BoxShape.circle,
                   ),
                 ),

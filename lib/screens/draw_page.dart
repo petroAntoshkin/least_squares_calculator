@@ -1,333 +1,179 @@
-import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
+
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:least_squares/elements/axis_label.dart';
+import 'package:least_squares/elements/graph_settings_bar.dart';
+import 'package:least_squares/utils/string_utils.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 
-import 'package:least_squares/elements/drop_down_list.dart';
 import 'package:least_squares/elements/graph_painter.dart';
-import 'package:least_squares/elements/list_widgets/approx_linear.dart';
-import 'package:least_squares/elements/list_widgets/approx_log.dart';
-import 'package:least_squares/elements/list_widgets/approx_parabolic.dart';
-import 'package:least_squares/elements/list_widgets/approx_pow.dart';
-import 'package:least_squares/elements/list_widgets/dot_circle.dart';
-import 'package:least_squares/elements/list_widgets/dot_rhomb.dart';
-import 'package:least_squares/elements/list_widgets/dot_square.dart';
 import 'package:least_squares/models/graphic_data.dart';
-import 'package:least_squares/models/named_widget.dart';
 import 'package:least_squares/providers/data_provider.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 
 // ignore: must_be_immutable
 class DrawPage extends StatefulWidget {
   String _loc;
-  GraphicData _graphicData = GraphicData();
-
-  // Offset _startGesturePoint;
-  Map<int, NamedWidget> _approxMap;
-  Map<int, NamedWidget> _dotsMap;
-
-  DrawPage() {
-    _approxMap = Map();
-    _dotsMap = Map();
-    _graphicData.dataDots = [];
-    _graphicData.trendDots = [];
-    _graphicData.displaceY = 0;
-    _graphicData.displaceX = 0;
-    _approxMap[0] = NamedWidget(name: 'linear', widget: ApproxLinear());
-    _approxMap[1] = NamedWidget(name: 'parabolic', widget: ApproxParabolic());
-    _approxMap[2] = NamedWidget(name: 'pow', widget: ApproxPow());
-    _approxMap[3] = NamedWidget(name: 'log', widget: ApproxLog());
-    // widget._appMap[4] = 'exponential';
-    // widget._appMap[5] = 'hyperbolic';
-    _dotsMap[0] = NamedWidget(name: 'circle', widget: DotCircle());
-    _dotsMap[1] = NamedWidget(name: 'square', widget: DotSquare());
-    _dotsMap[2] = NamedWidget(name: 'rhomb', widget: DotRhomb());
-  }
 
   @override
   _DrawPageState createState() => _DrawPageState();
 }
 
 class _DrawPageState extends State<DrawPage> {
-  bool _drawGrid = false;
-  Map<String, List<double>> _allValues;
-  int _approximationType = 0;
-  int _dotType = 0;
-  double _maxSize, _dotsPerGrid, _a, _b;
-  final double _sizeMultiplier = 0.95;
-  double _metamorphosisFactor;
+  final double _gridIndexDisplace = 4.0;
+  GlobalKey _globalKey = new GlobalKey();
+
+  double _maxSize;
+  final double _sizeMultiplier = 1;
   final _displaceNotifier = ValueNotifier<double>(0);
   final int _gridCount = 10;
 
-  // final double _mainLineOffset = 14.0;
-  double _divider;
-
   String dragDirection;
-  double _startDXPoint,
-      _startDYPoint,
-      _startDisplaceX,
-      _startDisplaceY,
-      _startMetamorphFactor;
+  double _startDXPoint, _startDYPoint, _startDisplaceX, _startDisplaceY;
+  Positioned _axisLabelX, _axisLabelY;
 
   ThemeData _themeData;
+  GraphicData _newGD;
 
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 
   @override
-  void initState() {
-    super.initState();
-    _a = Provider.of<DataProvider>(context, listen: false).getAValue();
-    _b = Provider.of<DataProvider>(context, listen: false).getBValue();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    Provider.of<DataProvider>(context, listen: false)
+        .setContextFunction(_exportGraph);
     _maxSize =
-    MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
-        ? MediaQuery.of(context).size.height
-        : MediaQuery.of(context).size.width;
+        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+            ? MediaQuery.of(context).size.height
+            : MediaQuery.of(context).size.width;
 
-    widget._graphicData.maxSize = _maxSize * _sizeMultiplier;
-    _dotsPerGrid = widget._graphicData.maxSize / _gridCount;
-    _allValues = Provider.of<DataProvider>(context).getAllValues();
-    widget._graphicData.zoomFactor =
-        _getInitialZoom(_getMaximumDisplace(), _gridCount);
-    widget._graphicData.dataDots =
-        _fillDataPoints(_allValues['x'], _allValues['y']);
-    if (_allValues['x'].isNotEmpty) {
-      _divider = widget._graphicData.zoomFactor == 0
-          ? 1.0
-          : pow(_gridCount, widget._graphicData.zoomFactor).toDouble();
-      // _divider = 1;
-      widget._graphicData.trendDots = _approximationDotsCount(
-          _allValues['x'], _allValues['y'], widget._approxMap[_approximationType].name);
-      widget._graphicData.gridCount = _drawGrid ? _gridCount : 0;
-      widget._graphicData.dotType = widget._dotsMap[_dotType].name;
-    }
+    Provider.of<DataProvider>(context, listen: false).maxSize =
+        _maxSize * _sizeMultiplier;
   }
 
   @override
   Widget build(BuildContext context) {
-    widget._graphicData.maxSize = _maxSize * _sizeMultiplier;
-    _drawGrid = Provider.of<DataProvider>(context, listen: false).getGridShow();
+    _newGD = Provider.of<DataProvider>(context, listen: false).graphicData;
     _themeData = Provider.of<DataProvider>(context, listen: false).theme;
     FocusManager.instance.primaryFocus.unfocus();
     int _len = Provider.of<DataProvider>(context).getValuesLength();
-    widget._loc = Provider.of<DataProvider>(context).getLocale();
-    _approximationType = Provider.of<DataProvider>(context).approximationType;
-    _dotType = Provider.of<DataProvider>(context).dotType;
-    widget._graphicData.dataDots =
-        _fillDataPoints(_allValues['x'], _allValues['y']);
-    widget._graphicData.trendDots = _approximationDotsCount(
-        _allValues['x'], _allValues['y'], widget._approxMap[_approximationType].name);
-    widget._graphicData.gridCount = _drawGrid ? _gridCount : 0;
-    widget._graphicData.dotType = widget._dotsMap[_dotType].name;
+    widget._loc = Provider.of<DataProvider>(context).getLanguage();
+
+    _axisLabelX = Positioned(
+      child: AxisLabel(label: 'x'),
+      right: 4.0,
+      top: _maxSize / 2 + _newGD.displaceY,
+    );
+    _axisLabelY = Positioned(
+      child: AxisLabel(label: 'y'),
+      left: _maxSize / 2 + _newGD.displaceX,
+      // top: _maxSize / 2 + _newGD.displaceY,
+    );
+
+    Stack _drawStack = Stack(
+      children: [
+        _newGD.dataDots.isNotEmpty
+            ? CustomPaint(
+                size: Size(_maxSize, _maxSize),
+                painter: DrawPainter(
+                  repaint: _displaceNotifier,
+                  graphicData: _newGD,
+                  themeData: _themeData,
+                ),
+              )
+            : Container(),
+      ],
+    );
+    if (_newGD.dataDots.isNotEmpty) _getAxisIndexes(_drawStack.children);
 
     return _keyboardIsVisible()
         ? Container()
-        : Column(
-      children: [
-        SizedBox(
-          width: _maxSize * _sizeMultiplier,
-          height: _maxSize * _sizeMultiplier,
-          child: _len != 0
-              ? GestureDetector(
-            onScaleStart: _onScaleStart,
-            onScaleUpdate: _onScaleUpdate,
-            child: CustomPaint(
-              size: Size(_maxSize, _maxSize),
-              painter: DrawPainter(
-                repaint: _displaceNotifier,
-                graphicData: widget._graphicData,
-                themeData: _themeData,
-              ),
-            ),
-          )
-              : Center(
-            child: Text(
-              MyTranslations().getLocale(widget._loc, 'nanData'),
-              style: TextStyle(
-                color:
-                _themeData.primaryTextTheme.bodyText1.color,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 26.0,
-          child: Slider(
-              value: widget._graphicData.dotSize,
-              min: 3.0,
-              max: 15.0,
-              divisions: 28,
-              onChanged: (value) => setState((){
-                widget._graphicData.dotSize = value;
-              }),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Row(
+        : Stack(
             children: [
-              Row(
-                children: [
-                  Checkbox(
-                    activeColor: _themeData.primaryColorDark,
-                    checkColor: _themeData.accentColor,
-                    value: _drawGrid,
-                    onChanged: (value) {
-                      // print('chane checkBox value to $value');
-                      Provider.of<DataProvider>(context, listen: false)
-                          .setGridShow(value);
-                      widget._graphicData.gridCount =
-                      value ? _gridCount : 0;
-                      setState(() {
-                        _drawGrid = value;
-                      });
-                    },
-                  ),
-                  Text(
-                    MyTranslations()
-                        .getLocale(widget._loc, 'show_grid'),
-                    style: TextStyle(
-                      color:
-                      _themeData.primaryTextTheme.bodyText1.color,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropDownList(
-                  itemsList: widget._approxMap,
-                  currentValue: _approximationType,
-                  callBack: _changeApproximationType,
+              RepaintBoundary(
+                key: _globalKey,
+                child: SizedBox(
+                  width: _maxSize * _sizeMultiplier,
+                  height: _maxSize * _sizeMultiplier,
+                  child: _len != 0
+                      ? GestureDetector(
+                          onScaleStart: _onScaleStart,
+                          onScaleUpdate: _onScaleUpdate,
+                          child: _drawStack,
+                        )
+                      : Center(
+                          child: Text(
+                            MyTranslations().getLocale(widget._loc, 'nanData'),
+                            style: TextStyle(
+                              color:
+                                  _themeData.primaryTextTheme.bodyText1.color,
+                            ),
+                          ),
+                        ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropDownList(
-                  itemsList: widget._dotsMap,
-                  currentValue: _dotType,
-                  callBack: _changeDotType,
-                ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                // child: _settingsBar(),
+                child: GraphSettingsBar(),
               ),
             ],
-          ),
+          );
+  }
+
+  ///axis indexes
+  void _getAxisIndexes(List<Widget> _children) {
+    if (_newGD.gridCount != null) {
+      for (int i = -_newGD.gridCount + 1; i < _newGD.gridCount; i += 2)
+        _children.add(_getIndexX(i));
+      for (int i = -_newGD.gridCount + 1; i < _newGD.gridCount; i += 2)
+        _children.add(_getIndexY(i));
+      _children.add(_axisLabelX);
+      _children.add(_axisLabelY);
+    }
+    // return _result;
+  }
+
+  Widget _getIndexX(int index) {
+    return Positioned(
+      top: _maxSize / 2 + _newGD.displaceY + _gridIndexDisplace,
+      left: _maxSize / 2 +
+          _newGD.displaceX +
+          _gridIndexDisplace +
+          index *
+              Provider.of<DataProvider>(context, listen: false).pixelsPerGrid,
+      child: Text(
+      StringUtils.decreaseZeroGroups(
+      '${_newGD.zoomFactorX <= 0 ? index ~/ pow(_gridCount, _newGD.zoomFactorX) : index / pow(_gridCount, _newGD.zoomFactorX)}'),
+        style: TextStyle(
+          color: _themeData.primaryTextTheme.bodyText1.color,
         ),
-      ],
+      ),
     );
   }
 
-  int _getInitialZoom(double distance, int gridCount) {
-    // _metamorphosisFactor = distance / (_maxSize / 2);
-    int _res = 1, _multiplier = 1;
-    if (distance > 1) {
-      _multiplier = -1;
-      _res = 0;
-    }
-    while (distance > gridCount / 2 || distance < 0) {
-      _multiplier > 0 ? distance *= gridCount : distance /= gridCount;
-      _res += _multiplier;
-    }
-    _metamorphosisFactor = _dotsPerGrid * pow(_gridCount, _res).toDouble();
-    return _res;
-  }
-
-  double _getMaximumDisplace() {
-    double _res = 0.0;
-    _allValues.forEach((key, value) {
-      for (int i = 0; i < value.length; i++)
-        if (value[i].abs() > _res) _res = value[i].abs();
-    });
-    return _res;
-  }
-
-  List<Offset> _fillDataPoints(List<double> xValues, List<double> yValues) {
-    List<Offset> _result = [];
-    double _x, _y;
-    for (int i = 0; i < xValues.length; i++) {
-      _x = _allValues['x'][i] * _metamorphosisFactor +
-          (_maxSize * _sizeMultiplier) / 2 +
-          widget._graphicData.displaceX;
-      _y = (_maxSize * _sizeMultiplier) / 2 -
-          _allValues['y'][i] * _metamorphosisFactor +
-          widget._graphicData.displaceY;
-      _result.add(Offset(_x, _y));
-    }
-    return _result;
-  }
-
-  Offset _scaleOffset(Offset source) {
-    // print('before scale x=${source.dx}; y=${source.dy}');
-    double _x, _y;
-    _x = (_maxSize * _sizeMultiplier) / 2 +
-        source.dx * _metamorphosisFactor +
-        widget._graphicData.displaceX;
-    _y = (_maxSize * _sizeMultiplier) / 2 -
-        source.dy * _metamorphosisFactor +
-        widget._graphicData.displaceY;
-    return Offset(_x, _y);
-  }
-
-  void _changeDotType(int index) {
-    //print('changeApproximationType to $index');
-    setState(() {
-      _dotType = index;
-      widget._graphicData.dotType = widget._dotsMap[_dotType].name;
-      Provider.of<DataProvider>(context, listen: false).dotType =
-          index;
-    });
-  }
-
-  ///approximation functions
-  ///
-  void _changeApproximationType(int index) {
-    //print('changeApproximationType to $index');
-    setState(() {
-      _approximationType = index;
-      Provider.of<DataProvider>(context, listen: false).approximationType =
-          index;
-    });
-  }
-
-  List<Offset> _approximationDotsCount(
-      List<double> xValues, List<double> yValues, String countType) {
-    List<Offset> _result = [];
-    double _y;
-    Offset _offset;
-    for (double _x = -(_gridCount) / _divider;
-    _x <= (_gridCount) / _divider;
-    _x += 0.1) {
-      switch (countType) {
-        case 'parabolic':
-          _y = _a * _x * _x + _b * _x;
-          break;
-        case 'exponential':
-          _y = exp(_a) * _b;
-          break;
-        case 'pow':
-          _y = pow(_x, _b) * _a;
-          break;
-        case 'hyperbolic':
-          _y = _a / _x + _b;
-          break;
-        case 'log':
-          _y = _a * log(_x) + _b;
-          break;
-        default:
-          _y = _x * _a + _b;
-          break;
-      }
-      _offset = _scaleOffset(Offset(_x, _y));
-      if (_offset.dx > 0 &&
-          _offset.dy > 0 &&
-          _offset.dx < widget._graphicData.maxSize &&
-          _offset.dy < widget._graphicData.maxSize) _result.add(_offset);
-    }
-    return _result;
+  Widget _getIndexY(int index) {
+    return Positioned(
+      left: _maxSize / 2 + _newGD.displaceX + _gridIndexDisplace,
+      top: _maxSize / 2 +
+          _newGD.displaceY +
+          _gridIndexDisplace +
+          index *
+              Provider.of<DataProvider>(context, listen: false).pixelsPerGrid,
+      child: Text(
+        '${_newGD.zoomFactorY <= 0 ? -index ~/ pow(_gridCount, _newGD.zoomFactorY) : (-index / pow(_gridCount, _newGD.zoomFactorY))}',
+        style: TextStyle(
+          color: _themeData.primaryTextTheme.bodyText1.color,
+        ),
+      ),
+    );
   }
 
   /// gesture functions
@@ -335,37 +181,94 @@ class _DrawPageState extends State<DrawPage> {
   void _onScaleStart(ScaleStartDetails scaleStartDetails) {
     this._startDXPoint = scaleStartDetails.focalPoint.dx.floorToDouble();
     this._startDYPoint = scaleStartDetails.focalPoint.dy.floorToDouble();
-    _startDisplaceX = widget._graphicData.displaceX;
-    _startDisplaceY = widget._graphicData.displaceY;
-    _startMetamorphFactor = _metamorphosisFactor;
+    _startDisplaceX = _newGD.displaceX;
+    _startDisplaceY = _newGD.displaceY;
+    // _startMetamorphFactor = _metamorphosisFactor;
   }
 
   void _onScaleUpdate(ScaleUpdateDetails scaleUpdateDetails) {
     double _tempDisplace =
         scaleUpdateDetails.focalPoint.dx - this._startDXPoint;
-    final _half = widget._graphicData.maxSize / 2;
-    if (_tempDisplace + _startDisplaceX <
-        _half - widget._graphicData.axisArrowOffset &&
-        _tempDisplace + _startDisplaceX >
-            -_half + widget._graphicData.axisArrowOffset) {
+    final _half = _newGD.maxSize / 2;
+    if (_tempDisplace + _startDisplaceX < _half - _newGD.axisArrowOffset &&
+        _tempDisplace + _startDisplaceX > -_half + _newGD.axisArrowOffset) {
       setState(() {
-        widget._graphicData.displaceX =
-            _displaceNotifier.value = _tempDisplace + _startDisplaceX;
+        Provider.of<DataProvider>(context, listen: false).displaceX =
+            _newGD.displaceX =
+                _displaceNotifier.value = _tempDisplace + _startDisplaceX;
       });
     }
     _tempDisplace = scaleUpdateDetails.focalPoint.dy - this._startDYPoint;
-    if (_tempDisplace + _startDisplaceY <
-        _half - widget._graphicData.axisArrowOffset &&
-        _tempDisplace + _startDisplaceY >
-            -_half + widget._graphicData.axisArrowOffset) {
+    if (_tempDisplace + _startDisplaceY < _half - _newGD.axisArrowOffset &&
+        _tempDisplace + _startDisplaceY > -_half + _newGD.axisArrowOffset) {
       setState(() {
-        widget._graphicData.displaceY =
-            _displaceNotifier.value = _tempDisplace + _startDisplaceY;
+        Provider.of<DataProvider>(context, listen: false).displaceY =
+            _newGD.displaceY =
+                _displaceNotifier.value = _tempDisplace + _startDisplaceY;
       });
     }
+
+    ///scale graphics maybe in the future
     //print('scale before: $_metamorphosisFactor');
-    if (scaleUpdateDetails.scale != 1.0)
-      _metamorphosisFactor = _startMetamorphFactor * scaleUpdateDetails.scale;
+    // if (scaleUpdateDetails.scale != 1.0)
+    //   _metamorphosisFactor = _startMetamorphFactor * scaleUpdateDetails.scale;
     //print('scale after: $_metamorphosisFactor');
+  }
+
+  ///export graphic
+  void _exportGraph() {
+    _capturePng();
+  }
+
+  void _capturePng() async {
+    Dialogs.materialDialog(
+      context: context,
+      customView: CircularProgressIndicator(),
+      dialogShape: null,
+    );
+    try {
+      RenderRepaintBoundary boundary =
+          _globalKey.currentContext.findRenderObject();
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      var pngBytes = byteData.buffer.asUint8List();
+      // var bs64 = base64Encode(pngBytes);
+      Provider.of<DataProvider>(context, listen: false).savePNG(pngBytes);
+      // print(pngBytes);
+      // print(bs64);
+      // return pngBytes;
+      Navigator.pop(context);
+      Dialogs.materialDialog(
+        context: context,
+        customView: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Image.memory(pngBytes),
+        ),
+        actions: [
+          IconsOutlineButton(
+            onPressed: () => Navigator.pop(context),
+            iconData: Icons.check,
+            iconColor: Colors.green,
+            text: '',
+          ),
+        ],
+      );
+    } catch (e) {
+      // print(e);
+      Navigator.pop(context);
+      Dialogs.materialDialog(
+        context: context,
+        msg: '$e',
+        actions: [
+          IconsOutlineButton(
+            onPressed: () => Navigator.pop(context),
+            iconData: Icons.error_outline,
+            iconColor: Colors.redAccent,
+            text: '',
+          ),
+        ],
+      );
+    }
   }
 }

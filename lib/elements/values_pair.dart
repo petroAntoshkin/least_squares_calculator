@@ -16,30 +16,34 @@ class ValuesPair extends StatelessWidget{
       color: Provider.of<DataProvider>(context).theme.primaryColor,
       child: GestureDetector(
         onHorizontalDragStart: (DragStartDetails details){
-          print('on start details: $details');
+          //print('on start details: $details');
         },
         onHorizontalDragEnd: (DragEndDetails details) {
-          print('on end details: $details');
+          //print('on end details: $details');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => Provider.of<DataProvider>(context, listen: false)
-                    .removeOneValue(pairIndex)),
+            SizedBox(
+              width: 40.0,
+              height: 40.0,
+              child: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => Provider.of<DataProvider>(context, listen: false)
+                      .removeOneValue(pairIndex)),
+            ),
             Center(
               child: Row(
                 children: [
                   SizedBox(
-                    width: 140.0,
+                    width: (MediaQuery.of(context).size.width - 100) / 2,
                     height: 40.0,
                     child: ValueText(text:
                     'X = ${Provider.of<DataProvider>(context, listen: false).getValue('x', pairIndex)}',
                         style: Presets.currrentValueStyle),
                   ),
                   SizedBox(
-                    width: 140.0,
+                    width: (MediaQuery.of(context).size.width - 100) / 2,
                     height: 40.0,
                     child: ValueText(text:
                     'Y = ${Provider.of<DataProvider>(context, listen: false).getValue('y', pairIndex)}',
@@ -48,10 +52,14 @@ class ValuesPair extends StatelessWidget{
                 ],
               ),
             ),
-            IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => Provider.of<DataProvider>(context, listen: false)
-                    .removeOneValue(pairIndex)),
+            SizedBox(
+              width: 40.0,
+              height: 40.0,
+              child: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => Provider.of<DataProvider>(context, listen: false)
+                      .removeOneValue(pairIndex)),
+            ),
           ],
         ),
       ),

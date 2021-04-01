@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:least_squares/styles_and_presets.dart';
 import 'dart:math';
 
+// ignore: must_be_immutable
 class DotRhomb extends StatelessWidget {
+  Color color;
+  DotRhomb({this.color : Colors.black});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +30,7 @@ class DotRhomb extends StatelessWidget {
                   angle: -pi / 4.0,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: color,
                       shape: BoxShape.rectangle,
                     ),
                   ),

@@ -1,87 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/providers/data_provider.dart';
-import 'package:material_dialogs/material_dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 
-import 'bottom_nav_painter.dart';
-
+// ignore: must_be_immutable
 class MyBottomNavBar extends StatelessWidget {
+  final List<IconData> _icons = [Icons.cleaning_services, Icons.image, Icons.analytics, Icons.settings_outlined];
+  final List<String> _texts = ['reset', 'export', 'delete', 'default_settings'];
+  int tabIndex;
+  MyBottomNavBar({this.tabIndex});
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height * 0.085;
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.08,
-      child: CustomPaint(
-        size: Size(MediaQuery.of(context).size.width,
-            MediaQuery.of(context).size.width * 0.08),
-        painter: BottomNavPainter(color: _themeData.primaryColor),
-        // ignore: deprecated_member_use
-        child: FlatButton(
-          onPressed: ()=> Dialogs.bottomMaterialDialog(
-              msg: MyTranslations().getLocale(
-                  Provider.of<DataProvider>(context, listen: false).getLocale(), 'del_approve'),
-              title: MyTranslations().getLocale(
-                  Provider.of<DataProvider>(context, listen: false).getLocale(), 'reset'),
-              context: context,
-              actions: [
-                IconsOutlineButton(
-                  onPressed: () => Navigator.pop(context),
-                  text: MyTranslations().getLocale(
-                      Provider.of<DataProvider>(context, listen: false).getLocale(), 'cancel'),
-                  iconData: Icons.cancel_outlined,
-                  textStyle: TextStyle(color: Colors.grey),
-                  iconColor: Colors.grey,
-                ),
-                IconsButton(
-                  onPressed: () {
-                    Provider.of<DataProvider>(context, listen: false).clearAllData();
-                    Navigator.pop(context);
-                  },
-                  text: MyTranslations().getLocale(
-                      Provider.of<DataProvider>(context, listen: false).getLocale(), 'delete'),
-                  iconData: Icons.delete,
-                  color: Colors.red,
-                  textStyle: TextStyle(color: Colors.white),
-                  iconColor: Colors.white,
-                ),
-              ]),
-          // onPressed: () => Provider.of<DataProvider>(context, listen: false)
-          //     .clearAllData(),
+      height: _height,
+      child: Container(
+
+        child: GestureDetector(
+          onTap: () => Provider.of<DataProvider>(context, listen: false).contextFunctions(tabIndex),
           child: Container(
-            // color: Colors.green,
+            color: _themeData.primaryColor,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
-                    width: MediaQuery.of(context).size.height * 0.07,
-                    height: MediaQuery.of(context).size.height * 0.08,
+                  width: _height,
+                  height: _height,
+                  child: Center(
                     child: Icon(
-                      Icons.cleaning_services,
-                      color: _themeData.primaryTextTheme.bodyText1.color,
-                    )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: Text(
-                    MyTranslations().getLocale(
-                        Provider.of<DataProvider>(context).getLocale(),
-                        'reset'),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+                      _icons[tabIndex],
                       color: _themeData.primaryTextTheme.bodyText1.color,
                     ),
                   ),
                 ),
                 SizedBox(
-                    width: MediaQuery.of(context).size.height * 0.07,
-                    height: MediaQuery.of(context).size.height * 0.08,
+                  width: MediaQuery.of(context).size.width - _height * 3,
+                  height: _height,
+                  child: Center(
+                    child: Text(
+                      MyTranslations().getLocale(
+                          Provider.of<DataProvider>(context).getLanguage(),
+                          _texts[tabIndex]),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color:
+                        _themeData.primaryTextTheme.bodyText1.color,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: _height,
+                  height: _height,
+                  child: Center(
                     child: Icon(
-                      Icons.cleaning_services,
-                      color: _themeData.primaryTextTheme.bodyText1.color,)),
+                      _icons[tabIndex],
+                      color: _themeData.primaryTextTheme.bodyText1.color,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

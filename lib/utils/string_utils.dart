@@ -27,4 +27,10 @@ class StringUtils{
     else return source;
   }
 
+  static String decreaseZeroGroups(String source){
+    final List<String> _threeZeroLiterals = ['', 'K', 'M', 'B', 'T'];
+    String _res = source.split('000')[0];
+    return _res + _threeZeroLiterals[source.split('000').length - 1];
+  }
+
 }

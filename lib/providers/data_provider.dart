@@ -1,41 +1,75 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:least_squares/mocks/my_translations.dart';
+import 'package:least_squares/mixins/calculate_mixin.dart';
 import 'package:least_squares/mocks/themes_mock.dart';
+import 'package:least_squares/models/axis_label_model.dart';
+import 'package:least_squares/models/image_pare.dart';
 import 'package:least_squares/models/settings_model.dart';
 import 'package:least_squares/models/theme_list_model.dart';
 import 'package:least_squares/utils/string_utils.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:validators/validators.dart';
 
-class DataProvider extends ChangeNotifier{
-  Map<String, List<double>> _allValues;
+class DataProvider extends ChangeNotifier with CalculateMixin{
+  Function _contextFunction;
   final String _settingsJson = '/settings.json';
-  final List<String> _replaceWhat = [',', '+'];
-  final List<String> _replaceTo = ['.', ''];
-  int approximationType = 0;
-  int dotType = 0;
+
+  Directory _appDirectory;
+  // int dotTypeIndex = 0;
   ThemeData _themeData;
-  int _themeID = 0;
+  int _themeID;
+  List<ImagePair> _imagesList;
 
 
-  double _a, _b;
+  // double _factorA, _factorB;
 
-  String _nanString;
-  // String _locName = 'en';
-  // String _theme = 'default';
-  SettingsModel _settingsModel = SettingsModel(language: 'en', themeId: 0, showGrid: true);
+  final Map<String, AxisLabelModel> _labels = Map();
+
+  SettingsModel _settingsModel;
 
   DataProvider(){
+    _resetSettings();
     _themeData = ThemesMock().themes[_themeID].data;
-    _nanString = _nanString = MyTranslations().getLocale(_settingsModel.language, 'nanMessage');
-    _allValues = new Map();
-    _onlyDataClean();
+    _labels['x'] = AxisLabelModel(text: 'X');
+    _labels['y'] = AxisLabelModel(text: 'Y');
+    _imagesList = [];
+    onlyDataClean();
     _readSettingsData();
   }
+
+  ///labels section
+  AxisLabelModel getAxisModel(String axis){
+    return _labels[axis];
+  }
+  void changeLabelVis(String axis, bool visibility){
+    _labels[axis].visibility = visibility;
+    notifyListeners();
+  }
+  void changeLabelsText(String xText, String yText){
+    _labels['x'].text = xText;
+    _labels['y'].text = yText;
+    notifyListeners();
+  }
+  void changeLabelRotation(String axis){
+    _labels[axis].rotationTimes++;
+    if(_labels[axis].rotationTimes > 1)
+      _labels[axis].rotationTimes = 0;
+    notifyListeners();
+  }
+  void changeLabelFlip(String axis, bool flip){
+    _labels[axis].flipped = flip;
+    notifyListeners();
+  }
+
   ///       settings section
-  String getLocale(){
+  void _resetSettings(){
+    _themeID = 0;
+    _settingsModel = SettingsModel(language: 'en', themeId: _themeID, showGrid: true);
+    _setTheme(_themeID);
+    notifyListeners();
+  }
+
+  String getLanguage(){
     return _settingsModel.language;
   }
 
@@ -45,6 +79,7 @@ class DataProvider extends ChangeNotifier{
   }
 
   void changeLocale(String loc){
+    mixinLanguage = loc;
     if(loc != _settingsModel.language) {
       _settingsModel.language = loc;
       writeLocalJson();
@@ -87,8 +122,16 @@ class DataProvider extends ChangeNotifier{
 
 
   ///   grid
+
   void setGridShow(bool value){
+    _settingsModel.showGrid = gridShow = value;
+  }
+
+  void changeGridShow(bool value){
     _settingsModel.showGrid = value;
+    gridShow = value;
+    notifyListeners();
+    writeLocalJson();
   }
 
   bool getGridShow(){
@@ -96,108 +139,41 @@ class DataProvider extends ChangeNotifier{
   }
 
   ///       data section
-
-  void _initSum() {
-    _a = _b = 0;
-  }
-  void _onlyDataClean() {
-    _allValues['x'] = [];
-    _allValues['y'] = [];
-    _initSum();
-  }
-
+  @override
   void clearAllData(){
-    // print('clearAllData!!!!!!!!!!!!!');
-    _onlyDataClean();
+    super.onlyDataClean();
     notifyListeners();
   }
-
-  String _replaceLoop(String source){
-    String _res = source;
-    for(int i = 0; i < _replaceWhat.length; i++){
-      _res = StringUtils.replaceOneSymbol(_res, _replaceWhat[i], _replaceTo[i]);
-    }
-    return _res;
-  }
-
+  @override
   bool addMoreValues(String xText, String yText) {
-    bool _err = true;
-    String _x = _replaceLoop(xText.isNotEmpty ? xText: '0'),
-        _y = _replaceLoop(yText.isNotEmpty ? yText : '0');
-
-    _x = StringUtils.addLeadNul(_x);
-    _y = StringUtils.addLeadNul(_y);
-
-    // print('isfloat x=${isFloat(_x)} is float y=${isFloat(_y)}');
-    if(isFloat(_x) && isFloat(_y)) {
-      _allValues['x'].add(double.parse(_x));
-      _allValues['y'].add(double.parse(_y));
-      _countAB();
-      _err = false;
-      notifyListeners();
-    }
+    bool _err = super.addMoreValues(xText, yText);
+    notifyListeners();
     return _err;
   }
 
+  @override
   void removeOneValue(int index) {
-    _allValues['x'].removeAt(index);
-    _allValues['y'].removeAt(index);
+    super.removeOneValue(index);
     notifyListeners();
   }
 
-  void _countAB() {
-    _initSum();
-    int _len = _allValues['x'].length;
-    double _sumX = 0, _sumY = 0, _sumXSquare = 0, _sumXY = 0;
-    for (int i = 0; i < _len; i++) {
-      _sumX += _allValues['x'][i];
-      _sumY += _allValues['y'][i];
-      _sumXY += _allValues['x'][i] * _allValues['y'][i];
-      _sumXSquare += _allValues['x'][i] * _allValues['x'][i];
-    }
-    _b = (_sumY * _sumXSquare - _sumX * _sumXY) /
-        (_len * _sumXSquare - _sumX * _sumX);
-    _a = (_len * _sumXY - _sumX * _sumY) /
-        (_len * _sumXSquare - _sumX * _sumX);
+  void approxTypeChange(int index) {
+    approximationType = index;
+    notifyListeners();
+  }
+  void changeDotType(int index) {
+    dotTypeIndex = index;
+    notifyListeners();
+  }
+  void changeDotSize(double size) {
+    dotSize = size;
+    notifyListeners();
   }
 
-  String getAString(){
-    return _a.isNaN ? _nanString : 'a = $_a';
-  }
-
-  String getBString(){
-    return _b.isNaN ? _nanString : 'b = $_b';
-  }
-
-  double getAValue(){
-    return _a;
-  }
-  double getBValue(){
-    return _b;
-  }
-
-  int getValuesLength(){
-    return _allValues['x'].length;
-  }
-
-  double getValue(String name, int index){
-    return _allValues[name][index];
-  }
-
-  Map<String, List<double>> getAllValues(){
-    Map<String, List<double>> _res = Map();
-    _allValues.forEach((key, value) {
-      _res[key] = [];
-      for(int i = 0; i < value.length; i++)
-        _res[key].add(value[i]);
-    });
-    return _res;
-  }
 
   /// read/write section
   Future<File> writeLocalJson() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}$_settingsJson');
+    final file = File('${_appDirectory.path}$_settingsJson');
 
     // String json = jsonEncode(mainDataToWrite);//Utils.correctJson(mainDataToWrite.toString());
     // print('---------------------local path: $localPath');
@@ -209,19 +185,84 @@ class DataProvider extends ChangeNotifier{
   Future<void> _readSettingsData() async {
     SettingsModel _result = new SettingsModel();
     // print('call settings provider read data');
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}$_settingsJson');
+    _appDirectory = await getApplicationDocumentsDirectory();
+    List<FileSystemEntity> _list = _appDirectory.listSync();
+    _imagesList = [];
+    for(int i = 0; i < _list.length; i++){
+      if(_list[i].path.contains(".png")) {
+        // print('read from local directory: ${_list[i].path}');
+        _imagesList.add(ImagePair(path: _list[i].path, selected: false));
+      }
+    }
+    final file = File('${_appDirectory.path}$_settingsJson');
+    if(await file.exists())
+      try {
+        // Read the file
+        String contents = await file.readAsString();
+        // var _dec = json.decode(contents);
+        _result.parseJson(contents);
+        changeTheme(_result.themeId);
+        changeLocale(_result.language);
+        changeGridShow(_result.showGrid);
+      } catch (e) {
+        // If encountering an error, return 0
+        print('catch $e');
+      }
+  }
 
-      // Read the file
-      String contents = await file.readAsString();
-      // var _dec = json.decode(contents);
-      _result.parseJson(contents);
-      changeTheme(_result.themeId);
-      changeLocale(_result.language);
-    } catch (e) {
-      // If encountering an error, return 0
-      print('catch $e');
+  ///images functions
+
+  ImagePair getImage(int index){
+    return _imagesList[index];
+  }
+
+  bool getImageSelection(int index){
+    return _imagesList[index].selected;
+  }
+
+  void setImageSelection(int index, bool value){
+    _imagesList[index].selected  = value;
+    notifyListeners();
+  }
+
+  int getImagesLength(){
+    return _imagesList.length;
+  }
+
+  void savePNG(var pngBytes){
+    // var pngBytes = await image.toByteData(format: ui.ImageByteFormat.png)
+    final _pngPath = '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-')}.png';
+    File('$_pngPath').writeAsBytesSync(pngBytes.buffer.asInt8List());
+    _imagesList.add(ImagePair(path: _pngPath, selected: false));
+  }
+
+  void deleteImages(){
+    for(int i = _imagesList.length - 1; i >= 0; i--){
+      if(_imagesList[i].selected){
+        File(_imagesList[i].path).deleteSync();
+        _imagesList.removeAt(i);
+      }
+    }
+    notifyListeners();
+  }
+
+  ///context functions called by bottomNavBar
+
+  void setContextFunction(Function callback){
+    _contextFunction = callback;
+  }
+  void contextFunctions(int index){
+    switch(index){
+      case 0:
+      case 1:
+      case 2:
+        if(_contextFunction != null)
+          _contextFunction();
+        //print('contextFunction $index');
+        break;
+      case 3:
+        _resetSettings();
+        break;
     }
   }
 

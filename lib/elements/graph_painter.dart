@@ -12,6 +12,8 @@ class DrawPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double _maxSize = size.width > size.height ? size.height : size.width;
     final double _gridStep = _maxSize / graphicData.gridCount;
+    final double _axisXCoord  = _maxSize / 2 + graphicData.displaceX;
+    final double _axisYCoord  = _maxSize / 2 + graphicData.displaceY;
 
     final paintAxis = Paint()
       ..color = themeData.primaryTextTheme.bodyText1.color
@@ -27,11 +29,11 @@ class DrawPainter extends CustomPainter {
       ..color = Colors.green
       ..strokeWidth = 1.0;
 
-    final paintTransp = Paint()..color = Color(0x00ffffff);
+    final paintBackground = Paint()..color = themeData.backgroundColor;
 
     canvas.drawRect(
-        Rect.fromPoints(Offset.zero, Offset(_maxSize, _maxSize)), paintTransp);
-    if (graphicData.gridCount > 0) {
+        Rect.fromPoints(Offset.zero, Offset(_maxSize, _maxSize)), paintBackground);
+    // if (graphicData.showGrid) {
       final paintGrid = Paint()
         ..color = Colors.grey
         ..strokeWidth = 1.0;
@@ -39,41 +41,47 @@ class DrawPainter extends CustomPainter {
       for (int i = -graphicData.gridCount; i < graphicData.gridCount * 2; i++) {
         double _tempCoord = i * _gridStep + graphicData.displaceX;
         if (_tempCoord > 0 && _tempCoord < _maxSize)
-          canvas.drawLine(
+          if(graphicData.showGrid)
+            canvas.drawLine(
               Offset(_tempCoord, 0), Offset(_tempCoord, _maxSize), paintGrid);
+          else canvas.drawLine(
+              Offset(_tempCoord, _axisYCoord - graphicData.axisArrowOffset), Offset(_tempCoord, _axisYCoord + graphicData.axisArrowOffset), paintGrid);
         _tempCoord = _maxSize - i * _gridStep + graphicData.displaceY;
         if (_tempCoord > 0 && _tempCoord < _maxSize)
-          canvas.drawLine(
+          if(graphicData.showGrid)
+            canvas.drawLine(
               Offset(0, _tempCoord), Offset(_maxSize, _tempCoord), paintGrid);
+          else canvas.drawLine(
+              Offset(_axisXCoord - graphicData.axisArrowOffset, _tempCoord), Offset(_axisXCoord + graphicData.axisArrowOffset, _tempCoord), paintGrid);
         // canvas.drawLine(Offset(graphicData.axisArrowOffset * 5, i), Offset(_maxSize - graphicData.axisArrowOffset * 5, i), paintGrid);
       }
-    }
+    // }
     //      Y axis
-    canvas.drawLine(Offset(_maxSize / 2 + graphicData.displaceX, 0),
-        Offset(_maxSize / 2 + graphicData.displaceX, _maxSize), paintAxis);
+    canvas.drawLine(Offset(_axisXCoord, 0),
+        Offset(_axisXCoord, _maxSize), paintAxis);
     canvas.drawLine(
-        Offset(_maxSize / 2 + graphicData.displaceX, 0),
+        Offset(_axisXCoord, 0),
         Offset(
             _maxSize / 2 + graphicData.axisArrowOffset + graphicData.displaceX,
             graphicData.axisArrowOffset * 2),
         paintAxis);
     canvas.drawLine(
-        Offset(_maxSize / 2 + graphicData.displaceX, 0),
+        Offset(_axisXCoord, 0),
         Offset(
             _maxSize / 2 - graphicData.axisArrowOffset + graphicData.displaceX,
             graphicData.axisArrowOffset * 2),
         paintAxis);
 
     //      X axis
-    canvas.drawLine(Offset(0, _maxSize / 2 + graphicData.displaceY),
-        Offset(_maxSize, _maxSize / 2 + graphicData.displaceY), paintAxis);
+    canvas.drawLine(Offset(0, _axisYCoord),
+        Offset(_maxSize, _axisYCoord), paintAxis);
     canvas.drawLine(
-        Offset(_maxSize, _maxSize / 2 + graphicData.displaceY),
+        Offset(_maxSize, _axisYCoord),
         Offset(_maxSize - graphicData.axisArrowOffset * 2,
             _maxSize / 2 - graphicData.axisArrowOffset + graphicData.displaceY),
         paintAxis);
     canvas.drawLine(
-        Offset(_maxSize, _maxSize / 2 + graphicData.displaceY),
+        Offset(_maxSize, _axisYCoord),
         Offset(_maxSize - graphicData.axisArrowOffset * 2,
             _maxSize / 2 + graphicData.axisArrowOffset + graphicData.displaceY),
         paintAxis);

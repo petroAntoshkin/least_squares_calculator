@@ -9,7 +9,7 @@ import '../styles_and_presets.dart';
 class AppbarTitle extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    final String _loc = Provider.of<DataProvider>(context).getLocale();
+    final String _loc = Provider.of<DataProvider>(context).getLanguage();
     return Container(
       // color: Colors.red,
       child: Column(

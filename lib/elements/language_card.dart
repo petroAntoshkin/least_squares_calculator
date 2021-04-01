@@ -18,7 +18,7 @@ class LanguageCard extends StatelessWidget {
     }
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
     bool _thisLangIsCurrent =
-        Provider.of<DataProvider>(context).getLocale() == languageModel.prefix;
+        Provider.of<DataProvider>(context).getLanguage() == languageModel.prefix;
     String _name = 'assets/flags/flag_${languageModel.prefix}.png';
     return Container(
       child: Card(

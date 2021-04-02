@@ -79,8 +79,8 @@ mixin CalculateMixin {
     return _res;
   }
 
-  bool addMoreValues(String xText, String yText) {
-    bool _err = true;
+  int addMoreValues(String xText, String yText) {
+    int _err = 0;
     String _x = _replaceLoop(xText.isNotEmpty ? xText : '0'),
         _y = _replaceLoop(yText.isNotEmpty ? yText : '0');
 
@@ -91,21 +91,22 @@ mixin CalculateMixin {
     if (isFloat(_x) && isFloat(_y)) {
       double _xCandidate = double.parse(_x);
       double _yCandidate = double.parse(_y);
-      if (!_checkForDuplicate(_xCandidate, _yCandidate)) {
+      _err = _checkForDuplicate(_xCandidate, _yCandidate);
+      if (_err == 0) {
         _allValues['x'].add(_xCandidate);
         _allValues['y'].add(_yCandidate);
         _countAB();
-        _err = false;
       }
       // notifyListeners();
     }
     return _err;
   }
 
-  bool _checkForDuplicate(double _x, double _y) {
-    bool _res = false;
+  int _checkForDuplicate(double _x, double _y) {
+    int _res = 0;
     for (int i = 0; i < _allValues['x'].length; i++) {
-      if (_x == _allValues['x'][i] && _y == _allValues['y'][i]) _res = true;
+      if (_x == _allValues['x'][i]) _res = 1;
+      if (_x == _allValues['x'][i] && _y == _allValues['y'][i]) _res = 2;
     }
     return _res;
   }

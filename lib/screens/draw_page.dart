@@ -102,7 +102,7 @@ class _DrawPageState extends State<DrawPage> {
                 child: SizedBox(
                   width: _maxSize * _sizeMultiplier,
                   height: _maxSize * _sizeMultiplier,
-                  child: _len != 0
+                  child: _len > 1
                       ? GestureDetector(
                           onScaleStart: _onScaleStart,
                           onScaleUpdate: _onScaleUpdate,

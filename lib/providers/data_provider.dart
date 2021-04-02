@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:least_squares/mixins/calculate_mixin.dart';
+import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/mocks/themes_mock.dart';
 import 'package:least_squares/models/axis_label_model.dart';
 import 'package:least_squares/models/image_pare.dart';
@@ -19,8 +20,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   ThemeData _themeData;
   int _themeID;
   List<ImagePair> _imagesList;
-
-
+  String _defaultLocale;
   // double _factorA, _factorB;
 
   final Map<String, AxisLabelModel> _labels = Map();
@@ -28,6 +28,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   SettingsModel _settingsModel;
 
   DataProvider(){
+    _defaultLocale = _getDeviceLocale(Platform.localeName);
     _resetSettings();
     _themeData = ThemesMock().themes[_themeID].data;
     _labels['x'] = AxisLabelModel(text: 'X');
@@ -35,6 +36,15 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     _imagesList = [];
     onlyDataClean();
     _readSettingsData();
+    //print('${Platform.localeName} def loacale is $_defaultLocale');
+  }
+
+  ///locale from device
+  String _getDeviceLocale(String so){
+    String first_let = so.substring(0, 2);
+    if(!MyTranslations().isLanguageAvailable(first_let))
+      first_let = 'en';
+    return first_let;
   }
 
   ///labels section
@@ -64,7 +74,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   ///       settings section
   void _resetSettings(){
     _themeID = 0;
-    _settingsModel = SettingsModel(language: 'en', themeId: _themeID, showGrid: true);
+    _settingsModel = SettingsModel(language: _defaultLocale, themeId: _themeID, showGrid: true);
     _setTheme(_themeID);
     notifyListeners();
   }
@@ -145,9 +155,9 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     notifyListeners();
   }
   @override
-  bool addMoreValues(String xText, String yText) {
-    bool _err = super.addMoreValues(xText, yText);
-    notifyListeners();
+  int addMoreValues(String xText, String yText) {
+    int _err = super.addMoreValues(xText, yText);
+    if(_err == 0) notifyListeners();
     return _err;
   }
 

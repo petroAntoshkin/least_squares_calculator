@@ -17,7 +17,7 @@ class MyTranslations{
     ///en
     en.putIfAbsent('title', () => 'Least Squares Calculator');
     en.putIfAbsent('calculateButtonName', () => 'Add &\nCalculate');
-    en.putIfAbsent('nanMessage', () => 'Is not a Number');
+    en.putIfAbsent('nanMessage', () => 'Not enough data');
     en.putIfAbsent('nanData', () => 'No data');
     en.putIfAbsent('settings', () => 'Settings');
     en.putIfAbsent('default_settings', () => 'Default settings');
@@ -33,10 +33,12 @@ class MyTranslations{
     en.putIfAbsent('copy_image_path', () => 'Copy Image path');
     en.putIfAbsent('customization', () => 'Customization');
     en.putIfAbsent('axis_description', () => 'Axis description');
+    en.putIfAbsent('equal_data_error_1', () => 'Only one value of Y must correspond to one value of X.');
+    en.putIfAbsent('equal_data_error_2', () => 'Such data already exist');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('calculateButtonName', () => '加和計算');
-    zh.putIfAbsent('nanMessage', () => '不是數字');
+    zh.putIfAbsent('nanMessage', () => '资料不足');
     zh.putIfAbsent('nanData', () => '沒有數據');
     zh.putIfAbsent('settings', () => '設定值');
     zh.putIfAbsent('default_settings', () => '默认设置');
@@ -52,10 +54,12 @@ class MyTranslations{
     zh.putIfAbsent('copy_image_path', () => '复制影像');
     zh.putIfAbsent('customization', () => '客制化');
     zh.putIfAbsent('axis_description', () => '轴说明');
+    zh.putIfAbsent('equal_data_error_1', () => 'Y的两个或多个值不可能对应于X的一个值。');
+    zh.putIfAbsent('equal_data_error_2', () => '这样的数据已经存在');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('calculateButtonName', () => 'जोड़ें और गणना करें');
-    hi.putIfAbsent('nanMessage', () => 'एक संख्या नहीं है');
+    hi.putIfAbsent('nanMessage', () => 'पर्याप्त डेटा नहीं');
     hi.putIfAbsent('nanData', () => 'कोई आकड़ा उपलब्ध नहीं है');
     hi.putIfAbsent('settings', () => 'समायोजन');
     hi.putIfAbsent('default_settings', () => 'न्यूनता समायोजन');
@@ -71,10 +75,12 @@ class MyTranslations{
     hi.putIfAbsent('copy_image_path', () => 'छवि पथ की प्रतिलिपि बनाएँ');
     hi.putIfAbsent('customization', () => 'अनुकूलन');
     hi.putIfAbsent('axis_description', () => 'एक्सिस विवरण');
+    hi.putIfAbsent('equal_data_error_1', () => 'X के एक मान से Y के दो या अधिक मान संभव नहीं हैं।');
+    hi.putIfAbsent('equal_data_error_2', () => 'ऐसा डेटा पहले से मौजूद है');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('calculateButtonName', () => 'Agregar & \ nCalculate');
-    es.putIfAbsent('nanMessage', () => 'No es un número');
+    es.putIfAbsent('nanMessage', () => 'No hay suficientes datos');
     es.putIfAbsent('nanData', () => 'Sin datos');
     es.putIfAbsent('settings', () => 'Configuración');
     es.putIfAbsent('default_settings', () => 'Configuraciones predeterminadas');
@@ -90,10 +96,12 @@ class MyTranslations{
     es.putIfAbsent('copy_image_path', () => 'Copiar ruta de imagen');
     es.putIfAbsent('customization', () => 'Personalización');
     es.putIfAbsent('axis_description', () => 'Descripción del eje');
+    es.putIfAbsent('equal_data_error_1', () => 'No es posible que dos o más valores de Y correspondan a un valor de X.');
+    es.putIfAbsent('equal_data_error_2', () => 'Tales datos ya existen');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('calculateButtonName', () => 'Ajouter & \ nCalculer');
-    fr.putIfAbsent('nanMessage', () => 'N\'est pas un nombre');
+    fr.putIfAbsent('nanMessage', () => 'Pas assez de données');
     fr.putIfAbsent('nanData', () => 'Aucune donnée');
     fr.putIfAbsent('settings', () => 'Paramètres');
     fr.putIfAbsent('default_settings', () => 'Paramètres par défaut');
@@ -109,10 +117,12 @@ class MyTranslations{
     fr.putIfAbsent('copy_image_path', () => 'Copier le chemin de l\'image');
     fr.putIfAbsent('customization', () => 'Personnalisation');
     fr.putIfAbsent('axis_description', () => 'Description de l\'axe');
+    fr.putIfAbsent('equal_data_error_1', () => 'Il est impossible que deux ou plusieurs valeurs de Y correspondent à une valeur de X.');
+    fr.putIfAbsent('equal_data_error_2', () => 'De telles données existent déjà');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('calculateButtonName', () => 'Hinzufügen &\nBerechnen');
-    de.putIfAbsent('nanMessage', () => 'Ist keine Zahl');
+    de.putIfAbsent('nanMessage', () => 'Nicht genügend Daten');
     de.putIfAbsent('nanData', () => 'Keine Daten');
     de.putIfAbsent('settings', () => 'die Einstellungen');
     de.putIfAbsent('default_settings', () => 'Standardeinstellungen');
@@ -128,10 +138,12 @@ class MyTranslations{
     de.putIfAbsent('copy_image_path', () => 'Bildpfad kopieren');
     de.putIfAbsent('customization', () => 'Anpassung');
     de.putIfAbsent('axis_description', () => 'Achsenbeschreibung');
+    de.putIfAbsent('equal_data_error_1', () => 'Nicht möglich, dass zwei oder mehr Werte von Y einem Wert von X entsprechen.');
+    de.putIfAbsent('equal_data_error_2', () => 'Solche Daten existieren bereits');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('calculateButtonName', () => 'Adicionar e\ncalcular');
-    pt.putIfAbsent('nanMessage', () => 'Não é um número');
+    pt.putIfAbsent('nanMessage', () => 'Não há dados suficientes');
     pt.putIfAbsent('nanData', () => 'Sem dados');
     pt.putIfAbsent('settings', () => 'Configurações');
     pt.putIfAbsent('default_settings', () => 'Configurações padrão');
@@ -147,10 +159,12 @@ class MyTranslations{
     pt.putIfAbsent('copy_image_path', () => 'Copiar caminho da imagem');
     pt.putIfAbsent('customization', () => 'Costumização');
     pt.putIfAbsent('axis_description', () => 'Descrição do eixo');
+    pt.putIfAbsent('equal_data_error_1', () => 'Não é possível que dois ou mais valores de Y correspondam a um valor de X.');
+    pt.putIfAbsent('equal_data_error_2', () => 'Esses dados já existem');
     ///ua
     ua.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     ua.putIfAbsent('calculateButtonName', () => 'Додати\nзначення');
-    ua.putIfAbsent('nanMessage', () => 'Результат не є числом');
+    ua.putIfAbsent('nanMessage', () => 'Недостатньо даних');
     ua.putIfAbsent('nanData', () => 'Відсутні дані');
     ua.putIfAbsent('settings', () => 'Налаштування');
     ua.putIfAbsent('default_settings', () => 'Налаштування за замовчуванням');
@@ -166,10 +180,12 @@ class MyTranslations{
     ua.putIfAbsent('copy_image_path', () => 'Скопіювати шлях зображення');
     ua.putIfAbsent('customization', () => 'Налаштування');
     ua.putIfAbsent('axis_description', () => 'Підпис вісі');
+    ua.putIfAbsent('equal_data_error_1', () => 'Неможливо, щоб два або більше значень Y відповідали одному значенню X.');
+    ua.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('calculateButtonName', () => 'Добавить\nзначения');
-    ru.putIfAbsent('nanMessage', () => 'Is not a Number');
+    ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
     ru.putIfAbsent('nanData', () => 'Нет данных');
     ru.putIfAbsent('settings', () => 'Настройки');
     ru.putIfAbsent('default_settings', () => 'Настройки по умолчанию');
@@ -185,6 +201,8 @@ class MyTranslations{
     ru.putIfAbsent('copy_image_path', () => 'Копировать путь изображения');
     ru.putIfAbsent('customization', () => 'Настройка');
     ru.putIfAbsent('axis_description', () => 'Описание оси');
+    ru.putIfAbsent('equal_data_error_1', () => 'Нельзя, чтобы два или более значения Y соответствовали одному значению X.');
+    ru.putIfAbsent('equal_data_error_2', () => 'Уже есть такие данные');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('zh', () => zh);
@@ -207,6 +225,9 @@ class MyTranslations{
         _resultString = value;
     });
     return _resultString;
+  }
+  bool isLanguageAvailable(String lang){
+    return _allTexts[lang] != null;
   }
 
 }

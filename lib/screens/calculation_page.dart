@@ -30,7 +30,8 @@ class _CalculationPageState extends State<CalculationPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Provider.of<DataProvider>(context, listen: false).setContextFunction(_bottomNavFunction);
+    Provider.of<DataProvider>(context, listen: false)
+        .setContextFunction(_bottomNavFunction);
   }
 
   @override
@@ -86,11 +87,7 @@ class _CalculationPageState extends State<CalculationPage> {
                             ),
                           ),
                           onTap: () {
-                            Provider.of<DataProvider>(context, listen: false)
-                                .addMoreValues(
-                                    _controllerX.text, _controllerY.text);
-                            _clearControllers();
-                            _xFocusNode.requestFocus();
+                            _addValuesRequest();
                           },
                         ),
                       ),
@@ -140,11 +137,7 @@ class _CalculationPageState extends State<CalculationPage> {
                             ),
                           ),
                           onTap: () {
-                            Provider.of<DataProvider>(context, listen: false)
-                                .addMoreValues(
-                                    _controllerX.text, _controllerY.text);
-                            _clearControllers();
-                            _xFocusNode.requestFocus();
+                            _addValuesRequest();
                           },
                         ),
                       ),
@@ -157,6 +150,47 @@ class _CalculationPageState extends State<CalculationPage> {
         ),
       ]),
     );
+  }
+
+  void _addValuesRequest() {
+    int _error = Provider.of<DataProvider>(context, listen: false)
+        .addMoreValues(_controllerX.text, _controllerY.text);
+    if (_error == 0) {
+      _clearControllers();
+      _xFocusNode.requestFocus();
+    } else {
+      Dialogs.materialDialog(
+        customView: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              Icon(
+                Icons.error_outline,
+                color: Colors.redAccent,
+                size: 50.0,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                MyTranslations().getLocale(
+                    Provider.of<DataProvider>(_context, listen: false)
+                        .getLanguage(),
+                    'equal_data_error_$_error'),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        context: _context,
+        actions: [
+          IconsOutlineButton(
+            onPressed: () => Navigator.pop(context),
+            text: 'ok',
+          ),
+        ],
+      );
+    }
   }
 
   void _clearControllers() {
@@ -190,7 +224,7 @@ class _CalculationPageState extends State<CalculationPage> {
   }
 
   void _bottomNavFunction() {
-    if(_dataLen > 0) {
+    if (_dataLen > 0) {
       Dialogs.bottomMaterialDialog(
         msg: MyTranslations().getLocale(
             Provider.of<DataProvider>(_context, listen: false).getLanguage(),
@@ -203,8 +237,7 @@ class _CalculationPageState extends State<CalculationPage> {
           IconsOutlineButton(
             onPressed: () => Navigator.pop(context),
             text: MyTranslations().getLocale(
-                Provider.of<DataProvider>(context, listen: false)
-                    .getLanguage(),
+                Provider.of<DataProvider>(context, listen: false).getLanguage(),
                 'cancel'),
             iconData: Icons.cancel_outlined,
             textStyle: TextStyle(color: Colors.grey),
@@ -212,13 +245,11 @@ class _CalculationPageState extends State<CalculationPage> {
           ),
           IconsButton(
             onPressed: () {
-              Provider.of<DataProvider>(context, listen: false)
-                  .clearAllData();
+              Provider.of<DataProvider>(context, listen: false).clearAllData();
               Navigator.pop(context);
             },
             text: MyTranslations().getLocale(
-                Provider.of<DataProvider>(context, listen: false)
-                    .getLanguage(),
+                Provider.of<DataProvider>(context, listen: false).getLanguage(),
                 'delete'),
             iconData: Icons.delete,
             color: Colors.red,

@@ -58,14 +58,6 @@ class _DropDownListState extends State<DropDownList> {
     listItems.forEach((key, value) {
       items.add(DropdownMenuItem(
         child: value.widget,
-        // child: Text(
-        //   value,
-        //   style: TextStyle(
-        //     color: _themeData != null
-        //         ? _themeData.primaryTextTheme.bodyText1.color
-        //         : Colors.white54,
-        //   ),
-        // ),
         value: key,
       ));
     });
@@ -82,6 +74,7 @@ class _DropDownListState extends State<DropDownList> {
         child: DropdownButton(
             //underline: SizedBox(child: Container(color: Colors.red,),),
             dropdownColor: _themeData.primaryColor,
+            iconEnabledColor: _themeData.primaryTextTheme.bodyText1.color,
             value: _selectedItem,
             items: buildDropDownMenuItems(_dropdownItems),
             onChanged: (value) {

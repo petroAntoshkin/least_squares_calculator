@@ -12,11 +12,12 @@ class MyTranslations{
     Map<String, String> fr = new Map();
     Map<String, String> es = new Map();
     Map<String, String> pt = new Map();
+    Map<String, String> it = new Map();
+    Map<String, String> pl = new Map();
     Map<String, String> ua = new Map();
     Map<String, String> ru = new Map();
     ///en
     en.putIfAbsent('title', () => 'Least Squares Calculator');
-    en.putIfAbsent('calculateButtonName', () => 'Add &\nCalculate');
     en.putIfAbsent('nanMessage', () => 'Not enough data');
     en.putIfAbsent('nanData', () => 'No data');
     en.putIfAbsent('settings', () => 'Settings');
@@ -37,7 +38,6 @@ class MyTranslations{
     en.putIfAbsent('equal_data_error_2', () => 'Such data already exist');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
-    zh.putIfAbsent('calculateButtonName', () => '加和計算');
     zh.putIfAbsent('nanMessage', () => '资料不足');
     zh.putIfAbsent('nanData', () => '沒有數據');
     zh.putIfAbsent('settings', () => '設定值');
@@ -58,7 +58,6 @@ class MyTranslations{
     zh.putIfAbsent('equal_data_error_2', () => '这样的数据已经存在');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
-    hi.putIfAbsent('calculateButtonName', () => 'जोड़ें और गणना करें');
     hi.putIfAbsent('nanMessage', () => 'पर्याप्त डेटा नहीं');
     hi.putIfAbsent('nanData', () => 'कोई आकड़ा उपलब्ध नहीं है');
     hi.putIfAbsent('settings', () => 'समायोजन');
@@ -79,7 +78,6 @@ class MyTranslations{
     hi.putIfAbsent('equal_data_error_2', () => 'ऐसा डेटा पहले से मौजूद है');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
-    es.putIfAbsent('calculateButtonName', () => 'Agregar & \ nCalculate');
     es.putIfAbsent('nanMessage', () => 'No hay suficientes datos');
     es.putIfAbsent('nanData', () => 'Sin datos');
     es.putIfAbsent('settings', () => 'Configuración');
@@ -100,7 +98,6 @@ class MyTranslations{
     es.putIfAbsent('equal_data_error_2', () => 'Tales datos ya existen');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
-    fr.putIfAbsent('calculateButtonName', () => 'Ajouter & \ nCalculer');
     fr.putIfAbsent('nanMessage', () => 'Pas assez de données');
     fr.putIfAbsent('nanData', () => 'Aucune donnée');
     fr.putIfAbsent('settings', () => 'Paramètres');
@@ -121,7 +118,6 @@ class MyTranslations{
     fr.putIfAbsent('equal_data_error_2', () => 'De telles données existent déjà');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
-    de.putIfAbsent('calculateButtonName', () => 'Hinzufügen &\nBerechnen');
     de.putIfAbsent('nanMessage', () => 'Nicht genügend Daten');
     de.putIfAbsent('nanData', () => 'Keine Daten');
     de.putIfAbsent('settings', () => 'die Einstellungen');
@@ -142,7 +138,6 @@ class MyTranslations{
     de.putIfAbsent('equal_data_error_2', () => 'Solche Daten existieren bereits');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
-    pt.putIfAbsent('calculateButtonName', () => 'Adicionar e\ncalcular');
     pt.putIfAbsent('nanMessage', () => 'Não há dados suficientes');
     pt.putIfAbsent('nanData', () => 'Sem dados');
     pt.putIfAbsent('settings', () => 'Configurações');
@@ -161,9 +156,48 @@ class MyTranslations{
     pt.putIfAbsent('axis_description', () => 'Descrição do eixo');
     pt.putIfAbsent('equal_data_error_1', () => 'Não é possível que dois ou mais valores de Y correspondam a um valor de X.');
     pt.putIfAbsent('equal_data_error_2', () => 'Esses dados já existem');
+    ///it
+    it.putIfAbsent('title', () => 'Calcolatrice dei minimi quadrati');
+    it.putIfAbsent('nanMessage', () => 'Dati insufficienti');
+    it.putIfAbsent('nanData', () => 'Nessun dato');
+    it.putIfAbsent('settings', () => 'Impostazioni');
+    it.putIfAbsent('default_settings', () => 'Impostazioni predefinite');
+    it.putIfAbsent('reset', () => 'Reimposta i dati');
+    it.putIfAbsent('show_grid', () => 'Mostra griglia');
+    it.putIfAbsent('del_approve', () => 'Sei sicuro? Non puoi annullare questa azione');
+    it.putIfAbsent('cancel', () => 'Annulla');
+    it.putIfAbsent('delete', () => 'Elimina');
+    it.putIfAbsent('dots_size', () => 'Dimensione dei punti');
+    it.putIfAbsent('export', () => 'Esporta immagine');
+    it.putIfAbsent('no_images', () => 'Nessuna immagine');
+    it.putIfAbsent('delete_image', () => 'Eliminazione delle immagini');
+    it.putIfAbsent('copy_image_path', () => 'Copia percorso immagine');
+    it.putIfAbsent('customization', () => 'Personalizzazione');
+    it.putIfAbsent('axis_description', () => 'Descrizione dell\'asse');
+    it.putIfAbsent('equal_data_error_1', () => 'Un solo valore di Y deve corrispondere a un valore di X.');
+    it.putIfAbsent('equal_data_error_2', () => 'Tali dati esistono già');
+    ///pl
+    pl.putIfAbsent('title', () => 'Kalkulator najmniejszych kwadratów');
+    pl.putIfAbsent('nanMessage', () => 'Za mało danych');
+    pl.putIfAbsent('nanData', () => 'Brak danych');
+    pl.putIfAbsent('settings', () => 'Ustawienia');
+    pl.putIfAbsent('default_settings', () => 'Ustawienia domyślne');
+    pl.putIfAbsent('reset', () => 'Resetuj dane');
+    pl.putIfAbsent('show_grid', () => 'Pokaż siatkę');
+    pl.putIfAbsent('del_approve', () => 'Jesteś pewny? Nie możesz cofnąć tej czynności');
+    pl.putIfAbsent('cancel', () => 'Odwołać');
+    pl.putIfAbsent('delete', () => 'Usunąć');
+    pl.putIfAbsent('dots_size', () => 'Rozmiar kropek');
+    pl.putIfAbsent('export', () => 'Eksport obrazu');
+    pl.putIfAbsent('no_images', () => 'Brak obrazów');
+    pl.putIfAbsent('delete_image', () => 'Usuwanie obrazów');
+    pl.putIfAbsent('copy_image_path', () => 'Kopiuj ścieżkę obrazu');
+    pl.putIfAbsent('customization', () => 'Dostosowywanie');
+    pl.putIfAbsent('axis_description', () => 'Opis osi');
+    pl.putIfAbsent('equal_data_error_1', () => 'Tylko jedna wartość Y musi odpowiadać jednej wartości X.');
+    pl.putIfAbsent('equal_data_error_2', () => 'Takie dane już istnieją');
     ///ua
     ua.putIfAbsent('title', () => 'Обчислення найменших квадратів');
-    ua.putIfAbsent('calculateButtonName', () => 'Додати\nзначення');
     ua.putIfAbsent('nanMessage', () => 'Недостатньо даних');
     ua.putIfAbsent('nanData', () => 'Відсутні дані');
     ua.putIfAbsent('settings', () => 'Налаштування');
@@ -184,7 +218,6 @@ class MyTranslations{
     ua.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
-    ru.putIfAbsent('calculateButtonName', () => 'Добавить\nзначения');
     ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
     ru.putIfAbsent('nanData', () => 'Нет данных');
     ru.putIfAbsent('settings', () => 'Настройки');
@@ -211,6 +244,8 @@ class MyTranslations{
     _allTexts.putIfAbsent('de', () => de);
     _allTexts.putIfAbsent('fr', () => fr);
     _allTexts.putIfAbsent('pt', () => pt);
+    _allTexts.putIfAbsent('it', () => it);
+    _allTexts.putIfAbsent('pl', () => pl);
     _allTexts.putIfAbsent('ua', () => ua);
     _allTexts.putIfAbsent('ru', () => ru);
   }

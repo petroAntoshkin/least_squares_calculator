@@ -28,9 +28,9 @@ class ValuesPair extends StatelessWidget{
               width: 40.0,
               height: 40.0,
               child: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.edit_outlined),
                   onPressed: () => Provider.of<DataProvider>(context, listen: false)
-                      .removeOneValue(pairIndex)),
+                      .startEditValue(pairIndex)),
             ),
             Center(
               child: Row(

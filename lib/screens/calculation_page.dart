@@ -13,6 +13,7 @@ class CalculationPage extends StatefulWidget {
 
 class _CalculationPageState extends State<CalculationPage> {
   ThemeData _themeData;
+  DataProvider _dataProvider;
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
   final FocusNode _xFocusNode = FocusNode();
@@ -36,8 +37,9 @@ class _CalculationPageState extends State<CalculationPage> {
 
   @override
   Widget build(BuildContext context) {
-    _dataLen = Provider.of<DataProvider>(context).getValuesLength();
-    _themeData = Provider.of<DataProvider>(context).theme;
+    _dataProvider = Provider.of<DataProvider>(context);
+    _dataLen = _dataProvider.getValuesLength();
+    _themeData = _dataProvider.theme;
     _context = context;
     // print('CalculationPage build $_dataLen');
     return Center(
@@ -81,7 +83,9 @@ class _CalculationPageState extends State<CalculationPage> {
                             ),
                             child: Center(
                               child: Icon(
-                                Icons.calculate,
+                                _dataProvider.editIndex == -1
+                                    ? Icons.calculate
+                                    : Icons.check,
                                 color: _themeData.accentColor,
                               ),
                             ),
@@ -98,7 +102,12 @@ class _CalculationPageState extends State<CalculationPage> {
                     width: (MediaQuery.of(context).size.width - 100) / 2,
                     child: Container(
                       margin: EdgeInsets.all(4.0),
-                      child: _editTextField(_controllerX, ' X ', _xFocusNode),
+                      child: _editTextField(
+                          _controllerX,
+                          ' X ',
+                          _xFocusNode,
+                          _dataProvider.getValueString(
+                              'x', _dataProvider.editIndex)),
                     ),
                   ),
                   SizedBox(
@@ -107,7 +116,12 @@ class _CalculationPageState extends State<CalculationPage> {
                     width: (MediaQuery.of(context).size.width - 100) / 2,
                     child: Container(
                       margin: EdgeInsets.all(4.0),
-                      child: _editTextField(_controllerY, ' Y ', null),
+                      child: _editTextField(
+                          _controllerY,
+                          ' Y ',
+                          null,
+                          _dataProvider.getValueString(
+                              'y', _dataProvider.editIndex)),
                     ),
                   ),
                   Padding(
@@ -131,13 +145,17 @@ class _CalculationPageState extends State<CalculationPage> {
                             ),
                             child: Center(
                               child: Icon(
-                                Icons.calculate,
+                                _dataProvider.editIndex == -1
+                                    ? Icons.calculate
+                                    : Icons.cancel_outlined,
                                 color: _themeData.accentColor,
                               ),
                             ),
                           ),
                           onTap: () {
-                            _addValuesRequest();
+                            _dataProvider.editIndex == -1
+                                ? _addValuesRequest()
+                                : _cancelEdit();
                           },
                         ),
                       ),
@@ -150,6 +168,11 @@ class _CalculationPageState extends State<CalculationPage> {
         ),
       ]),
     );
+  }
+
+  void _cancelEdit(){
+    Provider.of<DataProvider>(context, listen: false).cancelEditValue();
+    FocusManager.instance.primaryFocus.unfocus();
   }
 
   void _addValuesRequest() {
@@ -198,8 +221,11 @@ class _CalculationPageState extends State<CalculationPage> {
     _controllerY.clear();
   }
 
-  Widget _editTextField(
-      TextEditingController controller, String prefix, FocusNode focusNode) {
+  Widget _editTextField(TextEditingController controller, String prefix,
+      FocusNode focusNode, String valueString) {
+    controller.text = valueString;
+    if(_controllerX.text.isNotEmpty)
+      _xFocusNode.requestFocus();
     return Container(
       decoration: BoxDecoration(),
       child: TextField(

@@ -34,7 +34,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
   Map<int, NamedWidget> _dotsMap = Map();
   int _approximationType = 0, _dotType = 0;
   AxisLabelModel _labelModelX, _labelModelY;
-  final double _buttonSize = 48.0, _iconSize = 22.0;
+  final double _buttonSize = 48.0, _iconSize = 22.0, _borderRadius = 8.0;
 
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
@@ -97,13 +97,21 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     _dotsMap[2].widget = DotRhomb(
       color: _themeData.primaryTextTheme.bodyText1.color,
     );
+    return _settingsBarCollapsed ? Positioned(
+      top: _maxSize + 6.0,
+      child: _child(),
+    )
+    : Align(
+    alignment: Alignment.bottomCenter,
+      child: _child(),
+    );
+  }
+
+  Widget _child(){
     return Container(
       decoration: BoxDecoration(
         color: _themeData.primaryColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -122,29 +130,34 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                 color: Color(0x00ff0000),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
                     gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0x55000000),
-                        Color(0x01000000),
-                        Color(0x01000000),
-                        Color(0x01000000),
-                      ]
-                    ),
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0x55000000),
+                          Color(0x01000000),
+                          Color(0x01000000),
+                          Color(0x01000000),
+                        ]),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
                         width: 40.0,
+                        child: Center(
+                          child: Icon(
+                            _settingsBarCollapsed
+                                ? Icons.arrow_drop_down_outlined
+                                : Icons.arrow_drop_up_outlined,
+                            color: _themeData.primaryTextTheme.bodyText1.color,
+                          ),
+                        ),
                       ),
                       Text(
-                        MyTranslations().getLocale(widget._loc, 'customization'),
+                        MyTranslations()
+                            .getLocale(widget._loc, 'customization'),
                         style: TextStyle(
                           color: _themeData.primaryTextTheme.bodyText1.color,
                         ),
@@ -154,8 +167,8 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                         child: Center(
                           child: Icon(
                             _settingsBarCollapsed
-                                ? Icons.arrow_drop_up_outlined
-                                : Icons.arrow_drop_down_outlined,
+                                ? Icons.arrow_drop_down_outlined
+                                : Icons.arrow_drop_up_outlined,
                             color: _themeData.primaryTextTheme.bodyText1.color,
                           ),
                         ),
@@ -169,279 +182,263 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
           _settingsBarCollapsed
               ? Container()
               : Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 26.0,
+                child: Slider(
+                  value: _graphicsData.dotSize,
+                  min: 3.0,
+                  max: 14.0,
+                  divisions: 32,
+                  onChanged: (value) {
+                    Provider.of<DataProvider>(context, listen: false)
+                        .changeDotSize(value);
+                    setState(() {});
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Row(
                   children: [
-                    SizedBox(
-                      height: 26.0,
-                      child: Slider(
-                        value: _graphicsData.dotSize,
-                        min: 3.0,
-                        max: 14.0,
-                        divisions: 32,
-                        onChanged: (value) {
-                          Provider.of<DataProvider>(context, listen: false)
-                              .changeDotSize(value);
-                          setState(() {});
-                        },
+                    Row(
+                      children: [
+                        Checkbox(
+                          activeColor: _themeData.primaryColorDark,
+                          checkColor: _themeData.accentColor,
+                          value: _graphicsData.showGrid,
+                          onChanged: (value) {
+                            // print('chane checkBox value to $value');
+                            Provider.of<DataProvider>(context,
+                                listen: false)
+                                .changeGridShow(value);
+                            setState(() {});
+                          },
+                        ),
+                        Text(
+                          MyTranslations()
+                              .getLocale(widget._loc, 'show_grid'),
+                          style: TextStyle(
+                            color: _themeData
+                                .primaryTextTheme.bodyText1.color,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropDownList(
+                        itemsList: _approxMap,
+                        currentValue: _approximationType,
+                        callBack: _changeApproximationType,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Row(
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                activeColor: _themeData.primaryColorDark,
-                                checkColor: _themeData.accentColor,
-                                value: _graphicsData.showGrid,
-                                onChanged: (value) {
-                                  // print('chane checkBox value to $value');
-                                  Provider.of<DataProvider>(context,
-                                          listen: false)
-                                      .changeGridShow(value);
-                                  setState(() {});
-                                },
-                              ),
-                              Text(
-                                MyTranslations()
-                                    .getLocale(widget._loc, 'show_grid'),
-                                style: TextStyle(
-                                  color: _themeData
-                                      .primaryTextTheme.bodyText1.color,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropDownList(
-                              itemsList: _approxMap,
-                              currentValue: _approximationType,
-                              callBack: _changeApproximationType,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropDownList(
-                              itemsList: _dotsMap,
-                              currentValue: _dotType,
-                              callBack: _changeDotType,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Table(
-                        border: TableBorder.all(color: Color(0x55000000)),
-                        columnWidths: {
-                          0: FlexColumnWidth(50),
-                          1: FlexColumnWidth(50),
-                        },
-                        children: [
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6.0),
-                                  child: Text(
-                                    '${MyTranslations().getLocale(widget._loc, 'axis_description')} (X)',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: _themeData
-                                          .primaryTextTheme.bodyText1.color,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              TableCell(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6.0),
-                                  child: Text(
-                                    '${MyTranslations().getLocale(widget._loc, 'axis_description')} (Y)',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: _themeData
-                                          .primaryTextTheme.bodyText1.color,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: _editTextField(
-                                    _controllerX,
-                                    Provider.of<DataProvider>(context,
-                                            listen: false)
-                                        .getAxisModel('x')
-                                        .text,
-                                    'x'),
-                              ),
-                              TableCell(
-                                child: _editTextField(
-                                    _controllerY,
-                                    Provider.of<DataProvider>(context,
-                                            listen: false)
-                                        .getAxisModel('y')
-                                        .text,
-                                    'y'),
-                              ),
-                            ],
-                          ),
-                          TableRow(children: [
-                            TableCell(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                SizedBox(
-                                  width: _buttonSize,
-                                  height: _buttonSize,
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      Provider.of<DataProvider>(context,
-                                              listen: false)
-                                          .changeLabelVis(
-                                              'x', !_labelModelX.visibility);
-                                    },
-                                    child: Center(
-                                      child: Icon(
-                                        _labelModelX.visibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: _themeData
-                                            .primaryTextTheme.bodyText1.color,
-                                        size: _iconSize,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // SizedBox(
-                                //   width: _buttonSize,
-                                //   height: _buttonSize,
-                                //   child: MaterialButton(
-                                //     onPressed: () {
-                                //       Provider.of<DataProvider>(context,
-                                //               listen: false)
-                                //           .changeLabelRotation('x');
-                                //     },
-                                //     child: Center(
-                                //       child: Icon(
-                                //         Icons.rotate_90_degrees_ccw_outlined,
-                                //         color: _themeData
-                                //             .primaryTextTheme.bodyText1.color,
-                                //         size: _iconSize,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-                                SizedBox(
-                                  width: _buttonSize,
-                                  height: _buttonSize,
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      Provider.of<DataProvider>(context,
-                                          listen: false)
-                                          .changeLabelFlip(
-                                          'x', !_labelModelX.flipped);
-                                    },
-                                    child: Center(
-                                      child: Transform.rotate(
-                                        angle: _labelModelX.flipped ? pi/2 : pi * 1.5,
-                                        child: Icon(
-                                          Icons.flip_outlined,
-                                          color: _themeData
-                                              .primaryTextTheme.bodyText1.color,
-                                          size: _iconSize,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                            TableCell(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                SizedBox(
-                                  width: _buttonSize,
-                                  height: _buttonSize,
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      Provider.of<DataProvider>(context,
-                                              listen: false)
-                                          .changeLabelVis(
-                                              'y', !_labelModelY.visibility);
-                                    },
-                                    child: Center(
-                                      child: Icon(
-                                        _labelModelY.visibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: _themeData
-                                            .primaryTextTheme.bodyText1.color,
-                                        size: _iconSize,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: _buttonSize,
-                                  height: _buttonSize,
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      Provider.of<DataProvider>(context,
-                                              listen: false)
-                                          .changeLabelRotation('y');
-                                    },
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.rotate_90_degrees_ccw_outlined,
-                                        color: _themeData
-                                            .primaryTextTheme.bodyText1.color,
-                                        size: _iconSize,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: _buttonSize,
-                                  height: _buttonSize,
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      Provider.of<DataProvider>(context,
-                                              listen: false)
-                                          .changeLabelFlip(
-                                              'y', !_labelModelY.flipped);
-                                    },
-                                    child: Center(
-                                      child: Transform.rotate(
-                                        angle: _labelModelY.flipped ? pi : 0,
-                                        child: Icon(
-                                          Icons.flip_outlined,
-                                          color: _themeData
-                                              .primaryTextTheme.bodyText1.color,
-                                          size: _iconSize,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                          ]),
-                        ],
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropDownList(
+                        itemsList: _dotsMap,
+                        currentValue: _dotType,
+                        callBack: _changeDotType,
                       ),
                     ),
                   ],
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Table(
+                  border: TableBorder.all(color: Color(0x55000000)),
+                  columnWidths: {
+                    0: FlexColumnWidth(50),
+                    1: FlexColumnWidth(50),
+                  },
+                  children: [
+                    TableRow(
+                      children: [
+                        TableCell(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                const EdgeInsets.fromLTRB(0, 2, 0, 0),
+                                child: Text(
+                                  '${MyTranslations().getLocale(widget._loc, 'axis_description')} (X)',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: _themeData
+                                        .primaryTextTheme.bodyText1.color,
+                                  ),
+                                ),
+                              ),
+                              _editTextField(
+                                  _controllerX,
+                                  Provider.of<DataProvider>(context,
+                                      listen: false)
+                                      .getAxisModel('x')
+                                      .text,
+                                  'x'),
+                            ],
+                          ),
+                        ),
+                        TableCell(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                const EdgeInsets.fromLTRB(0, 2, 0, 0),
+                                child: Text(
+                                  '${MyTranslations().getLocale(widget._loc, 'axis_description')} (Y)',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: _themeData
+                                        .primaryTextTheme.bodyText1.color,
+                                  ),
+                                ),
+                              ),
+                              _editTextField(
+                                  _controllerY,
+                                  Provider.of<DataProvider>(context,
+                                      listen: false)
+                                      .getAxisModel('y')
+                                      .text,
+                                  'y'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(children: [
+                      TableCell(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: _buttonSize,
+                                height: _buttonSize,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    Provider.of<DataProvider>(context,
+                                        listen: false)
+                                        .changeLabelVis(
+                                        'x', !_labelModelX.visibility);
+                                  },
+                                  child: Center(
+                                    child: Icon(
+                                      _labelModelX.visibility
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: _themeData
+                                          .primaryTextTheme.bodyText1.color,
+                                      size: _iconSize,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: _buttonSize,
+                                height: _buttonSize,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    Provider.of<DataProvider>(context,
+                                        listen: false)
+                                        .changeLabelFlip(
+                                        'x', !_labelModelX.flipped);
+                                  },
+                                  child: Center(
+                                    child: Transform.rotate(
+                                      angle: _labelModelX.flipped
+                                          ? pi / 2
+                                          : pi * 1.5,
+                                      child: Icon(
+                                        Icons.flip_outlined,
+                                        color: _themeData
+                                            .primaryTextTheme.bodyText1.color,
+                                        size: _iconSize,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
+                      TableCell(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: _buttonSize,
+                                height: _buttonSize,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    Provider.of<DataProvider>(context,
+                                        listen: false)
+                                        .changeLabelVis(
+                                        'y', !_labelModelY.visibility);
+                                  },
+                                  child: Center(
+                                    child: Icon(
+                                      _labelModelY.visibility
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: _themeData
+                                          .primaryTextTheme.bodyText1.color,
+                                      size: _iconSize,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: _buttonSize,
+                                height: _buttonSize,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    Provider.of<DataProvider>(context,
+                                        listen: false)
+                                        .changeLabelRotation('y');
+                                  },
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.rotate_90_degrees_ccw_outlined,
+                                      color: _themeData
+                                          .primaryTextTheme.bodyText1.color,
+                                      size: _iconSize,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: _buttonSize,
+                                height: _buttonSize,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    Provider.of<DataProvider>(context,
+                                        listen: false)
+                                        .changeLabelFlip(
+                                        'y', !_labelModelY.flipped);
+                                  },
+                                  child: Center(
+                                    child: Transform.rotate(
+                                      angle: _labelModelY.flipped ? pi : 0,
+                                      child: Icon(
+                                        Icons.flip_outlined,
+                                        color: _themeData
+                                            .primaryTextTheme.bodyText1.color,
+                                        size: _iconSize,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
+                    ]),
+                  ],
+                ),
+              ),
+              SizedBox(height: _borderRadius,),
+            ],
+          ),
         ],
       ),
     );
@@ -455,10 +452,6 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
       padding: EdgeInsets.symmetric(horizontal: 4.0),
       // decoration: BoxDecoration(),
       child: TextField(
-        // onChanged: (value) {
-        //   Provider.of<DataProvider>(context, listen: false)
-        //       .changeLabelText(identifier, value);
-        // },
         onEditingComplete: () {
           Provider.of<DataProvider>(context, listen: false)
               .changeLabelsText(_controllerX.text, _controllerY.text);

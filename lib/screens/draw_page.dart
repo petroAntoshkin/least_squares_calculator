@@ -119,11 +119,7 @@ class _DrawPageState extends State<DrawPage> {
                         ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                // child: _settingsBar(),
-                child: GraphSettingsBar(),
-              ),
+              _len > 1 ? GraphSettingsBar() : Container(),
             ],
           );
   }
@@ -150,8 +146,8 @@ class _DrawPageState extends State<DrawPage> {
           index *
               Provider.of<DataProvider>(context, listen: false).pixelsPerGrid,
       child: Text(
-      StringUtils.decreaseZeroGroups(
-      '${_newGD.zoomFactorX <= 0 ? index ~/ pow(_gridCount, _newGD.zoomFactorX) : index / pow(_gridCount, _newGD.zoomFactorX)}'),
+        StringUtils.decreaseZeroGroups(
+            '${_newGD.zoomFactorX <= 0 ? index ~/ pow(_gridCount, _newGD.zoomFactorX) : index / pow(_gridCount, _newGD.zoomFactorX)}'),
         style: TextStyle(
           color: _themeData.primaryTextTheme.bodyText1.color,
         ),
@@ -168,7 +164,8 @@ class _DrawPageState extends State<DrawPage> {
           index *
               Provider.of<DataProvider>(context, listen: false).pixelsPerGrid,
       child: Text(
-        '${_newGD.zoomFactorY <= 0 ? -index ~/ pow(_gridCount, _newGD.zoomFactorY) : (-index / pow(_gridCount, _newGD.zoomFactorY))}',
+        StringUtils.decreaseZeroGroups(
+            '${_newGD.zoomFactorY <= 0 ? -index ~/ pow(_gridCount, _newGD.zoomFactorY) : (-index / pow(_gridCount, _newGD.zoomFactorY))}'),
         style: TextStyle(
           color: _themeData.primaryTextTheme.bodyText1.color,
         ),
@@ -221,54 +218,56 @@ class _DrawPageState extends State<DrawPage> {
   }
 
   void _capturePng() async {
-    Dialogs.materialDialog(
-      context: context,
-      customView: CircularProgressIndicator(),
-      dialogShape: null,
-    );
-    try {
-      RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      var pngBytes = byteData.buffer.asUint8List();
-      // var bs64 = base64Encode(pngBytes);
-      Provider.of<DataProvider>(context, listen: false).savePNG(pngBytes);
-      // print(pngBytes);
-      // print(bs64);
-      // return pngBytes;
-      Navigator.pop(context);
+    if (_newGD.dataDots.length > 1) {
       Dialogs.materialDialog(
         context: context,
-        customView: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.memory(pngBytes),
-        ),
-        actions: [
-          IconsOutlineButton(
-            onPressed: () => Navigator.pop(context),
-            iconData: Icons.check,
-            iconColor: Colors.green,
-            text: '',
-          ),
-        ],
+        customView: CircularProgressIndicator(),
+        dialogShape: null,
       );
-    } catch (e) {
-      // print(e);
-      Navigator.pop(context);
-      Dialogs.materialDialog(
-        context: context,
-        msg: '$e',
-        actions: [
-          IconsOutlineButton(
-            onPressed: () => Navigator.pop(context),
-            iconData: Icons.error_outline,
-            iconColor: Colors.redAccent,
-            text: '',
+      try {
+        RenderRepaintBoundary boundary =
+            _globalKey.currentContext.findRenderObject();
+        ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+        ByteData byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
+        var pngBytes = byteData.buffer.asUint8List();
+        // var bs64 = base64Encode(pngBytes);
+        Provider.of<DataProvider>(context, listen: false).savePNG(pngBytes);
+        // print(pngBytes);
+        // print(bs64);
+        // return pngBytes;
+        Navigator.pop(context);
+        Dialogs.materialDialog(
+          context: context,
+          customView: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Image.memory(pngBytes),
           ),
-        ],
-      );
+          actions: [
+            IconsOutlineButton(
+              onPressed: () => Navigator.pop(context),
+              iconData: Icons.check,
+              iconColor: Colors.green,
+              text: '',
+            ),
+          ],
+        );
+      } catch (e) {
+        // print(e);
+        Navigator.pop(context);
+        Dialogs.materialDialog(
+          context: context,
+          msg: '$e',
+          actions: [
+            IconsOutlineButton(
+              onPressed: () => Navigator.pop(context),
+              iconData: Icons.error_outline,
+              iconColor: Colors.redAccent,
+              text: '',
+            ),
+          ],
+        );
+      }
     }
   }
 }

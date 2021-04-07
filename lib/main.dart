@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/appbar_title.dart';
-import 'package:least_squares/elements/my_bottom_nav_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 // import 'package:least_squares/my_translations.dart';
+import 'package:least_squares/elements/appbar_title.dart';
+import 'package:least_squares/elements/my_bottom_nav_bar.dart';
 import 'package:least_squares/screens/calculation_page.dart';
 import 'package:least_squares/screens/draw_page.dart';
 import 'package:least_squares/screens/images_page.dart';
 import 'package:least_squares/screens/settings_page.dart';
-import 'package:provider/provider.dart';
 import 'providers/data_provider.dart';
 
-
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -25,18 +29,18 @@ class MyApp extends StatelessWidget {
       child: Consumer<DataProvider>(
           builder: (context, DataProvider notifier, child) {
         return MaterialApp(
-            // title: 'Least Squares',
-            theme: notifier.theme,
-            home: LSMHomePage(),
-            // home: MultiProvider(
-            //   // providers: [
-            //   //   ChangeNotifierProvider(
-            //   //       create: (BuildContext context) => DataProvider()),
-            //   //   // ChangeNotifierProvider(create: (BuildContext context) => ThemeProvider()),
-            //   // ],
-            //   child: LSMHomePage(),
-            // )
-            );
+          // title: 'Least Squares',
+          theme: notifier.theme,
+          home: LSMHomePage(),
+          // home: MultiProvider(
+          //   // providers: [
+          //   //   ChangeNotifierProvider(
+          //   //       create: (BuildContext context) => DataProvider()),
+          //   //   // ChangeNotifierProvider(create: (BuildContext context) => ThemeProvider()),
+          //   // ],
+          //   child: LSMHomePage(),
+          // )
+        );
       }),
     );
   }
@@ -51,7 +55,8 @@ class LSMHomePage extends StatefulWidget {
   _LSMHomePageState createState() => _LSMHomePageState();
 }
 
-class _LSMHomePageState extends State<LSMHomePage> with SingleTickerProviderStateMixin{
+class _LSMHomePageState extends State<LSMHomePage>
+    with SingleTickerProviderStateMixin {
 /*
 
   void _tabBarController(){
@@ -59,7 +64,6 @@ class _LSMHomePageState extends State<LSMHomePage> with SingleTickerProviderStat
   }
 
 */
-
 
   TabController _tabController;
 
@@ -74,10 +78,8 @@ class _LSMHomePageState extends State<LSMHomePage> with SingleTickerProviderStat
     // print('rebuild home page');
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
     _tabController.addListener(() {
-      if(_tabController.indexIsChanging)
-        setState(() {
-
-        });
+      // if(_tabController.indexIsChanging)
+      setState(() {});
     });
     return DefaultTabController(
       length: 4,

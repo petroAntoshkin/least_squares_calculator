@@ -13,5 +13,11 @@ class LanguagesMock {
     languges[6] = LanguageModel(prefix: 'pt', name: 'Português');
     languges[7] = LanguageModel(prefix: 'ua', name: 'Українська');
     languges[8] = LanguageModel(prefix: 'ru', name: 'Русский');
+    // languges[7] = LanguageModel(prefix: 'it', name: 'Italiano');
+    // languges[8] = LanguageModel(prefix: 'pl', name: 'Polskie');
+    // languges[9] = LanguageModel(prefix: 'ua', name: 'Українська');
+    // languges[10] = LanguageModel(prefix: 'ru', name: 'Русский');
+
+
   }
 }

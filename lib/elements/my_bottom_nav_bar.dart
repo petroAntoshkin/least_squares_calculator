@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class MyBottomNavBar extends StatelessWidget {
-  final List<IconData> _icons = [Icons.cleaning_services, Icons.image, Icons.analytics, Icons.settings_outlined];
+  final List<IconData> _icons = [Icons.cleaning_services, Icons.image, Icons.delete, Icons.settings_outlined];
   final List<String> _texts = ['reset', 'export', 'delete', 'default_settings'];
   int tabIndex;
   MyBottomNavBar({this.tabIndex});

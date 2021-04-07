@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 class DataProvider extends ChangeNotifier with CalculateMixin{
   Function _contextFunction;
   final String _settingsJson = '/settings.json';
+  final String _dataJson = '/data_snapshot.json';
 
   Directory _appDirectory;
   // int dotTypeIndex = 0;
@@ -34,17 +36,18 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     _labels['x'] = AxisLabelModel(text: 'X');
     _labels['y'] = AxisLabelModel(text: 'Y');
     _imagesList = [];
-    onlyDataClean();
+    dataClean();
     _readSettingsData();
+    _readSavedData();
     //print('${Platform.localeName} def loacale is $_defaultLocale');
   }
 
   ///locale from device
   String _getDeviceLocale(String so){
-    String first_let = so.substring(0, 2);
-    if(!MyTranslations().isLanguageAvailable(first_let))
-      first_let = 'en';
-    return first_let;
+    String _firstLet = so.substring(0, 2);
+    if(!MyTranslations().isLanguageAvailable(_firstLet))
+      _firstLet = 'en';
+    return _firstLet;
   }
 
   ///labels section
@@ -92,7 +95,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     mixinLanguage = loc;
     if(loc != _settingsModel.language) {
       _settingsModel.language = loc;
-      writeLocalJson();
+      _saveSettings();
       notifyListeners();
     }
   }
@@ -107,7 +110,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   void changeTheme(int themeId){
     if(themeId != _settingsModel.themeId) {
       _setTheme(themeId);
-      writeLocalJson();
+      _saveSettings();
       notifyListeners();
     }
   }
@@ -141,7 +144,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     _settingsModel.showGrid = value;
     gridShow = value;
     notifyListeners();
-    writeLocalJson();
+    _saveSettings();
   }
 
   bool getGridShow(){
@@ -149,15 +152,33 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   }
 
   ///       data section
-  @override
+  void _restoreData(var data){
+    if(data != null){
+      int _err = 0;
+      int _len = (data['x'] as List).length;
+      if((data['y'] as List).length < _len) _len = (data['y'] as List).length;
+      for(int i = 0; i < _len; i++){
+        _err += super.addMoreValues(data['x'][i], data['y'][i]);
+      }
+      if(_err == 0) {
+        // print('read data:');
+        notifyListeners();
+      }
+    }
+  }
+
   void clearAllData(){
-    super.onlyDataClean();
+    dataClean();
+    _saveLastData();
     notifyListeners();
   }
   @override
   int addMoreValues(String xText, String yText) {
     int _err = super.addMoreValues(xText, yText);
-    if(_err == 0) notifyListeners();
+    if(_err == 0) {
+      _saveLastData();
+      notifyListeners();
+    }
     return _err;
   }
 
@@ -180,9 +201,18 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     notifyListeners();
   }
 
+  void startEditValue(int value){
+    editIndex = value;
+    notifyListeners();
+  }
+
+  void cancelEditValue(){
+    editIndex = -1;
+    notifyListeners();
+  }
 
   /// read/write section
-  Future<File> writeLocalJson() async {
+  Future<File> _saveSettings() async {
     final file = File('${_appDirectory.path}$_settingsJson');
 
     // String json = jsonEncode(mainDataToWrite);//Utils.correctJson(mainDataToWrite.toString());
@@ -214,6 +244,24 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
         changeTheme(_result.themeId);
         changeLocale(_result.language);
         changeGridShow(_result.showGrid);
+      } catch (e) {
+        // If encountering an error, return 0
+        print('catch $e');
+      }
+  }
+
+  Future<File> _saveLastData() async {
+    final file = File('${_appDirectory.path}$_dataJson');
+    return file.writeAsString(getAllDataString());
+  }
+  Future<void> _readSavedData() async {
+    if(_appDirectory == null) _appDirectory = await getApplicationDocumentsDirectory();
+    final file = File('${_appDirectory.path}$_dataJson');
+    if(await file.exists())
+      try {
+        // Read the file
+        String contents = await file.readAsString();
+        _restoreData(json.decode(contents)['data']);
       } catch (e) {
         // If encountering an error, return 0
         print('catch $e');

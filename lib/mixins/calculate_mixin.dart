@@ -37,6 +37,7 @@ mixin CalculateMixin {
   ];
   int _dotTypeIndex = 0;
   int _approximationType = 0;
+  int _editIndex = -1;
   String _approximationName = 'linear';
   Map<String, List<double>> _allValues = Map();
   List<Offset> _sourceAproxDots = [];
@@ -57,7 +58,15 @@ mixin CalculateMixin {
     _factorA = _factorB = 0;
   }
 
-  void onlyDataClean() {
+  int get editIndex{
+    return _editIndex;
+  }
+
+  set editIndex(int value){
+    _editIndex = value;
+  }
+
+  void dataClean() {
     _allValues['x'] = [];
     _allValues['y'] = [];
     _graphicData.dataDots = [];
@@ -65,10 +74,25 @@ mixin CalculateMixin {
     _initSum();
   }
 
-  void clearAllData() {
-    // print('clearAllData!!!!!!!!!!!!!');
-    onlyDataClean();
-    // notifyListeners();
+  // void clearAllData() {
+  //   // print('clearAllData!!!!!!!!!!!!!');
+  //   onlyDataClean();
+  //   // notifyListeners();
+  // }
+
+  String getAllDataString(){
+    String _res = '{"data": {';
+    _allValues.forEach((key, value) {
+      _res += '"' + key + '": [';
+      for(int i = 0; i < value.length; i++){
+        if(i > 0) _res += ', ';
+        _res += '"${value[i]}"';
+      }
+      _res += '],';
+    });
+    _res += '}}';
+    _res = _res.replaceAll('],}', ']}');
+    return _res;
   }
 
   String _replaceLoop(String source) {
@@ -92,9 +116,16 @@ mixin CalculateMixin {
       double _xCandidate = double.parse(_x);
       double _yCandidate = double.parse(_y);
       _err = _checkForDuplicate(_xCandidate, _yCandidate);
-      if (_err == 0) {
-        _allValues['x'].add(_xCandidate);
-        _allValues['y'].add(_yCandidate);
+      if (_err == 0 || _editIndex >= 0) {
+        _err = 0;
+        if(_editIndex >= 0){
+          _allValues['x'][_editIndex] = _xCandidate;
+          _allValues['y'][_editIndex] = _yCandidate;
+        } else {
+          _allValues['x'].add(_xCandidate);
+          _allValues['y'].add(_yCandidate);
+        }
+        _editIndex = -1;
         _countAB();
       }
       // notifyListeners();
@@ -171,6 +202,13 @@ mixin CalculateMixin {
   set maxSize(double value) {
     _graphicData.maxSize = value;
     _globalRecalculation();
+  }
+
+  String getValueString(String type, int index){
+    if(index < 0)
+      return '';
+    else
+      return _allValues[type][index].toString();
   }
 
   ///graphics calculations

@@ -14,7 +14,7 @@ class MyTranslations{
     Map<String, String> pt = new Map();
     Map<String, String> it = new Map();
     Map<String, String> pl = new Map();
-    Map<String, String> ua = new Map();
+    Map<String, String> uk = new Map();
     Map<String, String> ru = new Map();
     ///en
     en.putIfAbsent('title', () => 'Least Squares Calculator');
@@ -197,25 +197,25 @@ class MyTranslations{
     pl.putIfAbsent('equal_data_error_1', () => 'Tylko jedna wartość Y musi odpowiadać jednej wartości X.');
     pl.putIfAbsent('equal_data_error_2', () => 'Takie dane już istnieją');
     ///ua
-    ua.putIfAbsent('title', () => 'Обчислення найменших квадратів');
-    ua.putIfAbsent('nanMessage', () => 'Недостатньо даних');
-    ua.putIfAbsent('nanData', () => 'Відсутні дані');
-    ua.putIfAbsent('settings', () => 'Налаштування');
-    ua.putIfAbsent('default_settings', () => 'Налаштування за замовчуванням');
-    ua.putIfAbsent('reset', () => 'Очистити дані');
-    ua.putIfAbsent('show_grid', () => 'Відобразити сітку');
-    ua.putIfAbsent('del_approve', () => 'Ви впевнені? Цю дію не можна скасувати');
-    ua.putIfAbsent('cancel', () => 'Скасувати');
-    ua.putIfAbsent('delete', () => 'Видалити');
-    ua.putIfAbsent('dots_size', () => 'Розмір точок');
-    ua.putIfAbsent('export', () => 'Експортувати зображення');
-    ua.putIfAbsent('no_images', () => 'Немає зображень');
-    ua.putIfAbsent('delete_image', () => 'Видалення зображень');
-    ua.putIfAbsent('copy_image_path', () => 'Скопіювати шлях зображення');
-    ua.putIfAbsent('customization', () => 'Налаштування');
-    ua.putIfAbsent('axis_description', () => 'Підпис вісі');
-    ua.putIfAbsent('equal_data_error_1', () => 'Неможливо, щоб два або більше значень Y відповідали одному значенню X.');
-    ua.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
+    uk.putIfAbsent('title', () => 'Обчислення найменших квадратів');
+    uk.putIfAbsent('nanMessage', () => 'Недостатньо даних');
+    uk.putIfAbsent('nanData', () => 'Відсутні дані');
+    uk.putIfAbsent('settings', () => 'Налаштування');
+    uk.putIfAbsent('default_settings', () => 'Налаштування за замовчуванням');
+    uk.putIfAbsent('reset', () => 'Очистити дані');
+    uk.putIfAbsent('show_grid', () => 'Відобразити сітку');
+    uk.putIfAbsent('del_approve', () => 'Ви впевнені? Цю дію не можна скасувати');
+    uk.putIfAbsent('cancel', () => 'Скасувати');
+    uk.putIfAbsent('delete', () => 'Видалити');
+    uk.putIfAbsent('dots_size', () => 'Розмір точок');
+    uk.putIfAbsent('export', () => 'Експортувати зображення');
+    uk.putIfAbsent('no_images', () => 'Немає зображень');
+    uk.putIfAbsent('delete_image', () => 'Видалення зображень');
+    uk.putIfAbsent('copy_image_path', () => 'Скопіювати шлях зображення');
+    uk.putIfAbsent('customization', () => 'Налаштування');
+    uk.putIfAbsent('axis_description', () => 'Підпис вісі');
+    uk.putIfAbsent('equal_data_error_1', () => 'Неможливо, щоб два або більше значень Y відповідали одному значенню X.');
+    uk.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
@@ -246,7 +246,7 @@ class MyTranslations{
     _allTexts.putIfAbsent('pt', () => pt);
     _allTexts.putIfAbsent('it', () => it);
     _allTexts.putIfAbsent('pl', () => pl);
-    _allTexts.putIfAbsent('ua', () => ua);
+    _allTexts.putIfAbsent('uk', () => uk);
     _allTexts.putIfAbsent('ru', () => ru);
   }
 

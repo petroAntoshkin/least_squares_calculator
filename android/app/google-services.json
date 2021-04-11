@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1043456575082:android:71aea4d080ddff26d86c13",
+        "mobilesdk_app_id": "1:1043456575082:android:e79e72f3e5a30be8d86c13",
         "android_client_info": {
-          "package_name": "com.antstudio.leastsquarescalculator"
+          "package_name": "com.antsstudio.least_squares_calculator"
         }
       },
       "oauth_client": [

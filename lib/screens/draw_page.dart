@@ -60,6 +60,7 @@ class _DrawPageState extends State<DrawPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('--------------------------------------------draw page rebuilded-------------------------');
     _newGD = Provider.of<DataProvider>(context, listen: false).graphicData;
     _themeData = Provider.of<DataProvider>(context, listen: false).theme;
     FocusManager.instance.primaryFocus.unfocus();

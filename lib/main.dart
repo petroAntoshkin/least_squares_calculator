@@ -11,8 +11,15 @@ import 'package:least_squares/screens/images_page.dart';
 import 'package:least_squares/screens/settings_page.dart';
 import 'providers/data_provider.dart';
 
-void main() {
+import 'package:least_squares/ad_manager.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart';
+
+// import 'package:material_dialogs/material_dialogs.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.initialize();
+  MobileAds.setTestDeviceIds(['ca-app-pub-4007582425024550~4028426450']);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(MyApp());
@@ -57,22 +64,34 @@ class LSMHomePage extends StatefulWidget {
 
 class _LSMHomePageState extends State<LSMHomePage>
     with SingleTickerProviderStateMixin {
-/*
-
-  void _tabBarController(){
-
-  }
-
-*/
-
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
+  final bannerController = BannerAdController();
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(length: 4, vsync: this);
-  }
 
+    bannerController.onEvent.listen((e) {
+      final event = e.keys.first;
+      print('controller event $e');
+      // final info = e.values.first;
+      switch (event) {
+        case BannerAdEvent.loaded:
+        // setState(() => _bannerAdHeight = (info as int)?.toDouble());
+          break;
+        default:
+          break;
+      }
+    });
+    bannerController.load();
+  }
+  @override
+  void dispose() {
+    bannerController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     // print('rebuild home page');
@@ -81,6 +100,7 @@ class _LSMHomePageState extends State<LSMHomePage>
       // if(_tabController.indexIsChanging)
       setState(() {});
     });
+    final _bannerHeight = 40.0;
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -106,7 +126,15 @@ class _LSMHomePageState extends State<LSMHomePage>
             SettingsPage(),
           ],
         ),
-        bottomNavigationBar: MyBottomNavBar(tabIndex: _tabController.index),
+        // bottomNavigationBar: BannerAd(controller: bannerController),
+        bottomNavigationBar: MyBottomNavBar(
+          bannerHeight: _bannerHeight,
+            tabIndex: _tabController.index,
+            banner: BannerAd(
+              unitId: AdManager.bannerAdUnitId,
+              controller: bannerController,
+              size: BannerSize.fromWH(MediaQuery.of(context).size.width, _bannerHeight),
+            )),
       ),
     );
   }

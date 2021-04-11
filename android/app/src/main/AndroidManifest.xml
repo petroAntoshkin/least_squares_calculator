@@ -3,6 +3,9 @@
    <application
         android:label="Least Squares Calculator"
         android:icon="@mipmap/launcher_icon">
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-4007582425024550~4028426450"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -14,6 +17,11 @@
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
+            <!--android:value="ca-app-pub-4007582425024550/4558268866"/>-->
+            <!-- android:name="ca-app-pub-4007582425024550~4028426450"-->
+
+
+
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"

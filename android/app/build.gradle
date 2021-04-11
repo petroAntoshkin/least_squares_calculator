@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'com.antsstudio.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
@@ -43,9 +43,9 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.antsstudio.least_squares_calculator"
 //        for google appstore
-        minSdkVersion 16
+//        minSdkVersion 16
 //        for debug
-//        minSdkVersion 21
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -61,10 +61,10 @@ android {
     }
 
     buildTypes {
-        release {
-            signingConfig signingConfigs.release
-//        debug {
-//            signingConfig signingConfigs.debug
+//        release {
+//            signingConfig signingConfigs.release
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
 //    buildTypes {
@@ -83,7 +83,7 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+    implementation platform('com.google.firebase:firebase-bom:26.8.0')
     // Add the dependency for the Firebase SDK for Google Analytics
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics'

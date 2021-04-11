@@ -8,16 +8,19 @@ class MyBottomNavBar extends StatelessWidget {
   final List<IconData> _icons = [Icons.cleaning_services, Icons.image, Icons.delete, Icons.settings_outlined];
   final List<String> _texts = ['reset', 'export', 'delete', 'default_settings'];
   int tabIndex;
-  MyBottomNavBar({this.tabIndex});
+  final _buttonSize = 40.0;
+  final _gapHeight = 6.0;
+  double bannerHeight;
+  Widget banner;
+  MyBottomNavBar({this.tabIndex, this.banner, this.bannerHeight : 54});
   @override
   Widget build(BuildContext context) {
-    final _height = MediaQuery.of(context).size.height * 0.085;
+    // final _height = MediaQuery.of(context).size.height * 0.14 + bannerHeight;
+    final _width = MediaQuery.of(context).size.width;
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: _height,
-      child: Container(
-
+    Provider.of<DataProvider>(context).navBarHe = _buttonSize + _gapHeight + bannerHeight;
+    Widget _gestureBlock(){
+      return Container(
         child: GestureDetector(
           onTap: () => Provider.of<DataProvider>(context, listen: false).contextFunctions(tabIndex),
           child: Container(
@@ -26,8 +29,8 @@ class MyBottomNavBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
-                  width: _height,
-                  height: _height,
+                  width: _buttonSize,
+                  height: _buttonSize,
                   child: Center(
                     child: Icon(
                       _icons[tabIndex],
@@ -36,8 +39,8 @@ class MyBottomNavBar extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width - _height * 3,
-                  height: _height,
+                  width: _width - _buttonSize * 3,
+                  height: _buttonSize,
                   child: Center(
                     child: Text(
                       MyTranslations().getLocale(
@@ -52,8 +55,8 @@ class MyBottomNavBar extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: _height,
-                  height: _height,
+                  width: _buttonSize,
+                  height: _buttonSize,
                   child: Center(
                     child: Icon(
                       _icons[tabIndex],
@@ -65,6 +68,28 @@ class MyBottomNavBar extends StatelessWidget {
             ),
           ),
         ),
+      );
+    }
+    return SizedBox(
+      width: _width,
+      height: Provider.of<DataProvider>(context).navBarHe,
+      child: Column(
+        children: [
+          SizedBox(
+            height: _buttonSize,
+          // Align(
+          //   alignment: Alignment.topCenter,
+            child: _gestureBlock(),
+          ),
+          SizedBox(
+            height: _gapHeight,
+          ),
+          SizedBox(
+            height: bannerHeight,
+            // alignment: Alignment.bottomCenter,
+            child: banner,
+          ),
+        ],
       ),
     );
   }

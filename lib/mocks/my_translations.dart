@@ -30,6 +30,7 @@ class MyTranslations{
     en.putIfAbsent('dots_size', () => 'Dots size');
     en.putIfAbsent('export', () => 'Export image');
     en.putIfAbsent('no_images', () => 'No images');
+    en.putIfAbsent('no_selected_images', () => 'No selected images');
     en.putIfAbsent('delete_image', () => 'Images deleting');
     en.putIfAbsent('copy_image_path', () => 'Copy Image path');
     en.putIfAbsent('customization', () => 'Customization');
@@ -50,6 +51,7 @@ class MyTranslations{
     zh.putIfAbsent('dots_size', () => '點尺寸');
     zh.putIfAbsent('export', () => '匯出圖片');
     zh.putIfAbsent('no_images', () => '沒有圖片');
+    zh.putIfAbsent('no_selected_images', () => '未选择图像');
     zh.putIfAbsent('delete_image', () => '图片删除');
     zh.putIfAbsent('copy_image_path', () => '复制影像');
     zh.putIfAbsent('customization', () => '客制化');
@@ -70,6 +72,7 @@ class MyTranslations{
     hi.putIfAbsent('dots_size', () => 'डॉट्स का आकार');
     hi.putIfAbsent('export', () => 'निर्यात छवि');
     hi.putIfAbsent('no_images', () => 'कोई चित्र नहीं');
+    hi.putIfAbsent('no_selected_images', () => 'कोई चयनित चित्र नहीं');
     hi.putIfAbsent('delete_image', () => 'चित्र हटाना');
     hi.putIfAbsent('copy_image_path', () => 'छवि पथ की प्रतिलिपि बनाएँ');
     hi.putIfAbsent('customization', () => 'अनुकूलन');
@@ -90,6 +93,7 @@ class MyTranslations{
     es.putIfAbsent('dots_size', () => 'Tamaño de los puntos');
     es.putIfAbsent('export', () => 'Exporter l\'image');
     es.putIfAbsent('no_images', () => 'Sin imágenes');
+    es.putIfAbsent('no_selected_images', () => 'No hay imágenes seleccionadas');
     es.putIfAbsent('delete_image', () => 'Eliminación de imágenes');
     es.putIfAbsent('copy_image_path', () => 'Copiar ruta de imagen');
     es.putIfAbsent('customization', () => 'Personalización');
@@ -110,6 +114,7 @@ class MyTranslations{
     fr.putIfAbsent('dots_size', () => 'Taille des points');
     fr.putIfAbsent('export', () => 'Export image');
     fr.putIfAbsent('no_images', () => 'Aucune image');
+    fr.putIfAbsent('no_selected_images', () => 'Aucune image sélectionnée');
     fr.putIfAbsent('delete_image', () => 'Suppression d\'images');
     fr.putIfAbsent('copy_image_path', () => 'Copier le chemin de l\'image');
     fr.putIfAbsent('customization', () => 'Personnalisation');
@@ -130,6 +135,7 @@ class MyTranslations{
     de.putIfAbsent('dots_size', () => 'Punktgröße');
     de.putIfAbsent('export', () => 'Bild exportieren');
     de.putIfAbsent('no_images', () => 'Keine Bilder');
+    de.putIfAbsent('no_selected_images', () => 'Keine ausgewählten Bilder');
     de.putIfAbsent('delete_image', () => 'Löschen von Bildern');
     de.putIfAbsent('copy_image_path', () => 'Bildpfad kopieren');
     de.putIfAbsent('customization', () => 'Anpassung');
@@ -150,6 +156,7 @@ class MyTranslations{
     pt.putIfAbsent('dots_size', () => 'Tamanho dos pontos');
     pt.putIfAbsent('export', () => 'Exportar imagem');
     pt.putIfAbsent('no_images', () => 'Sem imagens');
+    pt.putIfAbsent('no_selected_images', () => 'Sem imagens selecionadas');
     pt.putIfAbsent('delete_image', () => 'Excluindo imagens');
     pt.putIfAbsent('copy_image_path', () => 'Copiar caminho da imagem');
     pt.putIfAbsent('customization', () => 'Costumização');
@@ -170,6 +177,7 @@ class MyTranslations{
     it.putIfAbsent('dots_size', () => 'Dimensione dei punti');
     it.putIfAbsent('export', () => 'Esporta immagine');
     it.putIfAbsent('no_images', () => 'Nessuna immagine');
+    it.putIfAbsent('no_selected_images', () => 'Nessuna immagine selezionata');
     it.putIfAbsent('delete_image', () => 'Eliminazione delle immagini');
     it.putIfAbsent('copy_image_path', () => 'Copia percorso immagine');
     it.putIfAbsent('customization', () => 'Personalizzazione');
@@ -190,6 +198,7 @@ class MyTranslations{
     pl.putIfAbsent('dots_size', () => 'Rozmiar kropek');
     pl.putIfAbsent('export', () => 'Eksport obrazu');
     pl.putIfAbsent('no_images', () => 'Brak obrazów');
+    pl.putIfAbsent('no_selected_images', () => 'Brak wybranych zdjęć');
     pl.putIfAbsent('delete_image', () => 'Usuwanie obrazów');
     pl.putIfAbsent('copy_image_path', () => 'Kopiuj ścieżkę obrazu');
     pl.putIfAbsent('customization', () => 'Dostosowywanie');
@@ -210,6 +219,7 @@ class MyTranslations{
     uk.putIfAbsent('dots_size', () => 'Розмір точок');
     uk.putIfAbsent('export', () => 'Експортувати зображення');
     uk.putIfAbsent('no_images', () => 'Немає зображень');
+    uk.putIfAbsent('no_selected_images', () => 'Жодного з зображень не обрано');
     uk.putIfAbsent('delete_image', () => 'Видалення зображень');
     uk.putIfAbsent('copy_image_path', () => 'Скопіювати шлях зображення');
     uk.putIfAbsent('customization', () => 'Налаштування');
@@ -230,6 +240,7 @@ class MyTranslations{
     ru.putIfAbsent('dots_size', () => 'Размер точек');
     ru.putIfAbsent('export', () => 'Экспорт изображения');
     ru.putIfAbsent('no_images', () => 'Нет изображений');
+    ru.putIfAbsent('no_selected_images', () => 'Нет выделенных изображений');
     ru.putIfAbsent('delete_image', () => 'Удаление изображений');
     ru.putIfAbsent('copy_image_path', () => 'Копировать путь изображения');
     ru.putIfAbsent('customization', () => 'Настройка');

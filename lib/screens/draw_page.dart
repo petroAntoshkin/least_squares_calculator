@@ -40,10 +40,16 @@ class _DrawPageState extends State<DrawPage> {
   ThemeData _themeData;
   GraphicData _newGD;
 
+  int _len;
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 
+  @override
+  void initState(){
+    super.initState();
+    FocusManager.instance.primaryFocus.unfocus();
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -56,17 +62,16 @@ class _DrawPageState extends State<DrawPage> {
 
     Provider.of<DataProvider>(context, listen: false).maxSize =
         _maxSize * _sizeMultiplier;
+    _themeData = Provider.of<DataProvider>(context, listen: false).theme;
+    widget._loc = Provider.of<DataProvider>(context, listen: false).getLanguage();
+    _len = Provider.of<DataProvider>(context, listen: false).getValuesLength();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('--------------------------------------------draw page rebuilded-------------------------');
+    // print('--------------------------------------------draw page rebuilded-------------------------');
     _newGD = Provider.of<DataProvider>(context, listen: false).graphicData;
-    _themeData = Provider.of<DataProvider>(context, listen: false).theme;
-    FocusManager.instance.primaryFocus.unfocus();
-    int _len = Provider.of<DataProvider>(context).getValuesLength();
-    widget._loc = Provider.of<DataProvider>(context).getLanguage();
-
+    widget._loc = Provider.of<DataProvider>(context, listen: false).getLanguage();
     _axisLabelX = Positioned(
       child: AxisLabel(label: 'x'),
       right: 4.0,

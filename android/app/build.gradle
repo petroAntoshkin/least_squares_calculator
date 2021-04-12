@@ -43,9 +43,9 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.antsstudio.least_squares_calculator"
 //        for google appstore
-//        minSdkVersion 16
+        minSdkVersion 16
 //        for debug
-        minSdkVersion 21
+//        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -61,10 +61,10 @@ android {
     }
 
     buildTypes {
-//        release {
-//            signingConfig signingConfigs.release
-        debug {
-            signingConfig signingConfigs.debug
+        release {
+            signingConfig signingConfigs.release
+//        debug {
+//            signingConfig signingConfigs.debug
         }
     }
 //    buildTypes {

@@ -123,39 +123,60 @@ class _ImagesPageState extends State<ImagesPage> {
   }
 
   void _deleteImages() {
-    Dialogs.bottomMaterialDialog(
-      msg: MyTranslations().getLocale(
-          Provider.of<DataProvider>(context, listen: false).getLanguage(),
-          'del_approve'),
-      title: MyTranslations().getLocale(
-          Provider.of<DataProvider>(context, listen: false).getLanguage(),
-          'delete_image'),
-      context: context,
-      actions: [
-        IconsOutlineButton(
-          onPressed: () => Navigator.pop(context),
-          text: MyTranslations().getLocale(
-              Provider.of<DataProvider>(context, listen: false).getLanguage(),
-              'cancel'),
-          iconData: Icons.cancel_outlined,
-          textStyle: TextStyle(color: Colors.grey),
-          iconColor: Colors.grey,
-        ),
-        IconsButton(
-          onPressed: () {
-            Provider.of<DataProvider>(context, listen: false).deleteImages();
-            Navigator.pop(context);
-          },
-          text: MyTranslations().getLocale(
-              Provider.of<DataProvider>(context, listen: false).getLanguage(),
-              'delete'),
-          iconData: Icons.delete,
-          color: Colors.red,
-          textStyle: TextStyle(color: Colors.white),
-          iconColor: Colors.white,
-        ),
-      ],
-    );
+    if(Provider.of<DataProvider>(context, listen: false).isSomeImageSelected()) {
+      Dialogs.bottomMaterialDialog(
+        msg: MyTranslations().getLocale(
+            Provider.of<DataProvider>(context, listen: false).getLanguage(),
+            'del_approve'),
+        title: MyTranslations().getLocale(
+            Provider.of<DataProvider>(context, listen: false).getLanguage(),
+            'delete_image'),
+        context: context,
+        actions: [
+          IconsOutlineButton(
+            onPressed: () => Navigator.pop(context),
+            text: MyTranslations().getLocale(
+                Provider.of<DataProvider>(context, listen: false).getLanguage(),
+                'cancel'),
+            iconData: Icons.cancel_outlined,
+            textStyle: TextStyle(color: Colors.grey),
+            iconColor: Colors.grey,
+          ),
+          IconsButton(
+            onPressed: () {
+              Provider.of<DataProvider>(context, listen: false).deleteImages();
+              Navigator.pop(context);
+            },
+            text: MyTranslations().getLocale(
+                Provider.of<DataProvider>(context, listen: false).getLanguage(),
+                'delete'),
+            iconData: Icons.delete,
+            color: Colors.red,
+            textStyle: TextStyle(color: Colors.white),
+            iconColor: Colors.white,
+          ),
+        ],
+      );
+    } else {
+      Dialogs.bottomMaterialDialog(
+        msg: MyTranslations().getLocale(
+            Provider.of<DataProvider>(context, listen: false).getLanguage(),
+            'no_selected_images'),
+        // title: MyTranslations().getLocale(
+        //     Provider.of<DataProvider>(context, listen: false).getLanguage(),
+        //     'delete_image'),
+        context: context,
+        actions: [
+          IconsOutlineButton(
+            onPressed: () => Navigator.pop(context),
+            text: '',
+            iconData: Icons.check,
+            // textStyle: TextStyle(color: Colors.grey),
+            iconColor: Colors.green,
+          ),
+        ],
+      );
+    }
   }
 
   void _shareImage(String filePath) async {

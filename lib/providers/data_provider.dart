@@ -293,6 +293,13 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     notifyListeners();
   }
 
+  bool isSomeImageSelected(){
+    bool _res = false;
+    for(int i = 0; i < _imagesList.length; i++)
+      _res = _res || _imagesList[i].selected;
+    return _res;
+  }
+
   int getImagesLength(){
     return _imagesList.length;
   }

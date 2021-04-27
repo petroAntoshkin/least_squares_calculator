@@ -27,10 +27,31 @@ class StringUtils{
     else return source;
   }
 
-  static String decreaseZeroGroups(String source){
+  static String normalizeNumberView(num source){
     final List<String> _threeZeroLiterals = ['', 'K', 'M', 'B', 'T'];
-    String _res = source.split('000')[0];
-    return _res + _threeZeroLiterals[source.split('000').length - 1];
+    String _res;
+    if(source > 0.01) {
+      _res = source.toString().split('000')[0];
+      _res = _res + _threeZeroLiterals[source.toString().split('000').length - 1];
+    } else {
+      List<String> _splitted = source.toStringAsExponential().split('e');
+      _res = '${_splitted[0]}${getPowSuperscript(int.parse(_splitted[1]))}';
+    }
+    return _res;
+  }
+
+  static String getPowSuperscript(int value){
+    String _res = '';
+    final _numbers = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+    final _str = value.abs().toString();
+    if (value !=0){
+      for(int i = 0; i < _str.length; i++){
+        _res += _numbers.substring(int.parse(_str[i]), int.parse(_str[i]) + 1);
+      }
+      if(value < 0)
+        _res = '⁻' + _res;
+    }
+    return _res;
   }
 
 }

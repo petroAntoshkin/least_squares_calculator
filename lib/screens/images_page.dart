@@ -25,7 +25,7 @@ class _ImagesPageState extends State<ImagesPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Provider.of<DataProvider>(context, listen: false)
-        .setContextFunction(_deleteImages);
+        .setContextFunction(2, _deleteImages);
   }
 
   @override

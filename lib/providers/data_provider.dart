@@ -13,7 +13,7 @@ import 'package:least_squares/utils/string_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DataProvider extends ChangeNotifier with CalculateMixin{
-  Function _contextFunction;
+  List<Function> _contextFunctions = List.generate(4, (index) => null);
   final String _settingsJson = '/settings.json';
   final String _dataJson = '/data_snapshot.json';
 
@@ -40,6 +40,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     dataClean();
     _readSettingsData();
     _readSavedData();
+    _contextFunctions[3] = _resetSettings;
     //print('${Platform.localeName} def loacale is $_defaultLocale');
   }
 
@@ -168,7 +169,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
       int _len = (data['x'] as List).length;
       if((data['y'] as List).length < _len) _len = (data['y'] as List).length;
       for(int i = 0; i < _len; i++){
-        _err += super.addMoreValues(data['x'][i], data['y'][i]);
+        _err += super.addMoreValues(data['x'][i], data['y'][i], 0, 0);
       }
       if(_err == 0) {
         // print('read data:');
@@ -183,8 +184,8 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     notifyListeners();
   }
   @override
-  int addMoreValues(String xText, String yText) {
-    int _err = super.addMoreValues(xText, yText);
+  int addMoreValues(String xText, String yText, int xPow, int yPow) {
+    int _err = super.addMoreValues(xText, yText, xPow, yPow);
     if(_err == 0) {
       _saveLastData();
       notifyListeners();
@@ -323,22 +324,24 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
 
   ///context functions called by bottomNavBar
 
-  void setContextFunction(Function callback){
-    _contextFunction = callback;
+  void setContextFunction(int index, Function callback){
+    _contextFunctions[index] = callback;
   }
   void contextFunctions(int index){
-    switch(index){
-      case 0:
-      case 1:
-      case 2:
-        if(_contextFunction != null)
-          _contextFunction();
+    if(_contextFunctions[index] != null)
+      _contextFunctions[index]();
+    // switch(index){
+    //   case 0:
+    //   case 1:
+    //   case 2:
+    //     if(_contextFunctions[index] != null)
+    //       _contextFunctions[index]();
         //print('contextFunction $index');
-        break;
-      case 3:
-        _resetSettings();
-        break;
-    }
+    //     break;
+    //   case 3:
+    //     _resetSettings();
+    //     break;
+    // }
   }
 
 }

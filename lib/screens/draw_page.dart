@@ -41,20 +41,22 @@ class _DrawPageState extends State<DrawPage> {
   GraphicData _newGD;
 
   int _len;
+
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     FocusManager.instance.primaryFocus.unfocus();
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     Provider.of<DataProvider>(context, listen: false)
-        .setContextFunction(_exportGraph);
+        .setContextFunction(1, _exportGraph);
     _maxSize =
         MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
             ? MediaQuery.of(context).size.height
@@ -63,7 +65,8 @@ class _DrawPageState extends State<DrawPage> {
     Provider.of<DataProvider>(context, listen: false).maxSize =
         _maxSize * _sizeMultiplier;
     _themeData = Provider.of<DataProvider>(context, listen: false).theme;
-    widget._loc = Provider.of<DataProvider>(context, listen: false).getLanguage();
+    widget._loc =
+        Provider.of<DataProvider>(context, listen: false).getLanguage();
     _len = Provider.of<DataProvider>(context, listen: false).getValuesLength();
   }
 
@@ -71,7 +74,8 @@ class _DrawPageState extends State<DrawPage> {
   Widget build(BuildContext context) {
     // print('--------------------------------------------draw page rebuilded-------------------------');
     _newGD = Provider.of<DataProvider>(context, listen: false).graphicData;
-    widget._loc = Provider.of<DataProvider>(context, listen: false).getLanguage();
+    widget._loc =
+        Provider.of<DataProvider>(context, listen: false).getLanguage();
     _axisLabelX = Positioned(
       child: AxisLabel(label: 'x'),
       right: 4.0,
@@ -133,10 +137,10 @@ class _DrawPageState extends State<DrawPage> {
   ///axis indexes
   void _getAxisIndexes(List<Widget> _children) {
     if (_newGD.gridCount != null) {
-      for (int i = -_newGD.gridCount + 1; i < _newGD.gridCount; i += 2)
+      for (int i = -_newGD.gridCount + 1; i < _newGD.gridCount; i += 2) {
         _children.add(_getIndexX(i));
-      for (int i = -_newGD.gridCount + 1; i < _newGD.gridCount; i += 2)
         _children.add(_getIndexY(i));
+      }
       _children.add(_axisLabelX);
       _children.add(_axisLabelY);
     }
@@ -152,8 +156,11 @@ class _DrawPageState extends State<DrawPage> {
           index *
               Provider.of<DataProvider>(context, listen: false).pixelsPerGrid,
       child: Text(
-        StringUtils.decreaseZeroGroups(
-            '${_newGD.zoomFactorX <= 0 ? index ~/ pow(_gridCount, _newGD.zoomFactorX) : index / pow(_gridCount, _newGD.zoomFactorX)}'),
+        _newGD.zoomFactorX <= 0
+            ? StringUtils.normalizeNumberView(
+                index ~/ pow(_gridCount, _newGD.zoomFactorX))
+            : StringUtils.normalizeNumberView(
+                (index / pow(_gridCount, _newGD.zoomFactorX))),
         style: TextStyle(
           color: _themeData.primaryTextTheme.bodyText1.color,
         ),
@@ -170,8 +177,11 @@ class _DrawPageState extends State<DrawPage> {
           index *
               Provider.of<DataProvider>(context, listen: false).pixelsPerGrid,
       child: Text(
-        StringUtils.decreaseZeroGroups(
-            '${_newGD.zoomFactorY <= 0 ? -index ~/ pow(_gridCount, _newGD.zoomFactorY) : (-index / pow(_gridCount, _newGD.zoomFactorY))}'),
+        _newGD.zoomFactorY <= 0
+            ? StringUtils.normalizeNumberView(
+                -index ~/ pow(_gridCount, _newGD.zoomFactorY))
+            : StringUtils.normalizeNumberView(
+                (-index / pow(_gridCount, _newGD.zoomFactorY))),
         style: TextStyle(
           color: _themeData.primaryTextTheme.bodyText1.color,
         ),
@@ -186,7 +196,6 @@ class _DrawPageState extends State<DrawPage> {
     this._startDYPoint = scaleStartDetails.focalPoint.dy.floorToDouble();
     _startDisplaceX = _newGD.displaceX;
     _startDisplaceY = _newGD.displaceY;
-    // _startMetamorphFactor = _metamorphosisFactor;
   }
 
   void _onScaleUpdate(ScaleUpdateDetails scaleUpdateDetails) {

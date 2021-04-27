@@ -29,7 +29,6 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
   GraphicData _graphicsData;
   bool _settingsBarCollapsed = true;
   double _shortSideSize;
-  double _longSideSize;
   final _collapsedSize = 30.0;
 
   Map<int, NamedWidget> _approxMap = Map();
@@ -63,10 +62,6 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
         MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
             ? MediaQuery.of(context).size.height
             : MediaQuery.of(context).size.width;
-    _longSideSize =
-        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
-            ? MediaQuery.of(context).size.width
-            : MediaQuery.of(context).size.height;
   }
 
   @override
@@ -109,10 +104,6 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     _dotsMap[2].widget = DotRhomb(
       color: _themeData.primaryTextTheme.bodyText1.color,
     );
-    final _gapSize = 6.0;
-    final _enoughSpace =
-        _longSideSize - Provider.of<DataProvider>(context).navBarHe - _gapSize >
-            _shortSideSize;
 
     _controllerX.text = _labelModelX.text;
     _controllerY.text = _labelModelY.text;

@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<DataProvider>(
           builder: (context, DataProvider notifier, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           // title: 'Least Squares',
           theme: notifier.theme,
           home: LSMHomePage(),

@@ -103,7 +103,7 @@ mixin CalculateMixin {
     return _res;
   }
 
-  int addMoreValues(String xText, String yText) {
+  int addMoreValues(String xText, String yText, int xPow, int yPow) {
     int _err = 0;
     String _x = _replaceLoop(xText.isNotEmpty ? xText : '0'),
         _y = _replaceLoop(yText.isNotEmpty ? yText : '0');
@@ -119,11 +119,11 @@ mixin CalculateMixin {
       if (_err == 0 || _editIndex >= 0) {
         _err = 0;
         if(_editIndex >= 0){
-          _allValues['x'][_editIndex] = _xCandidate;
-          _allValues['y'][_editIndex] = _yCandidate;
+          _allValues['x'][_editIndex] = _xCandidate * pow(10, xPow);
+          _allValues['y'][_editIndex] = _yCandidate * pow(10, yPow);
         } else {
-          _allValues['x'].add(_xCandidate);
-          _allValues['y'].add(_yCandidate);
+          _allValues['x'].add(_xCandidate * pow(10, xPow));
+          _allValues['y'].add(_yCandidate * pow(10, yPow));
         }
         _editIndex = -1;
         _countAB();
@@ -214,18 +214,13 @@ mixin CalculateMixin {
   ///graphics calculations
 
   int _getInitialZoom(double distance, int gridCount) {
-    // _metamorphosisFactor = distance / (_graphicData.maxSize / 2);
-    int _res = 1, _multiplier = 1;
-    if (distance >= 1) {
+    int _res = 0, _multiplier = 1;
+    if (distance >= 1)
       _multiplier = -1;
-      _res = 0;
-    }
-    while (distance > gridCount / 2 || distance < 0) {
+    while (distance > gridCount / 2 || distance < 1) {
       _multiplier > 0 ? distance *= gridCount : distance /= gridCount;
       _res += _multiplier;
     }
-    // _metamorphosisX =
-    //     _pixelsPerPoint * pow(_graphicData.gridCount, _res).toDouble();
     return _res;
   }
 

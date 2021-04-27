@@ -28,16 +28,16 @@ class StringUtils{
   }
 
   static String normalizeNumberView(num source){
-    final List<String> _threeZeroLiterals = ['', 'K', 'M', 'B', 'T'];
-    String _res;
-    if(source > 0.01) {
-      _res = source.toString().split('000')[0];
-      _res = _res + _threeZeroLiterals[source.toString().split('000').length - 1];
-    } else {
+    // final List<String> _threeZeroLiterals = ['', 'K', 'M', 'B', 'T'];
+    // String _res;
+    if(source <= 0.001 || source >= 1000) {
+    //   _res = source.toString().split('000')[0];
+    //   _res = _res + _threeZeroLiterals[source.toString().split('000').length - 1];
+    // } else {
       List<String> _splitted = source.toStringAsExponential().split('e');
-      _res = '${_splitted[0]}${getPowSuperscript(int.parse(_splitted[1]))}';
-    }
-    return _res;
+      String _res = '${_splitted[0]}${getPowSuperscript(int.parse(_splitted[1]))}';
+      return _res;
+    } else return source.toString();
   }
 
   static String getPowSuperscript(int value){

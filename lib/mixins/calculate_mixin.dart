@@ -214,6 +214,8 @@ mixin CalculateMixin {
   ///graphics calculations
 
   int _getInitialZoom(double distance, int gridCount) {
+    if(distance == 0)
+      return 0;
     int _res = 0, _multiplier = 1;
     if (distance >= 1)
       _multiplier = -1;

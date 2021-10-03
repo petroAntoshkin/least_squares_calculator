@@ -117,7 +117,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     //         child: _child(),
     //       );
     return Align(
-    alignment: Alignment.bottomCenter,
+      alignment: Alignment.bottomCenter,
       child: _child(),
     );
   }
@@ -298,12 +298,9 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                           ),
                                         ),
                                         _editTextField(
-                                            _controllerX,
-                                            Provider.of<DataProvider>(context,
-                                                    listen: false)
-                                                .getAxisModel('x')
-                                                .text,
-                                            _focusNodeX),
+                                          _controllerX,
+                                          _focusNodeX,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -325,10 +322,6 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                         ),
                                         _editTextField(
                                           _controllerY,
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .getAxisModel('y')
-                                              .text,
                                           _focusNodeY,
                                         ),
                                       ],
@@ -482,14 +475,12 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
   }
 
   ///axis description controllers
-  Widget _editTextField(TextEditingController controller, String initialText,
-      FocusNode focusNode) {
-    //controller.text = initialText;
+  Widget _editTextField(TextEditingController controller, FocusNode focusNode) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.0),
       // decoration: BoxDecoration(),
       child: TextField(
-        focusNode: focusNode,
+        // focusNode: focusNode,
         onEditingComplete: () {
           Provider.of<DataProvider>(context, listen: false)
               .changeLabelsText(_controllerX.text, _controllerY.text);

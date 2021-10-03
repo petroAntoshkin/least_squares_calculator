@@ -216,12 +216,18 @@ mixin CalculateMixin {
   int _getInitialZoom(double distance, int gridCount) {
     if(distance == 0)
       return 0;
-    int _res = 0, _multiplier = 1;
-    if (distance >= 1)
-      _multiplier = -1;
-    while (distance > gridCount / 2 || distance < 1) {
-      _multiplier > 0 ? distance *= gridCount : distance /= gridCount;
-      _res += _multiplier;
+    int _res = 0;
+    final _multiplier = distance >= 1 ? -1 : 1;
+    if(distance > gridCount / 2) {
+      while (distance > gridCount / 2) {
+        distance /= gridCount;
+        _res += _multiplier;
+      }
+    } else {
+      while (distance < 1) {
+        distance *= gridCount;
+        _res += _multiplier;
+      }
     }
     return _res;
   }

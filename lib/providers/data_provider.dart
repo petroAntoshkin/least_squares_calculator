@@ -24,7 +24,6 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   List<ImagePair> _imagesList;
   String _defaultLocale;
   // double _factorA, _factorB;
-  double _bottomNavBarHeight;
 
   final Map<String, AxisLabelModel> _labels = Map();
 
@@ -44,15 +43,6 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     //print('${Platform.localeName} def loacale is $_defaultLocale');
   }
 
-  ///bottom navBar
-  // ignore: unnecessary_getters_setters
-  get navBarHe{
-    return _bottomNavBarHeight;
-  }
-  // ignore: unnecessary_getters_setters
-  set navBarHe(double value){
-    _bottomNavBarHeight = value;
-  }
   ///locale from device
   String _getDeviceLocale(String so){
     String _firstLet = so.substring(0, 2);
@@ -301,9 +291,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     return _res;
   }
 
-  int getImagesLength(){
-    return _imagesList.length;
-  }
+  int getImagesLength() =>_imagesList.length;
 
   void savePNG(var pngBytes){
     // var pngBytes = await image.toByteData(format: ui.ImageByteFormat.png)
@@ -330,18 +318,6 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   void contextFunctions(int index){
     if(_contextFunctions[index] != null)
       _contextFunctions[index]();
-    // switch(index){
-    //   case 0:
-    //   case 1:
-    //   case 2:
-    //     if(_contextFunctions[index] != null)
-    //       _contextFunctions[index]();
-        //print('contextFunction $index');
-    //     break;
-    //   case 3:
-    //     _resetSettings();
-    //     break;
-    // }
   }
 
 }

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:least_squares/models/theme_list_model.dart';
 
 class ThemesMock {
-
   Color _hexToColor(String code) {
     return Color(int.parse(code.substring(0, 6), radix: 16) + 0xFF000000);
   }
-  
+
   final Map<int, ThemeListModel> themes = Map();
 
   ThemesMock() {
@@ -15,38 +14,29 @@ class ThemesMock {
         data: ThemeData(
           primaryColor: _hexToColor('D9D7D7'),
           primaryColorDark: _hexToColor('010D00'),
-          accentColor: Colors.white,
           backgroundColor: _hexToColor('F0F0F0'),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
           // backgroundColor: _hexToColor('BFADA3'),
-        )
-    );
+        ));
     themes[1] = ThemeListModel(
         name: 'Dark green',
         data: ThemeData(
           primaryColor: _hexToColor('54594D'),
           primaryColorDark: _hexToColor('3D403A'),
-          accentColor: Colors.white54,
           backgroundColor: _hexToColor('262626'),
-        )
-    );
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: Colors.white54),
+        ));
     themes[2] = ThemeListModel(
         name: 'Black and white',
         data: ThemeData(
-            primaryColor: _hexToColor('a6a6a6'),
-            primaryColorDark: _hexToColor('f2f2f2'),
-            accentColor: _hexToColor('0d0d0d'),
-            backgroundColor: _hexToColor('555555'),
-        )
-    );
-    /*themes[3] = ThemeListModel(
-        name: 'X3',
-        data: ThemeData(
-            primaryColor: _hexToColor('5D7CA6'),
-            primaryColorDark: _hexToColor('73A2BF'),
-            accentColor: _hexToColor('03588C'),
-            backgroundColor: _hexToColor('023059'),
-        )
-    );*/
+          primaryColor: _hexToColor('a6a6a6'),
+          primaryColorDark: _hexToColor('f2f2f2'),
+          backgroundColor: _hexToColor('555555'),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: _hexToColor('0d0d0d')),
+        ));
   }
 }
 

@@ -67,7 +67,7 @@ class _ImagesPageState extends State<ImagesPage> {
             height: 40.0,
             child: Checkbox(
               activeColor: _themeData.primaryColorDark,
-              checkColor: _themeData.accentColor,
+              checkColor: _themeData.colorScheme.secondary,
               value: _imageList[index].selected,
               onChanged: (bool value) {
                 _changeCheckbox(index, value);
@@ -104,7 +104,7 @@ class _ImagesPageState extends State<ImagesPage> {
                   Center(
                     child: Icon(
                       Icons.share,
-                      color: _themeData.accentColor,
+                      color: _themeData.colorScheme.secondary,
                     ),
                   ),
                 ],
@@ -190,7 +190,7 @@ class _ImagesPageState extends State<ImagesPage> {
           mimeType: 'image/png',
           bytesOfFile: bytes);
     } catch (e) {
-      print('error: $e');
+      debugPrint('error: $e');
     }
   }
 }

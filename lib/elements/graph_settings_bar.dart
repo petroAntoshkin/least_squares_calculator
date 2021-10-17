@@ -231,7 +231,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                         Checkbox(
                                           activeColor:
                                               _themeData.primaryColorDark,
-                                          checkColor: _themeData.accentColor,
+                                          checkColor: _themeData.colorScheme.secondary,
                                           value: _graphicsData.showGrid,
                                           onChanged: (value) {
                                             // print('chane checkBox value to $value');

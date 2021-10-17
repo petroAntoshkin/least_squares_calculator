@@ -104,7 +104,7 @@ class _CalculationPageState extends State<CalculationPage> {
                                     _dataProvider.editIndex == -1
                                         ? Icons.calculate
                                         : Icons.check,
-                                    color: _themeData.accentColor,
+                                    color: _themeData.colorScheme.secondary,
                                   ),
                                 ),
                               ),
@@ -167,7 +167,7 @@ class _CalculationPageState extends State<CalculationPage> {
                                     _dataProvider.editIndex == -1
                                         ? Icons.calculate
                                         : Icons.cancel_outlined,
-                                    color: _themeData.accentColor,
+                                    color: _themeData.colorScheme.secondary,
                                   ),
                                 ),
                               ),

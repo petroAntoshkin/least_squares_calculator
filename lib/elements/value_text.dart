@@ -12,18 +12,18 @@ class ValueText extends StatelessWidget{
   Widget build(BuildContext context){
     _themeData = Provider.of<DataProvider>(context).theme;
     return Container(
-      padding: EdgeInsets.all(3.0),
-      child: Card(
-          color: _themeData.primaryColorDark,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 7.0),
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Text(text, style: TextStyle(
-                    color: _themeData.accentColor,
-                  ))
-            ),
-          )),
+      // padding: EdgeInsets.all(11.0),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 7.0),
+          child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text(text, style: TextStyle(
+                  color: _themeData.primaryTextTheme.bodyText1.color,
+                ))
+          ),
+        ),
+      ),
     );
   }
 }

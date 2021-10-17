@@ -58,6 +58,7 @@ class _LSMHomePageState extends State<LSMHomePage>
     super.initState();
     _tabController = new TabController(length: 4, vsync: this);
   }
+
   @override
   Widget build(BuildContext context) {
     // print('rebuild home page');
@@ -71,8 +72,12 @@ class _LSMHomePageState extends State<LSMHomePage>
       child: Scaffold(
         backgroundColor: _themeData.backgroundColor,
         appBar: AppBar(
-          title: AppbarTitle(),
+          backgroundColor: _themeData.backgroundColor,
+          title: AppbarTitle(
+            themeData: _themeData,
+          ),
           bottom: TabBar(
+            indicatorWeight: 3.0,
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.list)),

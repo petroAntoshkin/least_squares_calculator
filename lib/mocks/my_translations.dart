@@ -37,6 +37,7 @@ class MyTranslations{
     en.putIfAbsent('axis_description', () => 'Axis description');
     en.putIfAbsent('equal_data_error_1', () => 'Only one value of Y must correspond to one value of X.');
     en.putIfAbsent('equal_data_error_2', () => 'Such data already exist');
+    en.putIfAbsent('copy_success_message', () => 'Data copied successfully');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('nanMessage', () => '资料不足');
@@ -58,6 +59,7 @@ class MyTranslations{
     zh.putIfAbsent('axis_description', () => '轴说明');
     zh.putIfAbsent('equal_data_error_1', () => 'Y的两个或多个值不可能对应于X的一个值。');
     zh.putIfAbsent('equal_data_error_2', () => '这样的数据已经存在');
+    zh.putIfAbsent('copy_success_message', () => '数据复制成功');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('nanMessage', () => 'पर्याप्त डेटा नहीं');
@@ -79,6 +81,7 @@ class MyTranslations{
     hi.putIfAbsent('axis_description', () => 'एक्सिस विवरण');
     hi.putIfAbsent('equal_data_error_1', () => 'X के एक मान से Y के दो या अधिक मान संभव नहीं हैं।');
     hi.putIfAbsent('equal_data_error_2', () => 'ऐसा डेटा पहले से मौजूद है');
+    hi.putIfAbsent('copy_success_message', () => 'डेटा सफलतापूर्वक कॉपी किया गया');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('nanMessage', () => 'No hay suficientes datos');
@@ -100,6 +103,7 @@ class MyTranslations{
     es.putIfAbsent('axis_description', () => 'Descripción del eje');
     es.putIfAbsent('equal_data_error_1', () => 'No es posible que dos o más valores de Y correspondan a un valor de X.');
     es.putIfAbsent('equal_data_error_2', () => 'Tales datos ya existen');
+    es.putIfAbsent('copy_success_message', () => 'Datos copiados correctamente');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('nanMessage', () => 'Pas assez de données');
@@ -121,6 +125,7 @@ class MyTranslations{
     fr.putIfAbsent('axis_description', () => 'Description de l\'axe');
     fr.putIfAbsent('equal_data_error_1', () => 'Il est impossible que deux ou plusieurs valeurs de Y correspondent à une valeur de X.');
     fr.putIfAbsent('equal_data_error_2', () => 'De telles données existent déjà');
+    fr.putIfAbsent('copy_success_message', () => 'Données copiées avec succès');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('nanMessage', () => 'Nicht genügend Daten');
@@ -142,6 +147,7 @@ class MyTranslations{
     de.putIfAbsent('axis_description', () => 'Achsenbeschreibung');
     de.putIfAbsent('equal_data_error_1', () => 'Nicht möglich, dass zwei oder mehr Werte von Y einem Wert von X entsprechen.');
     de.putIfAbsent('equal_data_error_2', () => 'Solche Daten existieren bereits');
+    de.putIfAbsent('copy_success_message', () => 'Daten erfolgreich kopiert');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('nanMessage', () => 'Não há dados suficientes');
@@ -163,6 +169,7 @@ class MyTranslations{
     pt.putIfAbsent('axis_description', () => 'Descrição do eixo');
     pt.putIfAbsent('equal_data_error_1', () => 'Não é possível que dois ou mais valores de Y correspondam a um valor de X.');
     pt.putIfAbsent('equal_data_error_2', () => 'Esses dados já existem');
+    pt.putIfAbsent('copy_success_message', () => 'Dados copiados com sucesso');
     ///it
     it.putIfAbsent('title', () => 'Calcolatrice dei minimi quadrati');
     it.putIfAbsent('nanMessage', () => 'Dati insufficienti');
@@ -184,6 +191,7 @@ class MyTranslations{
     it.putIfAbsent('axis_description', () => 'Descrizione dell\'asse');
     it.putIfAbsent('equal_data_error_1', () => 'Un solo valore di Y deve corrispondere a un valore di X.');
     it.putIfAbsent('equal_data_error_2', () => 'Tali dati esistono già');
+    it.putIfAbsent('copy_success_message', () => 'Dati copiati con successo');
     ///pl
     pl.putIfAbsent('title', () => 'Kalkulator najmniejszych kwadratów');
     pl.putIfAbsent('nanMessage', () => 'Za mało danych');
@@ -205,6 +213,7 @@ class MyTranslations{
     pl.putIfAbsent('axis_description', () => 'Opis osi');
     pl.putIfAbsent('equal_data_error_1', () => 'Tylko jedna wartość Y musi odpowiadać jednej wartości X.');
     pl.putIfAbsent('equal_data_error_2', () => 'Takie dane już istnieją');
+    pl.putIfAbsent('copy_success_message', () => 'Dane skopiowane pomyślnie');
     ///ua
     uk.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     uk.putIfAbsent('nanMessage', () => 'Недостатньо даних');
@@ -226,6 +235,7 @@ class MyTranslations{
     uk.putIfAbsent('axis_description', () => 'Підпис вісі');
     uk.putIfAbsent('equal_data_error_1', () => 'Неможливо, щоб два або більше значень Y відповідали одному значенню X.');
     uk.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
+    uk.putIfAbsent('copy_success_message', () => 'Дані успішно скопійовані');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
@@ -247,6 +257,7 @@ class MyTranslations{
     ru.putIfAbsent('axis_description', () => 'Описание оси');
     ru.putIfAbsent('equal_data_error_1', () => 'Нельзя, чтобы два или более значения Y соответствовали одному значению X.');
     ru.putIfAbsent('equal_data_error_2', () => 'Уже есть такие данные');
+    ru.putIfAbsent('copy_success_message', () => 'Данные успешно скопированы');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('zh', () => zh);

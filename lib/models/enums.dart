@@ -8,5 +8,6 @@ enum ApproximationTypes{
 enum DotsTypes{
   circle,
   rhomb,
+  crest,
   square
 }

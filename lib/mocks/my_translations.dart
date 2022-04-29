@@ -24,6 +24,7 @@ class MyTranslations{
     en.putIfAbsent('default_settings', () => 'Default settings');
     en.putIfAbsent('reset', () => 'Reset data');
     en.putIfAbsent('show_grid', () => 'Show grid');
+    en.putIfAbsent('dot_type', () => 'Point type');
     en.putIfAbsent('del_approve', () => 'Are you sure? you can\'t undo this action');
     en.putIfAbsent('cancel', () => 'Cancel');
     en.putIfAbsent('delete', () => 'Delete');
@@ -46,6 +47,7 @@ class MyTranslations{
     zh.putIfAbsent('default_settings', () => '默认设置');
     zh.putIfAbsent('reset', () => '重置數據');
     zh.putIfAbsent('show_grid', () => '顯示網格');
+    zh.putIfAbsent('dot_type', () => '点类型');
     zh.putIfAbsent('del_approve', () => '你確定嗎？ 您無法撤消此操作');
     zh.putIfAbsent('cancel', () => '取消');
     zh.putIfAbsent('delete', () => '刪除');
@@ -68,6 +70,7 @@ class MyTranslations{
     hi.putIfAbsent('default_settings', () => 'न्यूनता समायोजन');
     hi.putIfAbsent('reset', () => 'रीसेट डेटा');
     hi.putIfAbsent('show_grid', () => 'ग्रिड दिखाएं');
+    hi.putIfAbsent('dot_type', () => 'बिंदु प्रकार');
     hi.putIfAbsent('del_approve', () => 'क्या आपको यकीन है? आप इस क्रिया को पूर्ववत नहीं कर सकते');
     hi.putIfAbsent('cancel', () => 'रद्द करना');
     hi.putIfAbsent('delete', () => 'हटाएं');
@@ -90,6 +93,7 @@ class MyTranslations{
     es.putIfAbsent('default_settings', () => 'Configuraciones predeterminadas');
     es.putIfAbsent('reset', () => 'Reiniciar datos');
     es.putIfAbsent('show_grid', () => 'Mostrar cuadrícula');
+    es.putIfAbsent('dot_type', () => 'Tipo de punto');
     es.putIfAbsent('del_approve', () => '¿Está seguro? no puedes deshacer esta acción');
     es.putIfAbsent('cancel', () => 'Cancelar');
     es.putIfAbsent('delete', () => 'Borrar');
@@ -112,6 +116,7 @@ class MyTranslations{
     fr.putIfAbsent('default_settings', () => 'Paramètres par défaut');
     fr.putIfAbsent('reset', () => 'Réinitialiser données');
     fr.putIfAbsent('show_grid', () => 'Afficher la grille');
+    fr.putIfAbsent('dot_type', () => 'Type de points');
     fr.putIfAbsent('del_approve', () => 'Êtes-vous sûr? vous ne pouvez pas annuler cette action');
     fr.putIfAbsent('cancel', () => 'Annuler');
     fr.putIfAbsent('delete', () => 'Effacer');
@@ -134,6 +139,7 @@ class MyTranslations{
     de.putIfAbsent('default_settings', () => 'Standardeinstellungen');
     de.putIfAbsent('reset', () => 'Daten zurücksetzen');
     de.putIfAbsent('show_grid', () => 'Rasteranzeige');
+    de.putIfAbsent('dot_type', () => 'Punkttyp');
     de.putIfAbsent('del_approve', () => 'Sind Sie sicher? Sie können diese Aktion nicht rückgängig machen');
     de.putIfAbsent('cancel', () => 'Stornieren');
     de.putIfAbsent('delete', () => 'Löschen');
@@ -156,6 +162,7 @@ class MyTranslations{
     pt.putIfAbsent('default_settings', () => 'Configurações padrão');
     pt.putIfAbsent('reset', () => 'Redefinir dados');
     pt.putIfAbsent('show_grid', () => 'Mostre as grades');
+    pt.putIfAbsent('dot_type', () => 'Tipo de ponto');
     pt.putIfAbsent('del_approve', () => 'Tem certeza? você não pode desfazer esta ação');
     pt.putIfAbsent('cancel', () => 'Cancelar');
     pt.putIfAbsent('delete', () => 'Excluir');
@@ -178,6 +185,7 @@ class MyTranslations{
     it.putIfAbsent('default_settings', () => 'Impostazioni predefinite');
     it.putIfAbsent('reset', () => 'Reimposta i dati');
     it.putIfAbsent('show_grid', () => 'Mostra griglia');
+    it.putIfAbsent('dot_type', () => 'Tipo di punto');
     it.putIfAbsent('del_approve', () => 'Sei sicuro? Non puoi annullare questa azione');
     it.putIfAbsent('cancel', () => 'Annulla');
     it.putIfAbsent('delete', () => 'Elimina');
@@ -200,6 +208,7 @@ class MyTranslations{
     pl.putIfAbsent('default_settings', () => 'Ustawienia domyślne');
     pl.putIfAbsent('reset', () => 'Resetuj dane');
     pl.putIfAbsent('show_grid', () => 'Pokaż siatkę');
+    pl.putIfAbsent('dot_type', () => 'Typ punktu');
     pl.putIfAbsent('del_approve', () => 'Jesteś pewny? Nie możesz cofnąć tej czynności');
     pl.putIfAbsent('cancel', () => 'Odwołać');
     pl.putIfAbsent('delete', () => 'Usunąć');
@@ -222,6 +231,7 @@ class MyTranslations{
     uk.putIfAbsent('default_settings', () => 'Налаштування за замовчуванням');
     uk.putIfAbsent('reset', () => 'Очистити дані');
     uk.putIfAbsent('show_grid', () => 'Відобразити сітку');
+    uk.putIfAbsent('dot_type', () => 'Тип точки');
     uk.putIfAbsent('del_approve', () => 'Ви впевнені? Цю дію не можна скасувати');
     uk.putIfAbsent('cancel', () => 'Скасувати');
     uk.putIfAbsent('delete', () => 'Видалити');
@@ -244,6 +254,7 @@ class MyTranslations{
     ru.putIfAbsent('default_settings', () => 'Настройки по умолчанию');
     ru.putIfAbsent('reset', () => 'Очистить данные');
     ru.putIfAbsent('show_grid', () => 'Показать сетку');
+    ru.putIfAbsent('dot_type', () => 'Тип точки');
     ru.putIfAbsent('del_approve', () => 'Вы уверены?');
     ru.putIfAbsent('cancel', () => 'Отменить');
     ru.putIfAbsent('delete', () => 'Удалить');

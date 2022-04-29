@@ -17,79 +17,88 @@ class AppbarTitle extends StatelessWidget {
     final String _loc = Provider.of<DataProvider>(context).getLanguage();
     final double _valueWidth = MediaQuery.of(context).size.width * 0.4;
     final String _aValue = Provider.of<DataProvider>(context).getAString();
+    final String _aDeviation = Provider.of<DataProvider>(context).getADeviationString();
     final String _bValue = Provider.of<DataProvider>(context).getBString();
-    final _textStyle = TextStyle(
-      fontSize: 18,
-      color: themeData.primaryTextTheme.bodyText1.color,
-    );
+    final String _bDeviation = Provider.of<DataProvider>(context).getBDeviationString();
+    // final _textStyle = TextStyle(
+    //   fontSize: 18,
+    //   color: themeData.primaryTextTheme.bodyText1.color,
+    // );
     return Container(
-      // color: Colors.red,
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
+      padding: EdgeInsets.all(2.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        color: themeData.primaryColor.withAlpha(80),
+      ),
+      child: Row(
         children: [
-          // SizedBox(height: 2,),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: _valueWidth,
+                    child: _loc != null
+                        ? ValueText(
+                            text: _aValue, style: Presets.resultsValueStyle)
+                        : Container(),
+                  ),
+                  //Expanded(child: Container()),
+                  SizedBox(
+                    width: _valueWidth,
+                    child: _loc != null
+                        ? ValueText(
+                            text: _bValue, style: Presets.resultsValueStyle)
+                        : Container(),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: _valueWidth,
+                    child: _loc != null
+                        ? ValueText(
+                            text: _aDeviation, style: Presets.resultsValueStyle)
+                        : Container(),
+                  ),
+                  //Expanded(child: Container()),
+                  SizedBox(
+                    width: _valueWidth,
+                    child: _loc != null
+                        ? ValueText(
+                            text: _bDeviation, style: Presets.resultsValueStyle)
+                        : Container(),
+                  ),
+                ],
+              ),
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.only(top: 1.0),
-            child: _loc != null
-                ? Text(
-                    MyTranslations().getLocale(_loc, 'title'),
-                    style: _textStyle,
-                  )
-                : Text(
-                    'Least Squares Calculator',
-                    style: _textStyle,
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                final String _res = '$_aValue $_bValue $_aDeviation $_bDeviation';
+                Clipboard.setData(ClipboardData(text: _res));
+                debugPrint(_res);
+                final snackBar = SnackBar(
+                  content: Text(
+                    MyTranslations()
+                        .getLocale(_loc, 'copy_success_message'),
                   ),
-          ),
-          SizedBox(
-            height: 3.0,
-          ),
-          Container(
-            padding: EdgeInsets.all(2.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4.0)),
-              color: themeData.primaryColor.withAlpha(80),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: _valueWidth,
-                  child: _loc != null
-                      ? ValueText(
-                          text: _aValue, style: Presets.resultsValueStyle)
-                      : Container(),
-                ),
-                //Expanded(child: Container()),
-                SizedBox(
-                  width: _valueWidth,
-                  child: _loc != null
-                      ? ValueText(
-                          text: _bValue, style: Presets.resultsValueStyle)
-                      : Container(),
-                ),
-                InkWell(
-                  onTap: () {
-                    final String _res = '$_aValue $_bValue';
-                    Clipboard.setData(ClipboardData(text: _res));
-                    debugPrint(_res);
-                    final snackBar = SnackBar(
-                      content: Text(
-                        MyTranslations()
-                            .getLocale(_loc, 'copy_success_message'),
-                      ),
-                      action: SnackBarAction(
-                        label: 'OK',
-                        onPressed: () {},
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                  child: Icon(
-                    Icons.copy,
-                    color: themeData.primaryTextTheme.bodyText1.color,
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {},
                   ),
-                ),
-              ],
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: Icon(
+                Icons.copy,
+                color: themeData.primaryTextTheme.bodyText1.color,
+              ),
             ),
           ),
         ],

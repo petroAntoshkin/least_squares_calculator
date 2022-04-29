@@ -18,7 +18,7 @@ class _CalculationPageState extends State<CalculationPage> {
   DataProvider _dataProvider;
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
-  final FocusNode _xFocusNode = FocusNode();
+  FocusNode _xFocusNode;
 
   int _dataLen, _xPow = 0, _yPow = 0;
   BuildContext _context;
@@ -30,6 +30,12 @@ class _CalculationPageState extends State<CalculationPage> {
     super.initState();
     _controllerX.text = '';
     _controllerY.text = '';
+    _xFocusNode = FocusNode();
+  }
+  @override
+  void dispose() {
+    _xFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,7 +51,7 @@ class _CalculationPageState extends State<CalculationPage> {
     _dataLen = _dataProvider.getValuesLength();
     _themeData = _dataProvider.theme;
     _context = context;
-    print('CalculationPage build $_dataLen');
+    // debugPrint('CalculationPage build $_dataLen');
     return Center(
       child: Stack(children: [
         SizedBox(
@@ -201,7 +207,8 @@ class _CalculationPageState extends State<CalculationPage> {
         .addMoreValues(_controllerX.text, _controllerY.text, _xPow, _yPow);
     if (_error == 0) {
       _clearControllers();
-      _xFocusNode.requestFocus();
+      // _xFocusNode.requestFocus();
+      FocusManager.instance.primaryFocus.unfocus();
     } else {
       Dialogs.materialDialog(
         customView: Padding(
@@ -249,6 +256,7 @@ class _CalculationPageState extends State<CalculationPage> {
     return Container(
       decoration: BoxDecoration(),
       child: TextField(
+        onEditingComplete: _addValuesRequest,
         focusNode: focusNode,
         keyboardType: TextInputType.phone,
         controller: controller,

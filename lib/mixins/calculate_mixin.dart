@@ -19,6 +19,8 @@ mixin CalculateMixin {
   );
   double _factorA,
       _factorB,
+      _deviationA = .0,
+      _deviationB = .0,
       // _divider,
       _metamorphosisX,
       _metamorphosisY,
@@ -34,6 +36,7 @@ mixin CalculateMixin {
     'circle',
     'square',
     'rhomb',
+    'crest',
   ];
   int _dotTypeIndex = 0;
   int _approximationType = 0;
@@ -152,39 +155,44 @@ mixin CalculateMixin {
   void _countAB() {
     _initSum();
     int _len = _allValues['x'].length;
-    double _sumX = 0, _sumY = 0, _sumXSquare = 0, _sumXY = 0;
+    double _sumX = 0, _sumY = 0, _sumXSquare = 0, _sumXY = 0, _sumFunDif = 0, _sumXDif = 0;
     for (int i = 0; i < _len; i++) {
       _sumX += _allValues['x'][i];
       _sumY += _allValues['y'][i];
       _sumXY += _allValues['x'][i] * _allValues['y'][i];
       _sumXSquare += _allValues['x'][i] * _allValues['x'][i];
     }
-    _factorB = (_sumY * _sumXSquare - _sumX * _sumXY) /
-        (_len * _sumXSquare - _sumX * _sumX);
     _factorA =
         (_len * _sumXY - _sumX * _sumY) / (_len * _sumXSquare - _sumX * _sumX);
+    _factorB = (_sumY * _sumXSquare - _sumX * _sumXY) /
+        (_len * _sumXSquare - _sumX * _sumX);
+    // _factorB = _sumY - _factorA * _sumX;
+    _deviationA = _deviationB = 0;
+    final double _xs = _sumX / _len;
+    final double _ys = _sumY / _len;
+    for(int i = 0; i < _len; i++) {
+      _sumFunDif += (_allValues['y'][i] - _factorA * _allValues['x'][i] - _factorB) * (_allValues['y'][i] - _factorA * _allValues['x'][i] - _factorB);
+      _sumXDif += (_allValues['x'][i] - _xs) * (_allValues['x'][i] - _xs);
+    }
+    // debugPrint('sumX=$_sumX xDif=$_sumXDif function dif=$_sumFunDif');
+    _deviationA = pow(_sumFunDif / ((-2 + _len) * _sumXDif), 0.5);
+    _deviationB = pow((1 / _len + (_xs * _xs) / _sumXDif) * _sumFunDif / (-2 + _len), 0.5);
     _globalRecalculation();
   }
 
-  String getAString() {
-    return _factorA.isNaN ? nanString : 'a = $_factorA';
-  }
+  String getAString() => _factorA.isNaN ? nanString : 'a = $_factorA';
+  String getADeviationString() => _deviationA.isNaN ? nanString : 'σ₁ = $_deviationA';
 
-  String getBString() {
-    return _factorB.isNaN ? nanString : 'b = $_factorB';
-  }
+  String getBString() => _factorB.isNaN ? nanString : 'b = $_factorB';
+  String getBDeviationString() => _deviationB.isNaN ? nanString : 'σ₂ = $_deviationB';
 
-  double getAValue() {
-    return _factorA;
-  }
+  double getAValue() => _factorA;
+  double getADeviation() => _deviationA;
 
-  double getBValue() {
-    return _factorB;
-  }
+  double getBValue() => _factorB;
+  double getBDeviation() => _deviationB;
 
-  int getValuesLength() {
-    return _allValues['x'].length;
-  }
+  int getValuesLength() =>_allValues['x'].length;
 
   double getValue(String name, int index) {
     return _allValues[name][index];
@@ -300,6 +308,31 @@ mixin CalculateMixin {
     }
   }
 
+  double _getFunctionValue({@required String name, @required double x}){
+    double _y;
+    switch (name) {
+      case 'parabolic':
+        _y = _factorA * x * x + _factorB * x;
+        break;
+      case 'exponential':
+        _y = exp(_factorA) * _factorB;
+        break;
+      case 'pow':
+        _y = pow(x, _factorB) * _factorA;
+        break;
+      case 'hyperbolic':
+        _y = _factorA / x + _factorB;
+        break;
+      case 'log':
+        _y = _factorA * log(x) + _factorB;
+        break;
+      default:
+        _y = x * _factorA + _factorB;
+        break;
+    }
+    return _y;
+  }
+
   void _fillApproximationPoints() {
     _sourceAproxDots = [];
     double _y, _start, _end;
@@ -312,26 +345,7 @@ mixin CalculateMixin {
         pow(_graphicData.gridCount, _graphicData.zoomFactorX).toDouble();
     Offset _offset;
     for (double _x = _start; _x <= _end; _x += _countStep) {
-      switch (_approximationName) {
-        case 'parabolic':
-          _y = _factorA * _x * _x + _factorB * _x;
-          break;
-        case 'exponential':
-          _y = exp(_factorA) * _factorB;
-          break;
-        case 'pow':
-          _y = pow(_x, _factorB) * _factorA;
-          break;
-        case 'hyperbolic':
-          _y = _factorA / _x + _factorB;
-          break;
-        case 'log':
-          _y = _factorA * log(_x) + _factorB;
-          break;
-        default:
-          _y = _x * _factorA + _factorB;
-          break;
-      }
+      _y = _getFunctionValue(name: _approximationName, x: _x);
       bool _diff = false;
       _offset = Offset(
           _graphicData.maxSize / 2 +
@@ -362,9 +376,7 @@ mixin CalculateMixin {
     _addDisplaceToApprox();
   }
 
-  double get displaceX {
-    return _graphicData.displaceX;
-  }
+  double get displaceX => _graphicData.displaceX;
 
   set displaceY(double value) {
     _graphicData.displaceY = value;
@@ -372,17 +384,11 @@ mixin CalculateMixin {
     _addDisplaceToApprox();
   }
 
-  double get displaceY {
-    return _graphicData.displaceY;
-  }
+  double get displaceY => _graphicData.displaceY;
 
-  GraphicData get graphicData {
-    return _graphicData.cloneData();
-  }
+  GraphicData get graphicData => _graphicData.cloneData();
 
-  double get dotSize {
-    return _graphicData.dotSize;
-  }
+  double get dotSize => _graphicData.dotSize;
 
   set dotSize(double value) {
     _graphicData.dotSize = value;

@@ -131,6 +131,22 @@ class DrawPainter extends CustomPainter {
           _path.close();
           canvas.drawPath(_path, paintDots);
           break;
+        case 'crest':
+          canvas.drawRect(
+              Rect.fromCenter(
+                center: graphicData.dataDots[i],
+                width: 2,
+                height: graphicData.dotSize * 2,
+              ),
+              paintDots);
+          canvas.drawRect(
+              Rect.fromCenter(
+                center: graphicData.dataDots[i],
+                width: graphicData.dotSize * 2,
+                height: 2,
+              ),
+              paintDots);
+          break;
         default:
           canvas.drawCircle(graphicData.dataDots[i], graphicData.dotSize, paintDots);
           break;

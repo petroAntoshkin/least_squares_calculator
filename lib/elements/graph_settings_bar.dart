@@ -9,6 +9,7 @@ import 'package:least_squares/elements/list_widgets/approx_pow.dart';
 import 'package:least_squares/elements/list_widgets/dot_circle.dart';
 import 'package:least_squares/elements/list_widgets/dot_rhomb.dart';
 import 'package:least_squares/elements/list_widgets/dot_square.dart';
+import 'package:least_squares/elements/list_widgets/dot_crest.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/models/axis_label_model.dart';
 import 'package:least_squares/models/graphic_data.dart';
@@ -33,7 +34,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
 
   Map<int, NamedWidget> _approxMap = Map();
   Map<int, NamedWidget> _dotsMap = Map();
-  int _approximationType = 0, _dotType = 0;
+  int /*_approximationType = 0,*/ _dotType = 0;
   AxisLabelModel _labelModelX, _labelModelY;
   final double _buttonSize = 48.0, _iconSize = 22.0, _borderRadius = 8.0;
   final _focusNodeX = FocusNode();
@@ -53,6 +54,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     _dotsMap[0] = NamedWidget(name: 'circle', widget: DotCircle());
     _dotsMap[1] = NamedWidget(name: 'square', widget: DotSquare());
     _dotsMap[2] = NamedWidget(name: 'rhomb', widget: DotRhomb());
+    _dotsMap[3] = NamedWidget(name: 'crest', widget: DotCrest());
   }
 
   @override
@@ -73,8 +75,8 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     _graphicsData =
         Provider.of<DataProvider>(context, listen: false).graphicData;
 
-    _approximationType =
-        Provider.of<DataProvider>(context, listen: false).approximationType;
+    // _approximationType =
+    //     Provider.of<DataProvider>(context, listen: false).approximationType;
     _dotType = Provider.of<DataProvider>(context, listen: false).dotTypeIndex;
     _labelModelX =
         Provider.of<DataProvider>(context, listen: false).getAxisModel('x');
@@ -102,6 +104,9 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
       color: _themeData.primaryTextTheme.bodyText1.color,
     );
     _dotsMap[2].widget = DotRhomb(
+      color: _themeData.primaryTextTheme.bodyText1.color,
+    );
+    _dotsMap[3].widget = DotCrest(
       color: _themeData.primaryTextTheme.bodyText1.color,
     );
 
@@ -253,11 +258,12 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: DropDownList(
-                                        itemsList: _approxMap,
-                                        currentValue: _approximationType,
-                                        callBack: _changeApproximationType,
-                                      ),
+                                      child: SizedBox(width: 15),
+                                      // child: DropDownList(
+                                      //   itemsList: _approxMap,
+                                      //   currentValue: _approximationType,
+                                      //   callBack: _changeApproximationType,
+                                      // ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -265,6 +271,17 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                         itemsList: _dotsMap,
                                         currentValue: _dotType,
                                         callBack: _changeDotType,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Text(
+                                        MyTranslations().getLocale(
+                                            widget._loc, 'dot_type'),
+                                        style: TextStyle(
+                                          color: _themeData.primaryTextTheme
+                                              .bodyText1.color,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -506,11 +523,11 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
 
   ///approximation functions
   ///
-  void _changeApproximationType(int index) {
-    //print('changeApproximationType to $index');
-    setState(() {
-      _approximationType = index;
-      Provider.of<DataProvider>(context, listen: false).approxTypeChange(index);
-    });
-  }
+  // void _changeApproximationType(int index) {
+  //   //print('changeApproximationType to $index');
+  //   setState(() {
+  //     _approximationType = index;
+  //     Provider.of<DataProvider>(context, listen: false).approxTypeChange(index);
+  //   });
+  // }
 }

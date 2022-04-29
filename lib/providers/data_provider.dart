@@ -186,6 +186,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   @override
   void removeOneValue(int index) {
     super.removeOneValue(index);
+    _saveLastData();
     notifyListeners();
   }
 
@@ -247,7 +248,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
         changeGridShow(_result.showGrid);
       } catch (e) {
         // If encountering an error, return 0
-        print('catch $e');
+        debugPrint('catch $e');
       }
   }
 
@@ -265,7 +266,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
         _restoreData(json.decode(contents)['data']);
       } catch (e) {
         // If encountering an error, return 0
-        print('catch $e');
+        debugPrint('catch $e');
       }
   }
 

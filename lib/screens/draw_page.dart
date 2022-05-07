@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:least_squares/elements/axis_label.dart';
 import 'package:least_squares/elements/graph_settings_bar.dart';
+import 'package:least_squares/styles_and_presets.dart';
 import 'package:least_squares/utils/string_utils.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -127,6 +128,22 @@ class _DrawPageState extends State<DrawPage> {
                             ),
                           ),
                         ),
+                ),
+              ),
+              Positioned(
+                top: _maxSize * _sizeMultiplier,
+                child: SizedBox(
+                  width: _maxSize * _sizeMultiplier,
+                  child: Center(
+                    child: Text(
+                      _len > 1 ? 'y = ax + b' : '',
+                      style: TextStyle(
+                        color: _themeData.primaryTextTheme.bodyText1.color,
+                        fontStyle: FontStyle.italic,
+                        fontSize: Presets.TEXT_SIZE_MIDDLE,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               _len > 1 ? GraphSettingsBar() : Container(),

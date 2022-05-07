@@ -8,6 +8,7 @@ import '../styles_and_presets.dart';
 // ignore: must_be_immutable
 class ValuesPair extends StatelessWidget{
   int pairIndex;
+  final _base_size = 40.0;
   // double _dragStartX;
   ValuesPair({@required this.pairIndex});
   @override
@@ -25,8 +26,8 @@ class ValuesPair extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width: 40.0,
-              height: 40.0,
+              width: _base_size,
+              height: _base_size,
               child: IconButton(
                   icon: Icon(Icons.edit_outlined),
                   onPressed: () => Provider.of<DataProvider>(context, listen: false)
@@ -36,15 +37,23 @@ class ValuesPair extends StatelessWidget{
               child: Row(
                 children: [
                   SizedBox(
-                    width: (MediaQuery.of(context).size.width - 100) / 2,
-                    height: 40.0,
+                    width: (MediaQuery.of(context).size.width - 100) / 2 - _base_size / 2,
+                    height: _base_size,
                     child: ValueText(text:
                     'X = ${Provider.of<DataProvider>(context, listen: false).getValue('x', pairIndex)}',
                         style: Presets.currrentValueStyle),
                   ),
                   SizedBox(
-                    width: (MediaQuery.of(context).size.width - 100) / 2,
-                    height: 40.0,
+                    width: _base_size,
+                    height: _base_size,
+                    child: IconButton(
+                        icon: Icon(Icons.swap_horiz),
+                        onPressed: () => Provider.of<DataProvider>(context, listen: false)
+                            .swapData(pairIndex)),
+                  ),
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width - 100) / 2 - _base_size / 2,
+                    height: _base_size,
                     child: ValueText(text:
                     'Y = ${Provider.of<DataProvider>(context, listen: false).getValue('y', pairIndex)}',
                         style: Presets.currrentValueStyle),
@@ -53,8 +62,8 @@ class ValuesPair extends StatelessWidget{
               ),
             ),
             SizedBox(
-              width: 40.0,
-              height: 40.0,
+              width: _base_size,
+              height: _base_size,
               child: IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () => Provider.of<DataProvider>(context, listen: false)

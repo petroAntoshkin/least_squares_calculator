@@ -190,6 +190,13 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     notifyListeners();
   }
 
+  @override
+  void swapData(int index) {
+    super.swapData(index);
+    _saveLastData();
+    notifyListeners();
+  }
+
   void approxTypeChange(int index) {
     approximationType = index;
     notifyListeners();

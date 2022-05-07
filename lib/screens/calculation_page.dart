@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:least_squares/elements/pow_form.dart';
 import 'package:least_squares/elements/values_pair.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/providers/data_provider.dart';
+
 // import 'package:least_squares/utils/string_utils.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
@@ -19,11 +22,17 @@ class _CalculationPageState extends State<CalculationPage> {
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
   FocusNode _xFocusNode;
+  ScrollController _controller;
 
   int _dataLen, _xPow = 0, _yPow = 0;
   BuildContext _context;
+
   // double _powStartY;
   // Map<String, String> _currentValues = {'x':'', 'y':''};
+
+  bool _keyboardIsVisible() {
+    return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
+  }
 
   @override
   void initState() {
@@ -32,6 +41,7 @@ class _CalculationPageState extends State<CalculationPage> {
     _controllerY.text = '';
     _xFocusNode = FocusNode();
   }
+
   @override
   void dispose() {
     _xFocusNode.dispose();
@@ -51,15 +61,20 @@ class _CalculationPageState extends State<CalculationPage> {
     _dataLen = _dataProvider.getValuesLength();
     _themeData = _dataProvider.theme;
     _context = context;
+    _controller = ScrollController();
     // debugPrint('CalculationPage build $_dataLen');
     return Center(
       child: Stack(children: [
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.6,
           width: MediaQuery.of(context).size.width,
-          child: ListView(children: [
-            for (int i = 0; i < _dataLen; i++) ValuesPair(pairIndex: i)
-          ]),
+          child: ListView(
+            controller: _controller,
+            children: [
+              for (int i = 0; i < _dataLen; i++) ValuesPair(pairIndex: i),
+              SizedBox(height: 40.0),
+            ],
+          ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -71,9 +86,17 @@ class _CalculationPageState extends State<CalculationPage> {
                 mainAxisSize: MainAxisSize.min,
                 // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  PowForm(leftFlag: false, powValue: _xPow, callback: _changePow,),
+                  PowForm(
+                    leftFlag: false,
+                    powValue: _xPow,
+                    callback: _changePow,
+                  ),
                   Expanded(child: Container()),
-                  PowForm(leftFlag: true, powValue: _yPow, callback: _changePow,),
+                  PowForm(
+                    leftFlag: true,
+                    powValue: _yPow,
+                    callback: _changePow,
+                  ),
                 ],
               ),
               //input numbers and + buttons
@@ -127,11 +150,15 @@ class _CalculationPageState extends State<CalculationPage> {
                         child: Container(
                           margin: EdgeInsets.all(4.0),
                           child: _editTextField(
-                              _controllerX,
-                              ' X ',
-                              _xFocusNode,
-                            _dataProvider.editIndex > -1 ? _checkValuePow('x', _dataProvider.getValue('x', _dataProvider.editIndex))
-                            : '',
+                            _controllerX,
+                            ' X ',
+                            _xFocusNode,
+                            _dataProvider.editIndex > -1
+                                ? _checkValuePow(
+                                    'x',
+                                    _dataProvider.getValue(
+                                        'x', _dataProvider.editIndex))
+                                : '',
                           ),
                         ),
                       ),
@@ -197,6 +224,13 @@ class _CalculationPageState extends State<CalculationPage> {
     );
   }
 
+  void _scrollDown() {
+    debugPrint('tap on textField');
+    // if(_controller.positions.isNotEmpty) {
+    //   _controller.jumpTo(_controller.position.maxScrollExtent);
+    // }
+  }
+
   void _cancelEdit() {
     Provider.of<DataProvider>(context, listen: false).cancelEditValue();
     FocusManager.instance.primaryFocus.unfocus();
@@ -256,6 +290,8 @@ class _CalculationPageState extends State<CalculationPage> {
     return Container(
       decoration: BoxDecoration(),
       child: TextField(
+        onTap: _scrollDown,
+        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
         onEditingComplete: _addValuesRequest,
         focusNode: focusNode,
         keyboardType: TextInputType.phone,
@@ -277,80 +313,6 @@ class _CalculationPageState extends State<CalculationPage> {
     );
   }
 
- /* Widget _powForm(bool leftFlag) {
-    final _index = leftFlag ? _yPow : _xPow;
-    final _str = _index == 0 ? '' : '0';
-    return Container(
-      decoration: BoxDecoration(
-        color: _themeData.primaryColor,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(leftFlag ? 0.0 : 10.0),
-          topLeft: Radius.circular(leftFlag ? 10.0 : 0.0),
-        ),
-      ),
-      child: SizedBox(
-        height: 34.0,
-        width: MediaQuery.of(context).size.width / 4,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'x1$_str${StringUtils.getPowSuperscript(leftFlag ? _yPow : _xPow)}',
-                style: TextStyle(
-                  color: _themeData.primaryTextTheme.bodyText1.color,
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Icon(
-                Icons.arrow_drop_up,
-                color: _themeData.primaryTextTheme.bodyText1.color,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Icon(
-                Icons.arrow_drop_down,
-                color: _themeData.primaryTextTheme.bodyText1.color,
-              ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: GestureDetector(
-                onTap: () => _changePow(leftFlag, 1),
-                onScaleStart: (ScaleStartDetails details) => _powStartY = details.localFocalPoint.dy,
-                onScaleUpdate: (ScaleUpdateDetails details) =>
-                  _changePow(leftFlag, (_powStartY-details.localFocalPoint.dy ) ~/ 40),
-                child: FractionallySizedBox(
-                  widthFactor: 1.0,
-                  heightFactor: 0.5,
-                  child: Container(color: Color(0x00ff0000)),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: GestureDetector(
-                onTap: () => _changePow(leftFlag, -1),
-                onScaleStart: (ScaleStartDetails details) => _powStartY = details.localFocalPoint.dy,
-                onScaleUpdate: (ScaleUpdateDetails details) =>
-                    _changePow(leftFlag, (_powStartY-details.localFocalPoint.dy ) ~/ 40),
-                child: FractionallySizedBox(
-                  widthFactor: 1.0,
-                  heightFactor: 0.5,
-                  child: Container(color: Color(0x000000ff)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }*/
-
   void _changePow(bool yFlag, int value) {
     if (yFlag)
       _yPow += value;
@@ -358,11 +320,11 @@ class _CalculationPageState extends State<CalculationPage> {
       _xPow += value;
   }
 
-  String _checkValuePow(String flag, double value){
+  String _checkValuePow(String flag, double value) {
     String _res = value.toString();
     int _pow = 0;
     List<String> _split = value.toStringAsExponential().split('e');
-    if(int.parse(_split[1]).abs() > 3) {
+    if (int.parse(_split[1]).abs() > 3) {
       _pow = int.parse(_split[1]);
       _res = _split[0];
     }
@@ -408,3 +370,11 @@ class _CalculationPageState extends State<CalculationPage> {
     }
   }
 }
+// class DecimalFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(oldVal, newVal){
+//     final regEx = RegExp(r'^\d*\.?\d*');
+//     final String newString = regEx.stringMatch(newVal.text) ?? '';
+//     return newString == newVal.text ? newVal : oldVal;
+//   }
+// }

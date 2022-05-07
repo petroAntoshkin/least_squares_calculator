@@ -236,7 +236,8 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                         Checkbox(
                                           activeColor:
                                               _themeData.primaryColorDark,
-                                          checkColor: _themeData.colorScheme.secondary,
+                                          checkColor:
+                                              _themeData.colorScheme.secondary,
                                           value: _graphicsData.showGrid,
                                           onChanged: (value) {
                                             // print('chane checkBox value to $value');
@@ -276,11 +277,11 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                     Padding(
                                       padding: const EdgeInsets.all(2.0),
                                       child: Text(
-                                        MyTranslations().getLocale(
-                                            widget._loc, 'dot_type'),
+                                        MyTranslations()
+                                            .getLocale(widget._loc, 'dot_type'),
                                         style: TextStyle(
-                                          color: _themeData.primaryTextTheme
-                                              .bodyText1.color,
+                                          color: _themeData
+                                              .primaryTextTheme.bodyText1.color,
                                         ),
                                       ),
                                     ),
@@ -523,11 +524,11 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
 
   ///approximation functions
   ///
-  // void _changeApproximationType(int index) {
-  //   //print('changeApproximationType to $index');
-  //   setState(() {
-  //     _approximationType = index;
-  //     Provider.of<DataProvider>(context, listen: false).approxTypeChange(index);
-  //   });
-  // }
+// void _changeApproximationType(int index) {
+//   //print('changeApproximationType to $index');
+//   setState(() {
+//     _approximationType = index;
+//     Provider.of<DataProvider>(context, listen: false).approxTypeChange(index);
+//   });
+// }
 }

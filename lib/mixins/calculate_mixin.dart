@@ -152,6 +152,13 @@ mixin CalculateMixin {
     // notifyListeners();
   }
 
+  void swapData(int index) {
+    final _buffer = _allValues['x'][index];
+    _allValues['x'][index] = _allValues['y'][index];
+    _allValues['y'][index] = _buffer;
+    _countAB();
+  }
+
   void _countAB() {
     _initSum();
     int _len = _allValues['x'].length;

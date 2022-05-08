@@ -36,7 +36,8 @@ class AppbarTitle extends StatelessWidget {
       child: _dataCount < 2
           ? Center(
               child: _loc != null
-                  ? ValueText(text: _aValue, style: Presets.resultsValueStyle)
+                  ? ValueText(text: MyTranslations()
+                  .getLocale(_loc, 'title'), style: Presets.resultsValueStyle)
                   : Container(),
             )
           : Row(

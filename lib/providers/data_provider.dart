@@ -321,7 +321,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     final _pngPath = '$_fileName.png';
     File('$_pngPath').writeAsBytesSync(pngBytes.buffer.asInt8List());
     _saveLastData(_fileName);
-    _imagesList.add(ImagePair(path: _pngPath, selected: false));
+    _imagesList.add(ImagePair(path: _pngPath, selected: false, haveData: true));
   }
 
   void deleteImages(){

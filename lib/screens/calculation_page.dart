@@ -5,6 +5,7 @@ import 'package:least_squares/elements/pow_form.dart';
 import 'package:least_squares/elements/values_pair.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares/styles_and_presets.dart';
 
 // import 'package:least_squares/utils/string_utils.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -291,7 +292,7 @@ class _CalculationPageState extends State<CalculationPage> {
       decoration: BoxDecoration(),
       child: TextField(
         onTap: _scrollDown,
-        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
+        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(Presets.numberRegExp)],
         onEditingComplete: _addValuesRequest,
         focusNode: focusNode,
         keyboardType: TextInputType.phone,

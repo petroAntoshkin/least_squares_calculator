@@ -80,10 +80,41 @@ class _ImagesPageState extends State<ImagesPage> {
             child: GestureDetector(
               onTap: () => Dialogs.materialDialog(
                 context: context,
-                msg: _imageFile,
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  // IconsOutlineButton(
+                  //   onPressed: () => Navigator.pop(context),
+                  //   text: 'ok',
+                  // ),
+                ],
+                // msg: _imageFile.split('.png')[0],
                 customView: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.file(File(_imageList[index].path)),
+                  child: Column(
+                    children: [
+                      Image.file(File(_imageList[index].path)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(_imageFile.split('.png')[0]),
+                      ),
+                      _imageList[index].haveData
+                          ? IconsOutlineButton(
+                              onPressed: () {
+                                Provider.of<DataProvider>(context,
+                                        listen: false)
+                                    .readSavedData(fileName: _imageFile);
+                                Navigator.pop(context);
+                              },
+                              text: MyTranslations().getLocale(
+                                  Provider.of<DataProvider>(context, listen: false).getLanguage(),
+                                  'load'),
+                            )
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
               child: Image.file(File(_imageList[index].path)),
@@ -123,7 +154,8 @@ class _ImagesPageState extends State<ImagesPage> {
   }
 
   void _deleteImages() {
-    if(Provider.of<DataProvider>(context, listen: false).isSomeImageSelected()) {
+    if (Provider.of<DataProvider>(context, listen: false)
+        .isSomeImageSelected()) {
       Dialogs.bottomMaterialDialog(
         msg: MyTranslations().getLocale(
             Provider.of<DataProvider>(context, listen: false).getLanguage(),

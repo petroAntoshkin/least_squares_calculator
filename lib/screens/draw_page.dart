@@ -264,7 +264,7 @@ class _DrawPageState extends State<DrawPage> {
             await image.toByteData(format: ui.ImageByteFormat.png);
         var pngBytes = byteData.buffer.asUint8List();
         // var bs64 = base64Encode(pngBytes);
-        Provider.of<DataProvider>(context, listen: false).savePNG(pngBytes);
+        Provider.of<DataProvider>(context, listen: false).saveCurrentData(pngBytes);
         // print(pngBytes);
         // print(bs64);
         // return pngBytes;

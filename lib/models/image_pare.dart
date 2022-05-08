@@ -1,5 +1,6 @@
 class ImagePair{
   String path;
   bool selected;
-  ImagePair({this.path, this.selected:false});
+  bool haveData;
+  ImagePair({this.path, this.selected:false, this.haveData:false});
 }

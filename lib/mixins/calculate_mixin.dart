@@ -77,6 +77,8 @@ mixin CalculateMixin {
     _initSum();
   }
 
+  int dataLength() => (_allValues['x']).length;
+
   // void clearAllData() {
   //   // print('clearAllData!!!!!!!!!!!!!');
   //   onlyDataClean();

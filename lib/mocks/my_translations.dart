@@ -29,7 +29,7 @@ class MyTranslations{
     en.putIfAbsent('cancel', () => 'Cancel');
     en.putIfAbsent('delete', () => 'Delete');
     en.putIfAbsent('dots_size', () => 'Dots size');
-    en.putIfAbsent('export', () => 'Export image');
+    en.putIfAbsent('export', () => 'Export image and data');
     en.putIfAbsent('no_images', () => 'No images');
     en.putIfAbsent('no_selected_images', () => 'No selected images');
     en.putIfAbsent('delete_image', () => 'Images deleting');
@@ -39,6 +39,7 @@ class MyTranslations{
     en.putIfAbsent('equal_data_error_1', () => 'Only one value of Y must correspond to one value of X.');
     en.putIfAbsent('equal_data_error_2', () => 'Such data already exist');
     en.putIfAbsent('copy_success_message', () => 'Data copied successfully');
+    en.putIfAbsent('load', () => 'Load Data');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('nanMessage', () => '资料不足');
@@ -52,7 +53,7 @@ class MyTranslations{
     zh.putIfAbsent('cancel', () => '取消');
     zh.putIfAbsent('delete', () => '刪除');
     zh.putIfAbsent('dots_size', () => '點尺寸');
-    zh.putIfAbsent('export', () => '匯出圖片');
+    zh.putIfAbsent('export', () => '导出图像和数据');
     zh.putIfAbsent('no_images', () => '沒有圖片');
     zh.putIfAbsent('no_selected_images', () => '未选择图像');
     zh.putIfAbsent('delete_image', () => '图片删除');
@@ -62,6 +63,7 @@ class MyTranslations{
     zh.putIfAbsent('equal_data_error_1', () => 'Y的两个或多个值不可能对应于X的一个值。');
     zh.putIfAbsent('equal_data_error_2', () => '这样的数据已经存在');
     zh.putIfAbsent('copy_success_message', () => '数据复制成功');
+    zh.putIfAbsent('load', () => '加载数据');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('nanMessage', () => 'पर्याप्त डेटा नहीं');
@@ -75,7 +77,7 @@ class MyTranslations{
     hi.putIfAbsent('cancel', () => 'रद्द करना');
     hi.putIfAbsent('delete', () => 'हटाएं');
     hi.putIfAbsent('dots_size', () => 'डॉट्स का आकार');
-    hi.putIfAbsent('export', () => 'निर्यात छवि');
+    hi.putIfAbsent('export', () => 'छवि और डेटा निर्यात करें');
     hi.putIfAbsent('no_images', () => 'कोई चित्र नहीं');
     hi.putIfAbsent('no_selected_images', () => 'कोई चयनित चित्र नहीं');
     hi.putIfAbsent('delete_image', () => 'चित्र हटाना');
@@ -85,6 +87,7 @@ class MyTranslations{
     hi.putIfAbsent('equal_data_error_1', () => 'X के एक मान से Y के दो या अधिक मान संभव नहीं हैं।');
     hi.putIfAbsent('equal_data_error_2', () => 'ऐसा डेटा पहले से मौजूद है');
     hi.putIfAbsent('copy_success_message', () => 'डेटा सफलतापूर्वक कॉपी किया गया');
+    hi.putIfAbsent('load', () => 'लोड डेटा');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('nanMessage', () => 'No hay suficientes datos');
@@ -98,7 +101,7 @@ class MyTranslations{
     es.putIfAbsent('cancel', () => 'Cancelar');
     es.putIfAbsent('delete', () => 'Borrar');
     es.putIfAbsent('dots_size', () => 'Tamaño de los puntos');
-    es.putIfAbsent('export', () => 'Exporter l\'image');
+    es.putIfAbsent('export', () => 'Exportar imagen y datos');
     es.putIfAbsent('no_images', () => 'Sin imágenes');
     es.putIfAbsent('no_selected_images', () => 'No hay imágenes seleccionadas');
     es.putIfAbsent('delete_image', () => 'Eliminación de imágenes');
@@ -108,6 +111,7 @@ class MyTranslations{
     es.putIfAbsent('equal_data_error_1', () => 'No es posible que dos o más valores de Y correspondan a un valor de X.');
     es.putIfAbsent('equal_data_error_2', () => 'Tales datos ya existen');
     es.putIfAbsent('copy_success_message', () => 'Datos copiados correctamente');
+    es.putIfAbsent('load', () => 'Cargar datos');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('nanMessage', () => 'Pas assez de données');
@@ -121,7 +125,7 @@ class MyTranslations{
     fr.putIfAbsent('cancel', () => 'Annuler');
     fr.putIfAbsent('delete', () => 'Effacer');
     fr.putIfAbsent('dots_size', () => 'Taille des points');
-    fr.putIfAbsent('export', () => 'Export image');
+    fr.putIfAbsent('export', () => 'Exporter l\'image et les données');
     fr.putIfAbsent('no_images', () => 'Aucune image');
     fr.putIfAbsent('no_selected_images', () => 'Aucune image sélectionnée');
     fr.putIfAbsent('delete_image', () => 'Suppression d\'images');
@@ -131,6 +135,7 @@ class MyTranslations{
     fr.putIfAbsent('equal_data_error_1', () => 'Il est impossible que deux ou plusieurs valeurs de Y correspondent à une valeur de X.');
     fr.putIfAbsent('equal_data_error_2', () => 'De telles données existent déjà');
     fr.putIfAbsent('copy_success_message', () => 'Données copiées avec succès');
+    fr.putIfAbsent('load', () => 'Charger les données');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('nanMessage', () => 'Nicht genügend Daten');
@@ -144,7 +149,7 @@ class MyTranslations{
     de.putIfAbsent('cancel', () => 'Stornieren');
     de.putIfAbsent('delete', () => 'Löschen');
     de.putIfAbsent('dots_size', () => 'Punktgröße');
-    de.putIfAbsent('export', () => 'Bild exportieren');
+    de.putIfAbsent('export', () => 'Bild und Daten exportieren');
     de.putIfAbsent('no_images', () => 'Keine Bilder');
     de.putIfAbsent('no_selected_images', () => 'Keine ausgewählten Bilder');
     de.putIfAbsent('delete_image', () => 'Löschen von Bildern');
@@ -154,6 +159,7 @@ class MyTranslations{
     de.putIfAbsent('equal_data_error_1', () => 'Nicht möglich, dass zwei oder mehr Werte von Y einem Wert von X entsprechen.');
     de.putIfAbsent('equal_data_error_2', () => 'Solche Daten existieren bereits');
     de.putIfAbsent('copy_success_message', () => 'Daten erfolgreich kopiert');
+    de.putIfAbsent('load', () => 'Lade Daten');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('nanMessage', () => 'Não há dados suficientes');
@@ -167,7 +173,7 @@ class MyTranslations{
     pt.putIfAbsent('cancel', () => 'Cancelar');
     pt.putIfAbsent('delete', () => 'Excluir');
     pt.putIfAbsent('dots_size', () => 'Tamanho dos pontos');
-    pt.putIfAbsent('export', () => 'Exportar imagem');
+    pt.putIfAbsent('export', () => 'Exportar imagem e dados');
     pt.putIfAbsent('no_images', () => 'Sem imagens');
     pt.putIfAbsent('no_selected_images', () => 'Sem imagens selecionadas');
     pt.putIfAbsent('delete_image', () => 'Excluindo imagens');
@@ -177,6 +183,7 @@ class MyTranslations{
     pt.putIfAbsent('equal_data_error_1', () => 'Não é possível que dois ou mais valores de Y correspondam a um valor de X.');
     pt.putIfAbsent('equal_data_error_2', () => 'Esses dados já existem');
     pt.putIfAbsent('copy_success_message', () => 'Dados copiados com sucesso');
+    pt.putIfAbsent('load', () => 'Carregar dados');
     ///it
     it.putIfAbsent('title', () => 'Calcolatrice dei minimi quadrati');
     it.putIfAbsent('nanMessage', () => 'Dati insufficienti');
@@ -190,7 +197,7 @@ class MyTranslations{
     it.putIfAbsent('cancel', () => 'Annulla');
     it.putIfAbsent('delete', () => 'Elimina');
     it.putIfAbsent('dots_size', () => 'Dimensione dei punti');
-    it.putIfAbsent('export', () => 'Esporta immagine');
+    it.putIfAbsent('export', () => 'Esporta immagine e dati');
     it.putIfAbsent('no_images', () => 'Nessuna immagine');
     it.putIfAbsent('no_selected_images', () => 'Nessuna immagine selezionata');
     it.putIfAbsent('delete_image', () => 'Eliminazione delle immagini');
@@ -200,6 +207,7 @@ class MyTranslations{
     it.putIfAbsent('equal_data_error_1', () => 'Un solo valore di Y deve corrispondere a un valore di X.');
     it.putIfAbsent('equal_data_error_2', () => 'Tali dati esistono già');
     it.putIfAbsent('copy_success_message', () => 'Dati copiati con successo');
+    it.putIfAbsent('load', () => 'Caricare dati');
     ///pl
     pl.putIfAbsent('title', () => 'Kalkulator najmniejszych kwadratów');
     pl.putIfAbsent('nanMessage', () => 'Za mało danych');
@@ -213,7 +221,7 @@ class MyTranslations{
     pl.putIfAbsent('cancel', () => 'Odwołać');
     pl.putIfAbsent('delete', () => 'Usunąć');
     pl.putIfAbsent('dots_size', () => 'Rozmiar kropek');
-    pl.putIfAbsent('export', () => 'Eksport obrazu');
+    pl.putIfAbsent('export', () => 'Eksport obrazu i danych');
     pl.putIfAbsent('no_images', () => 'Brak obrazów');
     pl.putIfAbsent('no_selected_images', () => 'Brak wybranych zdjęć');
     pl.putIfAbsent('delete_image', () => 'Usuwanie obrazów');
@@ -223,6 +231,7 @@ class MyTranslations{
     pl.putIfAbsent('equal_data_error_1', () => 'Tylko jedna wartość Y musi odpowiadać jednej wartości X.');
     pl.putIfAbsent('equal_data_error_2', () => 'Takie dane już istnieją');
     pl.putIfAbsent('copy_success_message', () => 'Dane skopiowane pomyślnie');
+    pl.putIfAbsent('load', () => 'Załaduj dane');
     ///ua
     uk.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     uk.putIfAbsent('nanMessage', () => 'Недостатньо даних');
@@ -236,7 +245,7 @@ class MyTranslations{
     uk.putIfAbsent('cancel', () => 'Скасувати');
     uk.putIfAbsent('delete', () => 'Видалити');
     uk.putIfAbsent('dots_size', () => 'Розмір точок');
-    uk.putIfAbsent('export', () => 'Експортувати зображення');
+    uk.putIfAbsent('export', () => 'Експортувати зображення та дані');
     uk.putIfAbsent('no_images', () => 'Немає зображень');
     uk.putIfAbsent('no_selected_images', () => 'Жодного з зображень не обрано');
     uk.putIfAbsent('delete_image', () => 'Видалення зображень');
@@ -246,6 +255,7 @@ class MyTranslations{
     uk.putIfAbsent('equal_data_error_1', () => 'Неможливо, щоб два або більше значень Y відповідали одному значенню X.');
     uk.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
     uk.putIfAbsent('copy_success_message', () => 'Дані успішно скопійовані');
+    uk.putIfAbsent('load', () => 'Завантажити дані');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
@@ -259,7 +269,7 @@ class MyTranslations{
     ru.putIfAbsent('cancel', () => 'Отменить');
     ru.putIfAbsent('delete', () => 'Удалить');
     ru.putIfAbsent('dots_size', () => 'Размер точек');
-    ru.putIfAbsent('export', () => 'Экспорт изображения');
+    ru.putIfAbsent('export', () => 'Экспорт изображения и данных');
     ru.putIfAbsent('no_images', () => 'Нет изображений');
     ru.putIfAbsent('no_selected_images', () => 'Нет выделенных изображений');
     ru.putIfAbsent('delete_image', () => 'Удаление изображений');
@@ -269,6 +279,7 @@ class MyTranslations{
     ru.putIfAbsent('equal_data_error_1', () => 'Нельзя, чтобы два или более значения Y соответствовали одному значению X.');
     ru.putIfAbsent('equal_data_error_2', () => 'Уже есть такие данные');
     ru.putIfAbsent('copy_success_message', () => 'Данные успешно скопированы');
+    ru.putIfAbsent('load', () => 'Загрузить данные');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('zh', () => zh);

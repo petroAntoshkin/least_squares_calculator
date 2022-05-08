@@ -34,7 +34,7 @@ class _MyRadioButtonState extends State<MyRadioButton>
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.black,
+        color: Colors.black26,
       ),
       child: FractionallySizedBox(
         widthFactor: 0.85,
@@ -50,7 +50,7 @@ class _MyRadioButtonState extends State<MyRadioButton>
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _isSelected ? Colors.black : Color(0x00ffffff),
+                color: _isSelected ? Colors.black87 : Color(0x00ffffff),
               ),
             ),
           ),

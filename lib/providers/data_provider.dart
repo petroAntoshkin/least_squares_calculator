@@ -153,6 +153,9 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   }
 
   ///       data section
+
+  int dataLength() => super.dataLength();
+
   void _restoreData(var data){
     if(data != null){
       int _err = 0;
@@ -240,7 +243,9 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     for(int i = 0; i < _list.length; i++){
       if(_list[i].path.contains(".png")) {
         // print('read from local directory: ${_list[i].path}');
-        _imagesList.add(ImagePair(path: _list[i].path, selected: false));
+        final dataFile = File('${_list[i].path.split('.png')[0]}.json');
+        final bool _haveData = await dataFile.exists();
+        _imagesList.add(ImagePair(path: _list[i].path, selected: false, haveData: _haveData));
       }
     }
     final file = File('${_appDirectory.path}$_settingsJson');
@@ -259,18 +264,28 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
       }
   }
 
-  Future<File> _saveLastData() async {
-    final file = File('${_appDirectory.path}$_dataJson');
+  Future<File> _saveLastData([String fileName = '']) async {
+    final String _name = fileName=='' ? '${_appDirectory.path}$_dataJson' : '$fileName.json';
+    final file = File(_name);
     return file.writeAsString(getAllDataString());
   }
-  Future<void> _readSavedData() async {
+  void readSavedData({@required String fileName}) async {
+    final String _name = '${_appDirectory.path}/${fileName.split('.png')[0]}.json';
+    clearAllData();
+    _readSavedData(_name);
+  }
+  Future<void> _readSavedData([String fileName = '']) async {
     if(_appDirectory == null) _appDirectory = await getApplicationDocumentsDirectory();
-    final file = File('${_appDirectory.path}$_dataJson');
+    final String _name = fileName=='' ? '${_appDirectory.path}$_dataJson' : fileName;
+    final file = File(_name);
     if(await file.exists())
       try {
         // Read the file
         String contents = await file.readAsString();
         _restoreData(json.decode(contents)['data']);
+        if(fileName !=''){
+          _saveLastData();
+        }
       } catch (e) {
         // If encountering an error, return 0
         debugPrint('catch $e');
@@ -301,16 +316,21 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
 
   int getImagesLength() =>_imagesList.length;
 
-  void savePNG(var pngBytes){
-    // var pngBytes = await image.toByteData(format: ui.ImageByteFormat.png)
-    final _pngPath = '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-')}.png';
+  void saveCurrentData(var pngBytes){
+    final _fileName = '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-')}';
+    final _pngPath = '$_fileName.png';
     File('$_pngPath').writeAsBytesSync(pngBytes.buffer.asInt8List());
+    _saveLastData(_fileName);
     _imagesList.add(ImagePair(path: _pngPath, selected: false));
   }
 
   void deleteImages(){
     for(int i = _imagesList.length - 1; i >= 0; i--){
       if(_imagesList[i].selected){
+        final _dataFile = File('${_imagesList[i].path.split('.png')[0]}.json');
+        if(_dataFile.existsSync()){
+          _dataFile.deleteSync();
+        }
         File(_imagesList[i].path).deleteSync();
         _imagesList.removeAt(i);
       }

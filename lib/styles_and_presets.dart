@@ -11,7 +11,8 @@ class Presets{
   static final BorderRadius defaultBorderRadius = BorderRadius.circular(4.0);
   static final Color _textColorDefault = Color(0xff666666);
   static final headerColor = Colors.lightBlue;
-  static final numberRegExp = RegExp(r'^\-?\d*\.?\d*');
+  // static final numberRegExp = RegExp(r'^\-?\d*\.?\d*');
+  static final numberRegExp = RegExp(r'^\-?\d*[,.]?\d*');
 
   static final String _fontNameDefault = 'Verdana';
 

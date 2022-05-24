@@ -9,13 +9,16 @@ class MyBottomNavBar extends StatelessWidget {
   final List<String> _texts = ['reset', 'export', 'delete', 'default_settings'];
   int tabIndex;
   final _buttonSize = 40.0;
-  MyBottomNavBar({this.tabIndex});
+  final _gapHeight = 6.0;
+  final double bannerHeight;
+  final Widget banner;
+  MyBottomNavBar({this.tabIndex, this.banner, this.bannerHeight: 54});
   @override
   Widget build(BuildContext context) {
     // final _height = MediaQuery.of(context).size.height * 0.14 + bannerHeight;
     final _width = MediaQuery.of(context).size.width;
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
-    // Provider.of<DataProvider>(context).navBarHe = _buttonSize;
+    Provider.of<DataProvider>(context).navBarHe = _buttonSize + _gapHeight + bannerHeight;
     Widget _gestureBlock(){
       return Container(
         child: GestureDetector(
@@ -69,8 +72,25 @@ class MyBottomNavBar extends StatelessWidget {
     }
     return SizedBox(
       width: _width,
-      height: _buttonSize,
-      child: _gestureBlock(),
+      height: Provider.of<DataProvider>(context).navBarHe,
+      child: Column(
+        children: [
+          SizedBox(
+            height: _buttonSize,
+            // Align(
+            //   alignment: Alignment.topCenter,
+            child: _gestureBlock(),
+          ),
+          SizedBox(
+            height: _gapHeight,
+          ),
+          SizedBox(
+            height: bannerHeight,
+            // alignment: Alignment.bottomCenter,
+            child: banner,
+          ),
+        ],
+      ),
     );
   }
 }

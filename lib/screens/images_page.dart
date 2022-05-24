@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:least_squares/elements/subscribed_icon_button.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/models/image_pare.dart';
 import 'package:least_squares/providers/data_provider.dart';
-import 'package:material_dialogs/material_dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+
+// import 'package:material_dialogs/material_dialogs.dart';
+// import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+// import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 import 'package:provider/provider.dart';
 
@@ -78,44 +80,46 @@ class _ImagesPageState extends State<ImagesPage> {
             width: 100.0,
             height: 100.0,
             child: GestureDetector(
-              onTap: () => Dialogs.materialDialog(
+              onTap: () => showDialog(
                 context: context,
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  // IconsOutlineButton(
-                  //   onPressed: () => Navigator.pop(context),
-                  //   text: 'ok',
-                  // ),
-                ],
-                // msg: _imageFile.split('.png')[0],
-                customView: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
+                builder: (BuildContext context) {
+                  return SimpleDialog(
                     children: [
-                      Image.file(File(_imageList[index].path)),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(_imageFile.split('.png')[0]),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Image.file(File(_imageList[index].path)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(_imageFile.split('.png')[0]),
+                            ),
+                            _imageList[index].haveData
+                                ? OutlinedButton(
+                                    onPressed: () {
+                                      Provider.of<DataProvider>(context,
+                                              listen: false)
+                                          .readSavedData(fileName: _imageFile);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(MyTranslations().getLocale(
+                                        Provider.of<DataProvider>(context,
+                                                listen: false)
+                                            .getLanguage(),
+                                        'load')),
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
-                      _imageList[index].haveData
-                          ? IconsOutlineButton(
-                              onPressed: () {
-                                Provider.of<DataProvider>(context,
-                                        listen: false)
-                                    .readSavedData(fileName: _imageFile);
-                                Navigator.pop(context);
-                              },
-                              text: MyTranslations().getLocale(
-                                  Provider.of<DataProvider>(context, listen: false).getLanguage(),
-                                  'load'),
-                            )
-                          : Container(),
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ],
-                  ),
-                ),
+                  );
+                },
               ),
               child: Image.file(File(_imageList[index].path)),
             ),
@@ -156,58 +160,105 @@ class _ImagesPageState extends State<ImagesPage> {
   void _deleteImages() {
     if (Provider.of<DataProvider>(context, listen: false)
         .isSomeImageSelected()) {
-      Dialogs.bottomMaterialDialog(
-        msg: MyTranslations().getLocale(
-            Provider.of<DataProvider>(context, listen: false).getLanguage(),
-            'del_approve'),
-        title: MyTranslations().getLocale(
-            Provider.of<DataProvider>(context, listen: false).getLanguage(),
-            'delete_image'),
+      showDialog(
         context: context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () => Navigator.pop(context),
-            text: MyTranslations().getLocale(
-                Provider.of<DataProvider>(context, listen: false).getLanguage(),
-                'cancel'),
-            iconData: Icons.cancel_outlined,
-            textStyle: TextStyle(color: Colors.grey),
-            iconColor: Colors.grey,
-          ),
-          IconsButton(
-            onPressed: () {
-              Provider.of<DataProvider>(context, listen: false).deleteImages();
-              Navigator.pop(context);
-            },
-            text: MyTranslations().getLocale(
-                Provider.of<DataProvider>(context, listen: false).getLanguage(),
-                'delete'),
-            iconData: Icons.delete,
-            color: Colors.red,
-            textStyle: TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-          ),
-        ],
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 8.0, vertical: 20.0),
+            title: Text(
+              MyTranslations().getLocale(
+                  Provider.of<DataProvider>(context, listen: false)
+                      .getLanguage(),
+                  'reset'),
+              textAlign: TextAlign.center,
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  MyTranslations().getLocale(
+                      Provider.of<DataProvider>(context, listen: false)
+                          .getLanguage(),
+                      'del_approve'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SimpleDialogOption(
+                      onPressed: () => Navigator.pop(context),
+                      child: SubscribedIconButton(
+                        text: MyTranslations().getLocale(
+                            Provider.of<DataProvider>(context, listen: false)
+                                .getLanguage(),
+                            'cancel'),
+                        iconData: Icons.cancel_outlined,
+                        iconColor: Colors.grey,
+                      ),
+                    ),
+                    SimpleDialogOption(
+                      onPressed: () {
+                        Provider.of<DataProvider>(context, listen: false)
+                            .deleteImages();
+                        Navigator.pop(context);
+                      },
+                      child: SubscribedIconButton(
+                        text: MyTranslations().getLocale(
+                            Provider.of<DataProvider>(context, listen: false)
+                                .getLanguage(),
+                            'delete'),
+                        iconData: Icons.delete,
+                        iconColor: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       );
     } else {
-      Dialogs.bottomMaterialDialog(
-        msg: MyTranslations().getLocale(
-            Provider.of<DataProvider>(context, listen: false).getLanguage(),
-            'no_selected_images'),
-        // title: MyTranslations().getLocale(
-        //     Provider.of<DataProvider>(context, listen: false).getLanguage(),
-        //     'delete_image'),
+      showDialog(
         context: context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () => Navigator.pop(context),
-            text: '',
-            iconData: Icons.check,
-            // textStyle: TextStyle(color: Colors.grey),
-            iconColor: Colors.green,
-          ),
-        ],
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(MyTranslations().getLocale(
+                Provider.of<DataProvider>(context, listen: false).getLanguage(),
+                'no_selected_images')),
+            children: [
+              OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
+              ),
+            ],
+          );
+        },
       );
+      // Dialogs.bottomMaterialDialog(
+      //   msg: MyTranslations().getLocale(
+      //       Provider.of<DataProvider>(context, listen: false).getLanguage(),
+      //       'no_selected_images'),
+      //   // title: MyTranslations().getLocale(
+      //   //     Provider.of<DataProvider>(context, listen: false).getLanguage(),
+      //   //     'delete_image'),
+      //   context: context,
+      //   actions: [
+      //     IconsButton(
+      //       onPressed: () => Navigator.pop(context),
+      //       text: '',
+      //       iconData: Icons.check,
+      //       // textStyle: TextStyle(color: Colors.grey),
+      //       iconColor: Colors.green,
+      //     ),
+      //   ],
+      // );
     }
   }
 

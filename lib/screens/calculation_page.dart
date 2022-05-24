@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart';
+import 'package:least_squares/elements/subscribed_icon_button.dart';
 import 'package:least_squares/elements/pow_form.dart';
 import 'package:least_squares/elements/values_pair.dart';
 import 'package:least_squares/mocks/my_translations.dart';
@@ -8,9 +9,7 @@ import 'package:least_squares/providers/data_provider.dart';
 import 'package:least_squares/styles_and_presets.dart';
 
 // import 'package:least_squares/utils/string_utils.dart';
-import 'package:material_dialogs/material_dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CalculationPage extends StatefulWidget {
@@ -245,8 +244,8 @@ class _CalculationPageState extends State<CalculationPage> {
       // _xFocusNode.requestFocus();
       FocusManager.instance.primaryFocus.unfocus();
     } else {
-      Dialogs.materialDialog(
-        customView: Padding(
+      SimpleDialog(children: [
+        Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
@@ -268,14 +267,15 @@ class _CalculationPageState extends State<CalculationPage> {
             ],
           ),
         ),
-        context: _context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () => Navigator.pop(context),
-            text: 'ok',
-          ),
-        ],
-      );
+      ]
+          // context: _context,
+          // actions: [
+          //   IconsButton(
+          //     onPressed: () => Navigator.pop(context),
+          //     text: 'ok',
+          //   ),
+          // ],
+          );
     }
   }
 
@@ -292,7 +292,9 @@ class _CalculationPageState extends State<CalculationPage> {
       decoration: BoxDecoration(),
       child: TextField(
         onTap: _scrollDown,
-        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(Presets.numberRegExp)],
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(Presets.numberRegExp)
+        ],
         onEditingComplete: _addValuesRequest,
         focusNode: focusNode,
         keyboardType: TextInputType.phone,
@@ -335,38 +337,66 @@ class _CalculationPageState extends State<CalculationPage> {
 
   void _bottomNavFunction() {
     if (_dataLen > 0) {
-      Dialogs.bottomMaterialDialog(
-        msg: MyTranslations().getLocale(
-            Provider.of<DataProvider>(_context, listen: false).getLanguage(),
-            'del_approve'),
-        title: MyTranslations().getLocale(
-            Provider.of<DataProvider>(_context, listen: false).getLanguage(),
-            'reset'),
-        context: _context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () => Navigator.pop(context),
-            text: MyTranslations().getLocale(
-                Provider.of<DataProvider>(context, listen: false).getLanguage(),
-                'cancel'),
-            iconData: Icons.cancel_outlined,
-            textStyle: TextStyle(color: Colors.grey),
-            iconColor: Colors.grey,
-          ),
-          IconsButton(
-            onPressed: () {
-              Provider.of<DataProvider>(context, listen: false).clearAllData();
-              Navigator.pop(context);
-            },
-            text: MyTranslations().getLocale(
-                Provider.of<DataProvider>(context, listen: false).getLanguage(),
-                'delete'),
-            iconData: Icons.delete,
-            color: Colors.red,
-            textStyle: TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-          ),
-        ],
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 8.0, vertical: 20.0),
+            title: Text(
+              MyTranslations().getLocale(
+                  Provider.of<DataProvider>(_context, listen: false)
+                      .getLanguage(),
+                  'reset'),
+              textAlign: TextAlign.center,
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  MyTranslations().getLocale(
+                      Provider.of<DataProvider>(_context, listen: false)
+                          .getLanguage(),
+                      'del_approve'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SimpleDialogOption(
+                      onPressed: () => Navigator.pop(context),
+                      child: SubscribedIconButton(
+                        text: MyTranslations().getLocale(
+                            Provider.of<DataProvider>(context, listen: false)
+                                .getLanguage(),
+                            'cancel'),
+                        iconData: Icons.cancel_outlined,
+                        iconColor: Colors.grey,
+                      ),
+                    ),
+                    SimpleDialogOption(
+                      onPressed: () {
+                        Provider.of<DataProvider>(context, listen: false)
+                            .clearAllData();
+                        Navigator.pop(context);
+                      },
+                      child: SubscribedIconButton(
+                        text: MyTranslations().getLocale(
+                            Provider.of<DataProvider>(context, listen: false)
+                                .getLanguage(),
+                            'delete'),
+                        iconData: Icons.delete,
+                        iconColor: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       );
     }
   }

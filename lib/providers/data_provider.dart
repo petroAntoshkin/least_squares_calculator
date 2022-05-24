@@ -23,6 +23,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   int _themeID;
   List<ImagePair> _imagesList;
   String _defaultLocale;
+  double _bottomNavBarHeight;
   // double _factorA, _factorB;
 
   final Map<String, AxisLabelModel> _labels = Map();
@@ -41,6 +42,15 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     _readSavedData();
     _contextFunctions[3] = _resetSettings;
     //print('${Platform.localeName} def loacale is $_defaultLocale');
+  }
+  ///bottom navBar
+  // ignore: unnecessary_getters_setters
+  get navBarHe{
+    return _bottomNavBarHeight;
+  }
+  // ignore: unnecessary_getters_setters
+  set navBarHe(double value){
+    _bottomNavBarHeight = value;
   }
 
   ///locale from device

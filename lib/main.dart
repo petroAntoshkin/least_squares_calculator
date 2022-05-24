@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:least_squares/ad_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +10,7 @@ import 'package:least_squares/screens/draw_page.dart';
 import 'package:least_squares/screens/images_page.dart';
 import 'package:least_squares/screens/settings_page.dart';
 import 'providers/data_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,10 +55,43 @@ class _LSMHomePageState extends State<LSMHomePage>
 
   TabController _tabController;
 
+  // Add _bannerAd
+  BannerAd _bannerAd;
+
+  // Add _isBannerAdReady
+  bool _isBannerAdReady = false;
+
   @override
   void initState() {
     super.initState();
+
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('Failed to load a banner ad: ${err.message}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+    _bannerAd.load();
+
     _tabController = new TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // Dispose a BannerAd object
+    _bannerAd.dispose();
+    super.dispose();
   }
 
   @override
@@ -96,7 +131,13 @@ class _LSMHomePageState extends State<LSMHomePage>
             SettingsPage(),
           ],
         ),
-        bottomNavigationBar: MyBottomNavBar(tabIndex: _tabController.index),
+        bottomNavigationBar: MyBottomNavBar(
+          tabIndex: _tabController.index,
+          banner: _isBannerAdReady ? AdWidget(ad: _bannerAd)
+              :Container(),
+          bannerHeight: _isBannerAdReady ? _bannerAd.size.height.toDouble()
+          : 54.0,
+        ),
       ),
     );
   }

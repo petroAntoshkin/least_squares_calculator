@@ -8,8 +8,10 @@ import 'package:least_squares/elements/axis_label.dart';
 import 'package:least_squares/elements/graph_settings_bar.dart';
 import 'package:least_squares/styles_and_presets.dart';
 import 'package:least_squares/utils/string_utils.dart';
-import 'package:material_dialogs/material_dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+
+// import 'package:material_dialogs/material_dialogs.dart';
+// import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+// import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 
 import 'package:least_squares/elements/graph_painter.dart';
@@ -251,10 +253,21 @@ class _DrawPageState extends State<DrawPage> {
 
   void _capturePng() async {
     if (_newGD.dataDots.length > 1) {
-      Dialogs.materialDialog(
+      showDialog(
         context: context,
-        customView: CircularProgressIndicator(),
-        dialogShape: null,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            children: [
+              Center(
+                child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ],
+          );
+        },
       );
       try {
         RenderRepaintBoundary boundary =
@@ -264,41 +277,57 @@ class _DrawPageState extends State<DrawPage> {
             await image.toByteData(format: ui.ImageByteFormat.png);
         var pngBytes = byteData.buffer.asUint8List();
         // var bs64 = base64Encode(pngBytes);
-        Provider.of<DataProvider>(context, listen: false).saveCurrentData(pngBytes);
-        // print(pngBytes);
-        // print(bs64);
+        Provider.of<DataProvider>(context, listen: false)
+            .saveCurrentData(pngBytes);
         // return pngBytes;
         Navigator.pop(context);
-        Dialogs.materialDialog(
+        showDialog(
           context: context,
-          customView: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Image.memory(pngBytes),
-          ),
-          actions: [
-            IconsOutlineButton(
-              onPressed: () => Navigator.pop(context),
-              iconData: Icons.check,
-              iconColor: Colors.green,
-              text: '',
-            ),
-          ],
+          builder: (BuildContext context) {
+            return SimpleDialog(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Image.memory(pngBytes),
+                ),
+                OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Icon(
+                    Icons.check,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            );
+          },
         );
       } catch (e) {
         // print(e);
         Navigator.pop(context);
-        Dialogs.materialDialog(
-          context: context,
-          msg: '$e',
-          actions: [
-            IconsOutlineButton(
+        SimpleDialog(
+          children: [
+            Text('$e'),
+            OutlinedButton(
               onPressed: () => Navigator.pop(context),
-              iconData: Icons.error_outline,
-              iconColor: Colors.redAccent,
-              text: '',
+              child: Icon(
+                Icons.error_outline,
+                color: Colors.redAccent,
+              ),
             ),
           ],
         );
+        // Dialogs.materialDialog(
+        //   context: context,
+        //   msg: '$e',
+        //   actions: [
+        //     IconsButton(
+        //       onPressed: () => Navigator.pop(context),
+        //       iconData: Icons.error_outline,
+        //       iconColor: Colors.redAccent,
+        //       text: '',
+        //     ),
+        //   ],
+        // );
       }
     }
   }

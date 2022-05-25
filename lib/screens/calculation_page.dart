@@ -244,38 +244,58 @@ class _CalculationPageState extends State<CalculationPage> {
       // _xFocusNode.requestFocus();
       FocusManager.instance.primaryFocus.unfocus();
     } else {
-      SimpleDialog(children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(
+              MyTranslations().getLocale(
+                  Provider.of<DataProvider>(_context, listen: false)
+                      .getLanguage(),
+                  'warning'),
+              textAlign: TextAlign.center,
+            ),
             children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.redAccent,
-                size: 50.0,
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Colors.redAccent,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Text(
+                      MyTranslations().getLocale(
+                          Provider.of<DataProvider>(_context, listen: false)
+                              .getLanguage(),
+                          'equal_data_error_$_error'),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                MyTranslations().getLocale(
-                    Provider.of<DataProvider>(_context, listen: false)
-                        .getLanguage(),
-                    'equal_data_error_$_error'),
-                textAlign: TextAlign.center,
+              OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
               ),
             ],
-          ),
-        ),
-      ]
-          // context: _context,
-          // actions: [
-          //   IconsButton(
-          //     onPressed: () => Navigator.pop(context),
-          //     text: 'ok',
-          //   ),
-          // ],
+            // context: _context,
+            // actions: [
+            //   IconsButton(
+            //     onPressed: () => Navigator.pop(context),
+            //     text: 'ok',
+            //   ),
+            // ],
           );
+        },
+      );
     }
   }
 

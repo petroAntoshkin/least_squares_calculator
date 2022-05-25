@@ -40,6 +40,7 @@ class MyTranslations{
     en.putIfAbsent('equal_data_error_2', () => 'Such data already exist');
     en.putIfAbsent('copy_success_message', () => 'Data copied successfully');
     en.putIfAbsent('load', () => 'Load Data');
+    en.putIfAbsent('warning', () => 'Warning');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('nanMessage', () => '资料不足');
@@ -64,6 +65,7 @@ class MyTranslations{
     zh.putIfAbsent('equal_data_error_2', () => '这样的数据已经存在');
     zh.putIfAbsent('copy_success_message', () => '数据复制成功');
     zh.putIfAbsent('load', () => '加载数据');
+    zh.putIfAbsent('warning', () => '警告');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('nanMessage', () => 'पर्याप्त डेटा नहीं');
@@ -88,6 +90,7 @@ class MyTranslations{
     hi.putIfAbsent('equal_data_error_2', () => 'ऐसा डेटा पहले से मौजूद है');
     hi.putIfAbsent('copy_success_message', () => 'डेटा सफलतापूर्वक कॉपी किया गया');
     hi.putIfAbsent('load', () => 'लोड डेटा');
+    hi.putIfAbsent('warning', () => 'चेतावनी');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('nanMessage', () => 'No hay suficientes datos');
@@ -112,6 +115,7 @@ class MyTranslations{
     es.putIfAbsent('equal_data_error_2', () => 'Tales datos ya existen');
     es.putIfAbsent('copy_success_message', () => 'Datos copiados correctamente');
     es.putIfAbsent('load', () => 'Cargar datos');
+    es.putIfAbsent('warning', () => 'Advertencia');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('nanMessage', () => 'Pas assez de données');
@@ -136,6 +140,7 @@ class MyTranslations{
     fr.putIfAbsent('equal_data_error_2', () => 'De telles données existent déjà');
     fr.putIfAbsent('copy_success_message', () => 'Données copiées avec succès');
     fr.putIfAbsent('load', () => 'Charger les données');
+    fr.putIfAbsent('warning', () => 'Avertissement');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('nanMessage', () => 'Nicht genügend Daten');
@@ -160,6 +165,7 @@ class MyTranslations{
     de.putIfAbsent('equal_data_error_2', () => 'Solche Daten existieren bereits');
     de.putIfAbsent('copy_success_message', () => 'Daten erfolgreich kopiert');
     de.putIfAbsent('load', () => 'Lade Daten');
+    de.putIfAbsent('warning', () => 'Warnung');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('nanMessage', () => 'Não há dados suficientes');
@@ -184,6 +190,7 @@ class MyTranslations{
     pt.putIfAbsent('equal_data_error_2', () => 'Esses dados já existem');
     pt.putIfAbsent('copy_success_message', () => 'Dados copiados com sucesso');
     pt.putIfAbsent('load', () => 'Carregar dados');
+    pt.putIfAbsent('warning', () => 'Aviso');
     ///it
     it.putIfAbsent('title', () => 'Calcolatrice dei minimi quadrati');
     it.putIfAbsent('nanMessage', () => 'Dati insufficienti');
@@ -208,6 +215,7 @@ class MyTranslations{
     it.putIfAbsent('equal_data_error_2', () => 'Tali dati esistono già');
     it.putIfAbsent('copy_success_message', () => 'Dati copiati con successo');
     it.putIfAbsent('load', () => 'Caricare dati');
+    it.putIfAbsent('warning', () => 'Avvertimento');
     ///pl
     pl.putIfAbsent('title', () => 'Kalkulator najmniejszych kwadratów');
     pl.putIfAbsent('nanMessage', () => 'Za mało danych');
@@ -232,6 +240,7 @@ class MyTranslations{
     pl.putIfAbsent('equal_data_error_2', () => 'Takie dane już istnieją');
     pl.putIfAbsent('copy_success_message', () => 'Dane skopiowane pomyślnie');
     pl.putIfAbsent('load', () => 'Załaduj dane');
+    pl.putIfAbsent('warning', () => 'Ostrzeżenie');
     ///ua
     uk.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     uk.putIfAbsent('nanMessage', () => 'Недостатньо даних');
@@ -256,6 +265,7 @@ class MyTranslations{
     uk.putIfAbsent('equal_data_error_2', () => 'Такі дані вже існують');
     uk.putIfAbsent('copy_success_message', () => 'Дані успішно скопійовані');
     uk.putIfAbsent('load', () => 'Завантажити дані');
+    uk.putIfAbsent('warning', () => 'Попередження');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
@@ -280,6 +290,7 @@ class MyTranslations{
     ru.putIfAbsent('equal_data_error_2', () => 'Уже есть такие данные');
     ru.putIfAbsent('copy_success_message', () => 'Данные успешно скопированы');
     ru.putIfAbsent('load', () => 'Загрузить данные');
+    ru.putIfAbsent('warning', () => 'Предупреждение');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('zh', () => zh);

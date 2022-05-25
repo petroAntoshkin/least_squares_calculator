@@ -154,11 +154,15 @@ mixin CalculateMixin {
     // notifyListeners();
   }
 
-  void swapData(int index) {
-    final _buffer = _allValues['x'][index];
-    _allValues['x'][index] = _allValues['y'][index];
-    _allValues['y'][index] = _buffer;
-    _countAB();
+  int swapData(int index) {
+    final _error = _checkForDuplicate(_allValues['y'][index], _allValues['x'][index]);
+    if(_error == 0) {
+      final _buffer = _allValues['x'][index];
+      _allValues['x'][index] = _allValues['y'][index];
+      _allValues['y'][index] = _buffer;
+      _countAB();
+    }
+    return _error;
   }
 
   void _countAB() {

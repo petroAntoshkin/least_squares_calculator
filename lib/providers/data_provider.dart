@@ -12,25 +12,30 @@ import 'package:least_squares/models/theme_list_model.dart';
 import 'package:least_squares/utils/string_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
-class DataProvider extends ChangeNotifier with CalculateMixin{
+class DataProvider extends ChangeNotifier with CalculateMixin {
   List<Function> _contextFunctions = List.generate(4, (index) => null);
   final String _settingsJson = '/settings.json';
   final String _dataJson = '/data_snapshot.json';
 
+
   Directory _appDirectory;
+
   // int dotTypeIndex = 0;
   ThemeData _themeData;
   int _themeID;
   List<ImagePair> _imagesList;
   String _defaultLocale;
   double _bottomNavBarHeight;
+
+  String focusOnText = '';
+
   // double _factorA, _factorB;
 
   final Map<String, AxisLabelModel> _labels = Map();
 
   SettingsModel _settingsModel;
 
-  DataProvider(){
+  DataProvider() {
     _defaultLocale = _getDeviceLocale(Platform.localeName);
     _resetSettings();
     _themeData = ThemesMock().themes[_themeID].data;
@@ -43,122 +48,126 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     _contextFunctions[3] = _resetSettings;
     //print('${Platform.localeName} def loacale is $_defaultLocale');
   }
+
   ///bottom navBar
   // ignore: unnecessary_getters_setters
-  get navBarHe{
+  get navBarHe {
     return _bottomNavBarHeight;
   }
+
   // ignore: unnecessary_getters_setters
-  set navBarHe(double value){
+  set navBarHe(double value) {
     _bottomNavBarHeight = value;
   }
 
   ///locale from device
-  String _getDeviceLocale(String so){
+  String _getDeviceLocale(String so) {
     String _firstLet = so.substring(0, 2);
-    if(!MyTranslations().isLanguageAvailable(_firstLet))
-      _firstLet = 'en';
+    if (!MyTranslations().isLanguageAvailable(_firstLet)) _firstLet = 'en';
     return _firstLet;
   }
 
   ///labels section
-  AxisLabelModel getAxisModel(String axis){
+  AxisLabelModel getAxisModel(String axis) {
     return _labels[axis];
   }
-  void changeLabelVis(String axis, bool visibility){
+
+  void changeLabelVis(String axis, bool visibility) {
     _labels[axis].visibility = visibility;
     notifyListeners();
   }
-  void changeLabelsText(String xText, String yText){
+
+  void changeLabelsText(String xText, String yText) {
     _labels['x'].text = xText;
     _labels['y'].text = yText;
     notifyListeners();
   }
-  void changeLabelRotation(String axis){
+
+  void changeLabelRotation(String axis) {
     _labels[axis].rotationTimes++;
-    if(_labels[axis].rotationTimes > 1)
-      _labels[axis].rotationTimes = 0;
+    if (_labels[axis].rotationTimes > 1) _labels[axis].rotationTimes = 0;
     notifyListeners();
   }
-  void changeLabelFlip(String axis, bool flip){
+
+  void changeLabelFlip(String axis, bool flip) {
     _labels[axis].flipped = flip;
     notifyListeners();
   }
 
   ///       settings section
-  void _resetSettings(){
+  void _resetSettings() {
     _themeID = 0;
-    _settingsModel = SettingsModel(language: _defaultLocale, themeId: _themeID, showGrid: true);
+    _settingsModel = SettingsModel(
+        language: _defaultLocale, themeId: _themeID, showGrid: true);
     _setTheme(_themeID);
     notifyListeners();
   }
 
-  String getLanguage(){
+  String getLanguage() {
     return _settingsModel.language;
   }
 
-  void applySettings(SettingsModel settings){
+  void applySettings(SettingsModel settings) {
     _setLocale(settings.language);
     notifyListeners();
   }
 
-  void changeLocale(String loc){
+  void changeLocale(String loc) {
     mixinLanguage = loc;
-    if(loc != _settingsModel.language) {
+    if (loc != _settingsModel.language) {
       _settingsModel.language = loc;
       _saveSettings();
       notifyListeners();
     }
   }
 
-  void _setLocale(String loc){
+  void _setLocale(String loc) {
     _settingsModel.language = loc;
     // notifyListeners();
   }
 
-
   ///theme functions
-  void changeTheme(int themeId){
-    if(themeId != _settingsModel.themeId) {
+  void changeTheme(int themeId) {
+    if (themeId != _settingsModel.themeId) {
       _setTheme(themeId);
       _saveSettings();
       notifyListeners();
     }
   }
-  void _setTheme(int id){
+
+  void _setTheme(int id) {
     _themeID = id;
     _themeData = ThemesMock().themes[_themeID].data;
     _settingsModel.themeId = _themeID;
     // notifyListeners();
   }
 
-  int get themeId{
+  int get themeId {
     return _themeID;
   }
 
-  get theme{
+  get theme {
     return _themeData;
   }
 
-  ThemeListModel getThemeModelById(int index){
+  ThemeListModel getThemeModelById(int index) {
     return ThemesMock().themes[index];
   }
 
-
   ///   grid
 
-  void setGridShow(bool value){
+  void setGridShow(bool value) {
     _settingsModel.showGrid = gridShow = value;
   }
 
-  void changeGridShow(bool value){
+  void changeGridShow(bool value) {
     _settingsModel.showGrid = value;
     gridShow = value;
     notifyListeners();
     _saveSettings();
   }
 
-  bool getGridShow(){
+  bool getGridShow() {
     return _settingsModel.showGrid;
   }
 
@@ -166,32 +175,33 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
 
   int dataLength() => super.dataLength();
 
-  void _restoreData(var data){
-    if(data != null){
+  void _restoreData(var data) {
+    if (data != null) {
       int _err = 0;
       int _len = (data['x'] as List).length;
-      if((data['y'] as List).length < _len) _len = (data['y'] as List).length;
-      for(int i = 0; i < _len; i++){
-        _err += super.addMoreValues(data['x'][i], data['y'][i], 0, 0);
+      if ((data['y'] as List).length < _len) _len = (data['y'] as List).length;
+      for (int i = 0; i < _len; i++) {
+        _err += super.addMoreValues(data['x'][i], data['y'][i]);
       }
-      if(_err == 0) {
+      if (_err == 0) {
         // print('read data:');
         notifyListeners();
       }
     }
   }
 
-  void clearAllData(){
+  void clearAllData() {
     dataClean();
     _saveLastData();
     notifyListeners();
   }
+
   @override
-  int addMoreValues(String xText, String yText, int xPow, int yPow) {
-    int _err = super.addMoreValues(xText, yText, xPow, yPow);
-    if(_err == 0) {
+  int addMoreValues(String xText, String yText) {
+    int _err = super.addMoreValues(xText, yText);
+    if (_err == 0) {
       _saveLastData();
-      notifyListeners();
+      cancelEditValue();
     }
     return _err;
   }
@@ -206,7 +216,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   @override
   int swapData(int index) {
     final _res = super.swapData(index);
-    if(_res == 0) {
+    if (_res == 0) {
       _saveLastData();
       notifyListeners();
     }
@@ -217,23 +227,40 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     approximationType = index;
     notifyListeners();
   }
+
   void changeDotType(int index) {
     dotTypeIndex = index;
     notifyListeners();
   }
+
   void changeDotSize(double size) {
     dotSize = size;
     notifyListeners();
   }
 
-  void startEditValue(int value){
+  void startEditValue(int value) {
     editIndex = value;
+    currentXValue = getValueString('x', editIndex);
+    currentYValue = getValueString('y', editIndex);
+    focusOnText = 'x';
     notifyListeners();
   }
 
-  void cancelEditValue(){
+  void cancelEditValue() {
     editIndex = -1;
+    focusOnText = currentXValue = currentYValue = '';
     notifyListeners();
+    // FocusManager.instance.primaryFocus.unfocus();
+  }
+
+  int getPowValue(String flag) => powMap[flag];
+
+  int changePowValue(String flag, int value){
+    if((powMap[flag] + value).abs() <= powMaximum) {
+      return powMap[flag] += value;
+    } else {
+      return null;
+    }
   }
 
   /// read/write section
@@ -246,23 +273,23 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
     return file.writeAsString(_settingsModel.toString());
   }
 
-
   Future<void> _readSettingsData() async {
     SettingsModel _result = new SettingsModel();
     // print('call settings provider read data');
     _appDirectory = await getApplicationDocumentsDirectory();
     List<FileSystemEntity> _list = _appDirectory.listSync();
     _imagesList = [];
-    for(int i = 0; i < _list.length; i++){
-      if(_list[i].path.contains(".png")) {
+    for (int i = 0; i < _list.length; i++) {
+      if (_list[i].path.contains(".png")) {
         // print('read from local directory: ${_list[i].path}');
         final dataFile = File('${_list[i].path.split('.png')[0]}.json');
         final bool _haveData = await dataFile.exists();
-        _imagesList.add(ImagePair(path: _list[i].path, selected: false, haveData: _haveData));
+        _imagesList.add(ImagePair(
+            path: _list[i].path, selected: false, haveData: _haveData));
       }
     }
     final file = File('${_appDirectory.path}$_settingsJson');
-    if(await file.exists())
+    if (await file.exists())
       try {
         // Read the file
         String contents = await file.readAsString();
@@ -278,25 +305,31 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
   }
 
   Future<File> _saveLastData([String fileName = '']) async {
-    final String _name = fileName=='' ? '${_appDirectory.path}$_dataJson' : '$fileName.json';
+    final String _name =
+        fileName == '' ? '${_appDirectory.path}$_dataJson' : '$fileName.json';
     final file = File(_name);
     return file.writeAsString(getAllDataString());
   }
+
   void readSavedData({@required String fileName}) async {
-    final String _name = '${_appDirectory.path}/${fileName.split('.png')[0]}.json';
+    final String _name =
+        '${_appDirectory.path}/${fileName.split('.png')[0]}.json';
     clearAllData();
     _readSavedData(_name);
   }
+
   Future<void> _readSavedData([String fileName = '']) async {
-    if(_appDirectory == null) _appDirectory = await getApplicationDocumentsDirectory();
-    final String _name = fileName=='' ? '${_appDirectory.path}$_dataJson' : fileName;
+    if (_appDirectory == null)
+      _appDirectory = await getApplicationDocumentsDirectory();
+    final String _name =
+        fileName == '' ? '${_appDirectory.path}$_dataJson' : fileName;
     final file = File(_name);
-    if(await file.exists())
+    if (await file.exists())
       try {
         // Read the file
         String contents = await file.readAsString();
         _restoreData(json.decode(contents)['data']);
-        if(fileName !=''){
+        if (fileName != '') {
           _saveLastData();
         }
       } catch (e) {
@@ -307,58 +340,62 @@ class DataProvider extends ChangeNotifier with CalculateMixin{
 
   ///images functions
 
-  ImagePair getImage(int index){
+  ImagePair getImage(int index) {
     return _imagesList[index];
   }
 
-  bool getImageSelection(int index){
+  bool getImageSelection(int index) {
     return _imagesList[index].selected;
   }
 
-  void setImageSelection(int index, bool value){
-    _imagesList[index].selected  = value;
+  void setImageSelection(int index, bool value) {
+    _imagesList[index].selected = value;
     notifyListeners();
   }
 
-  bool isSomeImageSelected(){
+  bool isSomeImageSelected() {
     bool _res = false;
-    for(int i = 0; i < _imagesList.length; i++)
+    for (int i = 0; i < _imagesList.length; i++)
       _res = _res || _imagesList[i].selected;
     return _res;
   }
 
-  int getImagesLength() =>_imagesList.length;
+  int getImagesLength() => _imagesList.length;
 
-  void saveCurrentData(var pngBytes){
-    final _fileName = '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-')}';
+  void saveCurrentData(var pngBytes) {
+    final _fileName =
+        '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-')}';
     final _pngPath = '$_fileName.png';
     File('$_pngPath').writeAsBytesSync(pngBytes.buffer.asInt8List());
     _saveLastData(_fileName);
     _imagesList.add(ImagePair(path: _pngPath, selected: false, haveData: true));
   }
 
-  void deleteImages(){
-    for(int i = _imagesList.length - 1; i >= 0; i--){
-      if(_imagesList[i].selected){
-        final _dataFile = File('${_imagesList[i].path.split('.png')[0]}.json');
-        if(_dataFile.existsSync()){
-          _dataFile.deleteSync();
-        }
-        File(_imagesList[i].path).deleteSync();
-        _imagesList.removeAt(i);
-      }
+  void deleteImage(int i) {
+    final _dataFile = File('${_imagesList[i].path.split('.png')[0]}.json');
+    if (_dataFile.existsSync()) {
+      _dataFile.deleteSync();
     }
+    File(_imagesList[i].path).deleteSync();
+    _imagesList.removeAt(i);
+
     notifyListeners();
   }
 
-  ///context functions called by bottomNavBar
+  /// settings bar
 
-  void setContextFunction(int index, Function callback){
-    _contextFunctions[index] = callback;
-  }
-  void contextFunctions(int index){
-    if(_contextFunctions[index] != null)
-      _contextFunctions[index]();
+  final _collapsedHeight = 60.0;
+  final expandedHeight = 300.0;
+  bool _settingsBarIsCollapsed = true;
+
+  double get graphOffset => _settingsBarIsCollapsed ? _collapsedHeight : expandedHeight;
+  bool get isGraphSettingCollapsed => _settingsBarIsCollapsed;
+
+  void resetGraphSettingCollapsed() => _settingsBarIsCollapsed = true;
+
+  void toggleCollaps(){
+    _settingsBarIsCollapsed = !_settingsBarIsCollapsed;
+    notifyListeners();
   }
 
 }

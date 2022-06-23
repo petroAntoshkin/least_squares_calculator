@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:least_squares/mocks/my_translations.dart';
 import 'package:least_squares/models/graphic_data.dart';
+import 'package:least_squares/models/pow_model.dart';
 import 'package:least_squares/utils/string_utils.dart';
 import 'package:validators/validators.dart';
 
@@ -38,6 +39,12 @@ mixin CalculateMixin {
     'rhomb',
     'crest',
   ];
+  final Map<String, int> powMap = {
+    'x': 0,
+    'y': 0,
+  };
+  final powMaximum = 10;
+
   int _dotTypeIndex = 0;
   int _approximationType = 0;
   int _editIndex = -1;
@@ -46,7 +53,7 @@ mixin CalculateMixin {
   List<Offset> _sourceAproxDots = [];
   final List<String> _replaceWhat = [',', '+'];
   final List<String> _replaceTo = ['.', ''];
-  String _language = 'en';
+  String _language = 'en', currentXValue = '', currentYValue = '';
 
   String get nanString {
     return MyTranslations().getLocale(_language, 'nanMessage');
@@ -61,13 +68,13 @@ mixin CalculateMixin {
     _factorA = _factorB = 0;
   }
 
-  int get editIndex{
-    return _editIndex;
-  }
+  int get editIndex => _editIndex;
 
-  set editIndex(int value){
+  set editIndex(int value) {
     _editIndex = value;
   }
+
+  bool isDataEdited(int index) => _editIndex == index;
 
   void dataClean() {
     _allValues['x'] = [];
@@ -85,12 +92,12 @@ mixin CalculateMixin {
   //   // notifyListeners();
   // }
 
-  String getAllDataString(){
+  String getAllDataString() {
     String _res = '{"data": {';
     _allValues.forEach((key, value) {
       _res += '"' + key + '": [';
-      for(int i = 0; i < value.length; i++){
-        if(i > 0) _res += ', ';
+      for (int i = 0; i < value.length; i++) {
+        if (i > 0) _res += ', ';
         _res += '"${value[i]}"';
       }
       _res += '],';
@@ -108,27 +115,30 @@ mixin CalculateMixin {
     return _res;
   }
 
-  int addMoreValues(String xText, String yText, int xPow, int yPow) {
+  int addMoreValues(String xText, String yText) {
     int _err = 0;
+    if (xText.isEmpty || yText.isEmpty) {
+      return _err;
+    }
     String _x = _replaceLoop(xText.isNotEmpty ? xText : '0'),
         _y = _replaceLoop(yText.isNotEmpty ? yText : '0');
-
     _x = StringUtils.addLeadNul(_x);
     _y = StringUtils.addLeadNul(_y);
-
-    // print('isfloat x=${isFloat(_x)} is float y=${isFloat(_y)}');
+    // debugPrint('isfloat x=${isFloat(_x)} is float y=${isFloat(_y)}');
     if (isFloat(_x) && isFloat(_y)) {
-      double _xCandidate = double.parse(_x);
-      double _yCandidate = double.parse(_y);
+      double _xCandidate = double.parse(StringUtils.doubleShift(
+          doubleBase: double.parse(_x), powValue: powMap['x']));
+      double _yCandidate = double.parse(StringUtils.doubleShift(
+          doubleBase: double.parse(_y), powValue: powMap['y']));
       _err = _checkForDuplicate(_xCandidate, _yCandidate);
-      if (_err == 0 || _editIndex >= 0) {
+      if (_err == 0) {
         _err = 0;
-        if(_editIndex >= 0){
-          _allValues['x'][_editIndex] = _xCandidate * pow(10, xPow);
-          _allValues['y'][_editIndex] = _yCandidate * pow(10, yPow);
+        if (_editIndex >= 0) {
+          _allValues['x'][_editIndex] = _xCandidate;
+          _allValues['y'][_editIndex] = _yCandidate;
         } else {
-          _allValues['x'].add(_xCandidate * pow(10, xPow));
-          _allValues['y'].add(_yCandidate * pow(10, yPow));
+          _allValues['x'].add(_xCandidate);
+          _allValues['y'].add(_yCandidate);
         }
         _editIndex = -1;
         _countAB();
@@ -141,8 +151,11 @@ mixin CalculateMixin {
   int _checkForDuplicate(double _x, double _y) {
     int _res = 0;
     for (int i = 0; i < _allValues['x'].length; i++) {
-      if (_x == _allValues['x'][i]) _res = 1;
-      if (_x == _allValues['x'][i] && _y == _allValues['y'][i]) _res = 2;
+      if (_x == _allValues['x'][i] && _editIndex != i) {
+        _res = 1;
+        if (_y == _allValues['y'][i] && _editIndex == i) _res = 2;
+        return _res;
+      }
     }
     return _res;
   }
@@ -155,8 +168,9 @@ mixin CalculateMixin {
   }
 
   int swapData(int index) {
-    final _error = _checkForDuplicate(_allValues['y'][index], _allValues['x'][index]);
-    if(_error == 0) {
+    final _error =
+        _checkForDuplicate(_allValues['y'][index], _allValues['x'][index]);
+    if (_error == 0) {
       final _buffer = _allValues['x'][index];
       _allValues['x'][index] = _allValues['y'][index];
       _allValues['y'][index] = _buffer;
@@ -168,7 +182,12 @@ mixin CalculateMixin {
   void _countAB() {
     _initSum();
     int _len = _allValues['x'].length;
-    double _sumX = 0, _sumY = 0, _sumXSquare = 0, _sumXY = 0, _sumFunDif = 0, _sumXDif = 0;
+    double _sumX = 0,
+        _sumY = 0,
+        _sumXSquare = 0,
+        _sumXY = 0,
+        _sumFunDif = 0,
+        _sumXDif = 0;
     for (int i = 0; i < _len; i++) {
       _sumX += _allValues['x'][i];
       _sumY += _allValues['y'][i];
@@ -182,33 +201,59 @@ mixin CalculateMixin {
     // _factorB = _sumY - _factorA * _sumX;
     _deviationA = _deviationB = 0;
     final double _xs = _sumX / _len;
-    final double _ys = _sumY / _len;
-    for(int i = 0; i < _len; i++) {
-      _sumFunDif += (_allValues['y'][i] - _factorA * _allValues['x'][i] - _factorB) * (_allValues['y'][i] - _factorA * _allValues['x'][i] - _factorB);
+    // final double _ys = _sumY / _len;
+    for (int i = 0; i < _len; i++) {
+      _sumFunDif +=
+          (_allValues['y'][i] - _factorA * _allValues['x'][i] - _factorB) *
+              (_allValues['y'][i] - _factorA * _allValues['x'][i] - _factorB);
       _sumXDif += (_allValues['x'][i] - _xs) * (_allValues['x'][i] - _xs);
     }
     // debugPrint('sumX=$_sumX xDif=$_sumXDif function dif=$_sumFunDif');
     _deviationA = pow(_sumFunDif / ((-2 + _len) * _sumXDif), 0.5);
-    _deviationB = pow((1 / _len + (_xs * _xs) / _sumXDif) * _sumFunDif / (-2 + _len), 0.5);
+    _deviationB = pow(
+        (1 / _len + (_xs * _xs) / _sumXDif) * _sumFunDif / (-2 + _len), 0.5);
     _globalRecalculation();
   }
 
   String getAString() => _factorA.isNaN ? nanString : 'a = $_factorA';
-  String getADeviationString() => _deviationA.isNaN ? nanString : 'σ₁ = $_deviationA';
+
+  String getADeviationString() =>
+      _deviationA.isNaN ? nanString : 'σ₁ = $_deviationA';
 
   String getBString() => _factorB.isNaN ? nanString : 'b = $_factorB';
-  String getBDeviationString() => _deviationB.isNaN ? nanString : 'σ₂ = $_deviationB';
+
+  String getBDeviationString() =>
+      _deviationB.isNaN ? nanString : 'σ₂ = $_deviationB';
 
   double getAValue() => _factorA;
+
   double getADeviation() => _deviationA;
 
   double getBValue() => _factorB;
+
   double getBDeviation() => _deviationB;
 
-  int getValuesLength() =>_allValues['x'].length;
+  int getValuesLength() => _allValues['x'].length;
 
   double getValue(String name, int index) {
-    return _allValues[name][index];
+    PowModel val = getValuePowModel(name, index);
+    double res = double.parse(StringUtils.doubleShift(
+        doubleBase: double.parse(val.base), powValue: val.powIndex));
+    return res;
+  }
+
+  PowModel getValuePowModel(String flag, int index) {
+    if (index == -1) return PowModel();
+    final sign = _allValues[flag][index] > 0 ? '' : '-';
+    String _res = _allValues[flag][index].abs().toString();
+    int _pow = 0;
+    List<String> _split =
+        _allValues[flag][index].toStringAsExponential().split('e');
+    if (int.parse(_split[1]).abs() > 3) {
+      _pow = int.parse(_split[1]);
+      _res = _split[0];
+    }
+    return PowModel(base: '$sign$_res', powIndex: _pow);
   }
 
   Map<String, List<double>> getAllValues() {
@@ -225,21 +270,36 @@ mixin CalculateMixin {
     _globalRecalculation();
   }
 
-  String getValueString(String type, int index){
-    if(index < 0)
+  String getValueString(String flag, int index) {
+    if (index < 0) {
       return '';
-    else
-      return _allValues[type][index].toString();
+    }
+    final sign = _allValues[flag][index] > 0 ? '' : '-';
+    double res = _allValues[flag][index].abs();
+    powMap[flag] = 0;
+    while (res < 0.1 && powMap[flag].abs() < powMaximum) {
+      res = double.parse(StringUtils.doubleShift(doubleBase: res, powValue: 1));
+      powMap[flag]--;
+    }
+    // if((res / 10 == res~/10 && res / 10 > 10)){
+    //   powMap[flag] = 1;
+    // }
+    while ((res / 10 == res~/10 && res / 10 > 0) && powMap[flag].abs() < powMaximum) {
+      res /=10;
+      // res = double.parse(StringUtils.doubleShift(doubleBase: res, powValue: -1));
+      powMap[flag]++;
+    }
+    debugPrint('get $flag with value ${_allValues[flag][index]}   pow:${powMap[flag]}');
+    return '$sign$res';
   }
 
   ///graphics calculations
 
   int _getInitialZoom(double distance, int gridCount) {
-    if(distance == 0)
-      return 0;
+    if (distance == 0) return 0;
     int _res = 0;
     final _multiplier = distance >= 1 ? -1 : 1;
-    if(distance > gridCount / 2) {
+    if (distance > gridCount / 2) {
       while (distance > gridCount / 2) {
         distance /= gridCount;
         _res += _multiplier;
@@ -321,7 +381,7 @@ mixin CalculateMixin {
     }
   }
 
-  double _getFunctionValue({@required String name, @required double x}){
+  double _getFunctionValue({@required String name, @required double x}) {
     double _y;
     switch (name) {
       case 'parabolic':

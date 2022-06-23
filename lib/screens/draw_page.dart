@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:least_squares/elements/axis_label.dart';
 import 'package:least_squares/elements/graph_settings_bar.dart';
+import 'package:least_squares/elements/my_focus_button.dart';
+import 'package:least_squares/elements/results_bar.dart';
 import 'package:least_squares/styles_and_presets.dart';
 import 'package:least_squares/utils/string_utils.dart';
 
@@ -49,6 +51,8 @@ class _DrawPageState extends State<DrawPage> {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 
+  bool exportEnabled = true;
+
   @override
   void initState() {
     super.initState();
@@ -58,8 +62,8 @@ class _DrawPageState extends State<DrawPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Provider.of<DataProvider>(context, listen: false)
-        .setContextFunction(1, _exportGraph);
+    // Provider.of<DataProvider>(context, listen: false)
+    //     .setContextFunction(1, _exportGraph);
     _maxSize =
         MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
             ? MediaQuery.of(context).size.height
@@ -121,34 +125,57 @@ class _DrawPageState extends State<DrawPage> {
                           onScaleUpdate: _onScaleUpdate,
                           child: _drawStack,
                         )
-                      : Center(
-                          child: Text(
-                            MyTranslations().getLocale(widget._loc, 'nanData'),
-                            style: TextStyle(
-                              color:
-                                  _themeData.primaryTextTheme.bodyText1.color,
-                            ),
-                          ),
-                        ),
+                      : Container(),
                 ),
               ),
               Positioned(
                 top: _maxSize * _sizeMultiplier,
                 child: SizedBox(
                   width: _maxSize * _sizeMultiplier,
-                  child: Center(
-                    child: Text(
-                      _len > 1 ? 'y = ax + b' : '',
-                      style: TextStyle(
-                        color: _themeData.primaryTextTheme.bodyText1.color,
-                        fontStyle: FontStyle.italic,
-                        fontSize: Presets.TEXT_SIZE_MIDDLE,
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          _len > 1 ? 'y = ax + b' : '',
+                          style: TextStyle(
+                            color: _themeData.indicatorColor,
+                            fontStyle: FontStyle.italic,
+                            fontSize: Presets.TEXT_SIZE_MIDDLE,
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 5.0),
+                      _len > 1 ? ResultBar() : Container(),
+                    ],
                   ),
                 ),
               ),
+              _len < 2 ?Align(
+                alignment: Alignment.center,
+                child: Text(
+                  MyTranslations().getLocale(widget._loc, _len == 0 ? 'nanData' : 'nanMessage'),
+                  style: TextStyle(
+                    color: _themeData.indicatorColor,
+                  ),
+                ),
+              ) : Container(),
+
+              /// graph settings
               _len > 1 ? GraphSettingsBar() : Container(),
+              Positioned(
+                // Provider.of<DataProvider>(context).graphOffset
+                left: MediaQuery.of(context).size.width / 2 -
+                    Presets.MINIMUM_TAP_SIZE,
+                bottom: Provider.of<DataProvider>(context).graphOffset -
+                    Presets.MINIMUM_TAP_SIZE +
+                    Presets.ARC_SIZE,
+                child: _len > 1
+                    ? MyFocusButton(
+                        callback: () => _exportGraph,
+                        text: 'export_short',
+                      )
+                    : Container(),
+              ),
             ],
           );
   }
@@ -181,7 +208,7 @@ class _DrawPageState extends State<DrawPage> {
             : StringUtils.normalizeNumberView(
                 (index / pow(_gridCount, _newGD.zoomFactorX))),
         style: TextStyle(
-          color: _themeData.primaryTextTheme.bodyText1.color,
+          color: _themeData.indicatorColor,
         ),
       ),
     );
@@ -202,7 +229,7 @@ class _DrawPageState extends State<DrawPage> {
             : StringUtils.normalizeNumberView(
                 (-index / pow(_gridCount, _newGD.zoomFactorY))),
         style: TextStyle(
-          color: _themeData.primaryTextTheme.bodyText1.color,
+          color: _themeData.indicatorColor,
         ),
       ),
     );
@@ -248,12 +275,15 @@ class _DrawPageState extends State<DrawPage> {
 
   ///export graphic
   void _exportGraph() {
-    _capturePng();
+    if (exportEnabled) {
+      _capturePng();
+    }
+    exportEnabled = false;
   }
 
   void _capturePng() async {
     if (_newGD.dataDots.length > 1) {
-      showDialog(
+      var tt = showDialog(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
@@ -316,19 +346,8 @@ class _DrawPageState extends State<DrawPage> {
             ),
           ],
         );
-        // Dialogs.materialDialog(
-        //   context: context,
-        //   msg: '$e',
-        //   actions: [
-        //     IconsButton(
-        //       onPressed: () => Navigator.pop(context),
-        //       iconData: Icons.error_outline,
-        //       iconColor: Colors.redAccent,
-        //       text: '',
-        //     ),
-        //   ],
-        // );
       }
+      tt.then((value) => exportEnabled = true);
     }
   }
 }

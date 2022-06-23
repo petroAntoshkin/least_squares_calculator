@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:least_squares/ad_helper.dart';
+import 'package:least_squares/mocks/my_translations.dart';
+import 'package:least_squares/styles_and_presets.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
-import 'package:least_squares/elements/appbar_title.dart';
 import 'package:least_squares/elements/my_bottom_nav_bar.dart';
 import 'package:least_squares/screens/calculation_page.dart';
 import 'package:least_squares/screens/draw_page.dart';
@@ -25,8 +27,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print('rebuild main');
-    return ChangeNotifierProvider(
-      create: (_) => DataProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DataProvider>(
+            create: (context) => DataProvider()),
+        // ChangeNotifierProvider<FocusProvider>(create: (context) => FocusProvider()),
+      ],
       child: Consumer<DataProvider>(
           builder: (context, DataProvider notifier, child) {
         return MaterialApp(
@@ -98,8 +104,17 @@ class _LSMHomePageState extends State<LSMHomePage>
   Widget build(BuildContext context) {
     // print('rebuild home page');
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
+    _tabController.animation.addListener(() {
+      if (_tabController.previousIndex == 0) {
+        Provider.of<DataProvider>(context, listen: false).cancelEditValue();
+      }
+    });
     _tabController.addListener(() {
-      // if(_tabController.indexIsChanging)
+      if (_tabController.indexIsChanging && _tabController.previousIndex == 0) {
+        Provider.of<DataProvider>(context, listen: false).cancelEditValue();
+      }
+      Provider.of<DataProvider>(context, listen: false)
+          .resetGraphSettingCollapsed();
       setState(() {});
     });
     return DefaultTabController(
@@ -107,22 +122,43 @@ class _LSMHomePageState extends State<LSMHomePage>
       child: Scaffold(
         backgroundColor: _themeData.backgroundColor,
         appBar: AppBar(
-          backgroundColor: _themeData.backgroundColor,
-          title: AppbarTitle(
-            themeData: _themeData,
-          ),
-          bottom: TabBar(
-            indicatorWeight: 3.0,
-            controller: _tabController,
-            tabs: [
-              Tab(icon: Icon(Icons.list)),
-              Tab(icon: Icon(Icons.analytics)),
-              Tab(icon: Icon(Icons.image)),
-              Tab(icon: Icon(Icons.settings_outlined)),
-            ],
+          toolbarHeight: 6.0,
+          backgroundColor: _themeData.primaryColorDark,
+          // title: AppbarTitle(
+          //   themeData: _themeData,
+          // ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(Presets.APP_BAR_HEIGHT),
+            child: Container(
+              color: _themeData.primaryColorLight,
+              child: TabBar(
+                labelColor: _themeData.focusColor,
+                unselectedLabelColor: _themeData.iconTheme.color,
+                indicatorWeight: 3.0,
+                indicator: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      _themeData.primaryColorDark,
+                      _themeData.focusColor,
+                    ],
+                    stops: [0.95, 1],
+                  ),
+                ),
+                controller: _tabController,
+                tabs: [
+                  tabColumn(context, Icons.list, 'data'),
+                  tabColumn(context, Icons.analytics, 'graph'),
+                  tabColumn(context, Icons.save_outlined, 'saved'),
+                  tabColumn(context, Icons.settings_outlined, 'settings'),
+                ],
+              ),
+            ),
           ),
         ),
         body: TabBarView(
+          // physics: NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: [
             CalculationPage(),
@@ -133,12 +169,77 @@ class _LSMHomePageState extends State<LSMHomePage>
         ),
         bottomNavigationBar: MyBottomNavBar(
           tabIndex: _tabController.index,
-          banner: _isBannerAdReady ? AdWidget(ad: _bannerAd)
-              :Container(),
-          bannerHeight: _isBannerAdReady ? _bannerAd.size.height.toDouble()
-          : 54.0,
+          banner: _isBannerAdReady ? AdWidget(ad: _bannerAd) : Container(),
+          bannerHeight: _isBannerAdReady
+              ? _bannerAd.size.height.toDouble()
+              : Presets.NAV_BAR_HEIGHT,
         ),
       ),
     );
+  }
+
+  Widget tabColumn(BuildContext context, IconData iconData, String text) {
+    final content = MyTranslations().getLocale(
+        Provider.of<DataProvider>(context, listen: false).getLanguage(), text);
+    final style = Presets.textSmall;
+    final wi = _getTextWidth(context, 'W', style) * content.length;
+    final _widIsEnough = wi <= MediaQuery.of(context).size.width / 4;
+    // debugPrint(
+    //     'text: $content   wid: ${MediaQuery.of(context).size.width / 4},   textWidth: $wi}');
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 4,
+      height: Presets.APP_BAR_HEIGHT,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Icon(
+                iconData,
+                size: 30.0,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 3.0),
+              child: _widIsEnough
+                  ? Text(
+                    content,
+                    style: style,
+                  )
+                  : SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: Presets.APP_BAR_HEIGHT / 3,
+                      child: Marquee(
+                        velocity: 20.0,
+                        blankSpace: 40.0,
+                        text: content,
+                      ),
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  double _getTextWidth(BuildContext context, String text, TextStyle style) {
+    final span = TextSpan(text: text, style: style);
+
+    final constraints = BoxConstraints(maxWidth: double.infinity);
+
+    final richTextWidget = Text.rich(span).build(context) as RichText;
+    final renderObject = richTextWidget.createRenderObject(context);
+    renderObject.layout(constraints);
+
+    final boxes = renderObject.getBoxesForSelection(TextSelection(
+      baseOffset: 0,
+      extentOffset: TextSpan(text: text).toPlainText().length,
+    ));
+
+    return boxes.last.right;
   }
 }

@@ -31,7 +31,7 @@ class AppbarTitle extends StatelessWidget {
       padding: EdgeInsets.all(2.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
-        color: themeData.primaryColor.withAlpha(80),
+        color: themeData.primaryColor,
       ),
       child: _dataCount < 2
           ? Center(
@@ -114,7 +114,7 @@ class AppbarTitle extends StatelessWidget {
                     },
                     child: Icon(
                       Icons.copy,
-                      color: themeData.primaryTextTheme.bodyText1.color,
+                      color: themeData.indicatorColor,
                     ),
                   ),
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:least_squares/elements/my_radio_button.dart';
 import 'package:least_squares/models/language_model.dart';
 import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,7 +23,7 @@ class LanguageCard extends StatelessWidget {
     String _name = 'assets/flags/flag_${languageModel.prefix}.png';
     return Container(
       child: Card(
-        color: _themeData.primaryColor,
+        color: _themeData.primaryColorLight,
         child: GestureDetector(
           onTap: () => Provider.of<DataProvider>(context, listen: false)
               .changeLocale(languageModel.prefix),
@@ -32,14 +33,14 @@ class LanguageCard extends StatelessWidget {
               padding: const EdgeInsets.all(6.0),
               child: Row(
                 children: [
-                  SizedBox(width: 30, height: 20, child: Image.asset(_name)),
+                  SizedBox(width: 30, height: Presets.SETTINGS_CARD_HEIGHT, child: Image.asset(_name)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(languageModel.name, style: _themeData.primaryTextTheme.bodyText1,),
                   ),
                   Expanded(child: Container()),
                   SizedBox(
-                    width: 20.0,
+                    width: 40.0,
                     height: 20.0,
                     child: MyRadioButton(isSelected: _thisLangIsCurrent),
                   )

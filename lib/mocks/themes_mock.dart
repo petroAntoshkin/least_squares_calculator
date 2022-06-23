@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:least_squares/models/theme_list_model.dart';
 
 class ThemesMock {
-  Color _hexToColor(String code) {
-    return Color(int.parse(code.substring(0, 6), radix: 16) + 0xFF000000);
-  }
+  // Color _hexToColor(String code) {
+  //   return Color(int.parse(code.substring(0, 6), radix: 16) + 0xFF000000);
+  // }
 
   final Map<int, ThemeListModel> themes = Map();
 
@@ -12,9 +12,15 @@ class ThemesMock {
     themes[0] = ThemeListModel(
         name: 'Default',
         data: ThemeData(
-          primaryColor: _hexToColor('D9D7D7'),
-          primaryColorDark: _hexToColor('010D00'),
-          backgroundColor: _hexToColor('F0F0F0'),
+          primaryColor: Color(0xff9E9E9E),
+          primaryColorDark: Color(0xff707070),
+          primaryColorLight: Color(0xffCFCFCF),
+          focusColor: Color(0xffFFD600),
+          backgroundColor: Color(0xffF0F0F0),
+          indicatorColor: Colors.black,
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
           // backgroundColor: _hexToColor('BFADA3'),
@@ -22,20 +28,33 @@ class ThemesMock {
     themes[1] = ThemeListModel(
         name: 'Dark green',
         data: ThemeData(
-          primaryColor: _hexToColor('54594D'),
-          primaryColorDark: _hexToColor('3D403A'),
-          backgroundColor: _hexToColor('262626'),
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: Colors.white54),
+          primaryColor: Color(0xff494d43),
+          primaryColorDark: Color(0xff292c27),
+          primaryColorLight: Color(0xff717a6e),
+          focusColor: Color(0xffbaef8a),
+          backgroundColor: Color(0xff1c1c1c),
+          indicatorColor: Colors.white,
+          primaryTextTheme: TextTheme(
+              bodyText1: TextStyle(color: Colors.black)
+          ),
+          // colorScheme:
+          //     ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
         ));
     themes[2] = ThemeListModel(
-        name: 'Black and white',
+        name: 'Dark',
         data: ThemeData(
-          primaryColor: _hexToColor('a6a6a6'),
-          primaryColorDark: _hexToColor('f2f2f2'),
-          backgroundColor: _hexToColor('555555'),
-          colorScheme: ColorScheme.fromSwatch()
-              .copyWith(secondary: _hexToColor('0d0d0d')),
+          primaryColorDark: Color(0xff9E9E9E),
+          primaryColorLight: Color(0xff707070),
+          primaryColor: Color(0xffCFCFCF),
+          focusColor: Color(0xffFFD600),
+          backgroundColor: Colors.black,
+          indicatorColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+          colorScheme:
+          ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+          // backgroundColor: _hexToColor('BFADA3'),
         ));
   }
 }

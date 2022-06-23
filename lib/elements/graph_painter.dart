@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:least_squares/models/graphic_data.dart';
 
@@ -16,7 +15,7 @@ class DrawPainter extends CustomPainter {
     final double _axisYCoord  = _maxSize / 2 + graphicData.displaceY;
 
     final paintAxis = Paint()
-      ..color = themeData.primaryTextTheme.bodyText1.color
+      ..color = themeData.indicatorColor
       ..strokeWidth = 2.0
       ..strokeCap = StrokeCap.round;
 
@@ -56,7 +55,7 @@ class DrawPainter extends CustomPainter {
         // canvas.drawLine(Offset(graphicData.axisArrowOffset * 5, i), Offset(_maxSize - graphicData.axisArrowOffset * 5, i), paintGrid);
       }
     // }
-    //      Y axis
+    ///      Y axis
     canvas.drawLine(Offset(_axisXCoord, 0),
         Offset(_axisXCoord, _maxSize), paintAxis);
     canvas.drawLine(
@@ -72,7 +71,7 @@ class DrawPainter extends CustomPainter {
             graphicData.axisArrowOffset * 2),
         paintAxis);
 
-    //      X axis
+    ///      X axis
     canvas.drawLine(Offset(0, _axisYCoord),
         Offset(_maxSize, _axisYCoord), paintAxis);
     canvas.drawLine(
@@ -86,7 +85,7 @@ class DrawPainter extends CustomPainter {
             _maxSize / 2 + graphicData.axisArrowOffset + graphicData.displaceY),
         paintAxis);
 
-    //     draw approximation
+    ///     draw approximation
 
     /*if (graphicData.trendDots.length == 2) {
       canvas.drawLine(graphicData.trendDots[0], graphicData.trendDots[1],
@@ -98,7 +97,7 @@ class DrawPainter extends CustomPainter {
             paintMainLine);
     }
 
-    // draw dots
+    /// draw dots
     for (int i = 0; i < graphicData.dataDots.length; i++) {
       switch (graphicData.dotType) {
         case 'square':

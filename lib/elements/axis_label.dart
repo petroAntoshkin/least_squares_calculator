@@ -67,7 +67,7 @@ class AxisLabel extends StatelessWidget {
                   child: Text(
                     labelModel.text,
                     style: TextStyle(
-                      color: _themeData.primaryTextTheme.bodyText1.color,
+                      color: _themeData.indicatorColor,
                     ),
                   ),
                 ),

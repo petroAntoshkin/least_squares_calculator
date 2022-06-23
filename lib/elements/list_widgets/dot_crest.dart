@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:least_squares/styles_and_presets.dart';
-import 'dart:math';
 
 // ignore: must_be_immutable
 class DotCrest extends StatelessWidget {

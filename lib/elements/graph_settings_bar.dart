@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:least_squares/elements/bottom_nav_painter.dart';
 import 'package:least_squares/elements/drop_down_list.dart';
 import 'package:least_squares/elements/list_widgets/approx_linear.dart';
 import 'package:least_squares/elements/list_widgets/approx_log.dart';
@@ -15,6 +16,7 @@ import 'package:least_squares/models/axis_label_model.dart';
 import 'package:least_squares/models/graphic_data.dart';
 import 'package:least_squares/models/named_widget.dart';
 import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -28,15 +30,16 @@ class GraphSettingsBar extends StatefulWidget {
 class _GraphSettingsBarState extends State<GraphSettingsBar> {
   ThemeData _themeData;
   GraphicData _graphicsData;
-  bool _settingsBarCollapsed = true;
   double _shortSideSize;
-  final _collapsedSize = 30.0;
+
+  // final _collapsedHeight = Presets.COLLAPSED_SETTINGS_BAR_HEIGHT;
+  // final _expandedHeight = 300.0;
 
   Map<int, NamedWidget> _approxMap = Map();
   Map<int, NamedWidget> _dotsMap = Map();
   int /*_approximationType = 0,*/ _dotType = 0;
   AxisLabelModel _labelModelX, _labelModelY;
-  final double _buttonSize = 48.0, _iconSize = 22.0, _borderRadius = 8.0;
+  final double _buttonSize = 48.0, _iconSize = 22.0;
   final _focusNodeX = FocusNode();
   final _focusNodeY = FocusNode();
   final TextEditingController _controllerX = TextEditingController(),
@@ -68,6 +71,8 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
 
   @override
   Widget build(BuildContext context) {
+    bool _settingsBarCollapsed =
+        Provider.of<DataProvider>(context).isGraphSettingCollapsed;
     // print('build graph settings');
     widget._loc =
         Provider.of<DataProvider>(context, listen: false).getLanguage();
@@ -123,275 +128,234 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     //       );
     return Align(
       alignment: Alignment.bottomCenter,
-      child: _child(),
-    );
-  }
-
-  Widget _child() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: _themeData.primaryColor,
-            borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _settingsBarCollapsed = !_settingsBarCollapsed;
-                  });
-                },
-                child: SizedBox(
-                  width: _shortSideSize,
-                  height: _collapsedSize,
-                  child: Container(
-                    color: Color(0x00ff0000),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(_borderRadius)),
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0x55000000),
-                              Color(0x01000000),
-                              Color(0x01000000),
-                              Color(0x01000000),
-                            ]),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 40.0,
-                            child: Center(
-                              child: Icon(
-                                _settingsBarCollapsed
-                                    ? Icons.arrow_drop_down_outlined
-                                    : Icons.arrow_drop_up_outlined,
-                                color:
-                                    _themeData.primaryTextTheme.bodyText1.color,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            MyTranslations()
-                                .getLocale(widget._loc, 'customization'),
-                            style: TextStyle(
-                              color:
-                                  _themeData.primaryTextTheme.bodyText1.color,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 40.0,
-                            child: Center(
-                              child: Icon(
-                                _settingsBarCollapsed
-                                    ? Icons.arrow_drop_down_outlined
-                                    : Icons.arrow_drop_up_outlined,
-                                color:
-                                    _themeData.primaryTextTheme.bodyText1.color,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+      child: GestureDetector(
+        onTap: () {
+          Provider.of<DataProvider>(context, listen: false)
+              .toggleCollaps();
+          setState(() {
+            // _settingsBarCollapsed = !_settingsBarCollapsed;
+          });
+        },
+        child: Stack(
+          children: [
+            /// blind
+            Align(
+              child: _settingsBarCollapsed? Container()
+              : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Container(color: Colors.black.withAlpha(150)),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: _shortSideSize,
+                height:
+                    Provider.of<DataProvider>(context, listen: false).graphOffset,
+                child: CustomPaint(
+                  painter: BottomNavPainter(
+                    color: _themeData.primaryColorLight,
+                    holeHeight: Presets.MINIMUM_TAP_SIZE,
                   ),
                 ),
               ),
-              _settingsBarCollapsed
-                  ? Container()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: Provider.of<DataProvider>(context).graphOffset,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(height: Presets.ARC_SIZE),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: 26.0,
-                          child: Slider(
-                            value: _graphicsData.dotSize,
-                            min: 3.0,
-                            max: 14.0,
-                            divisions: 32,
-                            onChanged: (value) {
-                              Provider.of<DataProvider>(context, listen: false)
-                                  .changeDotSize(value);
-                              setState(() {});
-                            },
-                          ),
+                          width: MediaQuery.of(context).size.width * 0.4 - Presets.ARC_SIZE * 2,
+                          child: settingsGroup(true),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: _focusNodeX.hasFocus || _focusNodeY.hasFocus
-                              ? Container()
-                              : Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          activeColor:
-                                              _themeData.primaryColorDark,
-                                          checkColor:
-                                              _themeData.colorScheme.secondary,
-                                          value: _graphicsData.showGrid,
-                                          onChanged: (value) {
-                                            // print('chane checkBox value to $value');
-                                            Provider.of<DataProvider>(context,
-                                                    listen: false)
-                                                .changeGridShow(value);
-                                            setState(() {});
-                                          },
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4 - Presets.ARC_SIZE * 2,
+                          child: settingsGroup(false),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            _settingsBarCollapsed
+                ? Container()
+                : Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      height: Provider.of<DataProvider>(context, listen: false)
+                              .expandedHeight -
+                          Presets.MINIMUM_TAP_SIZE / 1.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Presets.MINIMUM_TAP_SIZE,
+                          ),
+                          SizedBox(
+                            height: 26.0,
+                            child: Slider(
+                              value: _graphicsData.dotSize,
+                              min: 3.0,
+                              max: 14.0,
+                              divisions: 32,
+                              onChanged: (value) {
+                                Provider.of<DataProvider>(context, listen: false)
+                                    .changeDotSize(value);
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: _focusNodeX.hasFocus || _focusNodeY.hasFocus
+                                ? Container()
+                                : Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Checkbox(
+                                            activeColor:
+                                                _themeData.primaryColorDark,
+                                            checkColor:
+                                                _themeData.colorScheme.secondary,
+                                            value: _graphicsData.showGrid,
+                                            onChanged: (value) {
+                                              Provider.of<DataProvider>(context,
+                                                      listen: false)
+                                                  .changeGridShow(value);
+                                              setState(() {});
+                                            },
+                                          ),
+                                          Text(
+                                            MyTranslations().getLocale(
+                                                widget._loc, 'show_grid'),
+                                            style: TextStyle(
+                                              color: _themeData.primaryTextTheme
+                                                  .bodyText1.color,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(width: 15),
+                                        // child: DropDownList(
+                                        //   itemsList: _approxMap,
+                                        //   currentValue: _approximationType,
+                                        //   callBack: _changeApproximationType,
+                                        // ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropDownList(
+                                          itemsList: _dotsMap,
+                                          currentValue: _dotType,
+                                          callBack: _changeDotType,
                                         ),
-                                        Text(
-                                          MyTranslations().getLocale(
-                                              widget._loc, 'show_grid'),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          MyTranslations()
+                                              .getLocale(widget._loc, 'dot_type'),
                                           style: TextStyle(
-                                            color: _themeData.primaryTextTheme
-                                                .bodyText1.color,
+                                            color: _themeData
+                                                .primaryTextTheme.bodyText1.color,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SizedBox(width: 15),
-                                      // child: DropDownList(
-                                      //   itemsList: _approxMap,
-                                      //   currentValue: _approximationType,
-                                      //   callBack: _changeApproximationType,
-                                      // ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropDownList(
-                                        itemsList: _dotsMap,
-                                        currentValue: _dotType,
-                                        callBack: _changeDotType,
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Table(
+                              border: TableBorder.all(color: Color(0x55000000)),
+                              columnWidths: {
+                                0: FlexColumnWidth(50),
+                                1: FlexColumnWidth(50),
+                              },
+                              children: [
+                                TableRow(
+                                  children: [
+                                    TableCell(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 2, 0, 0),
+                                            child: Text(
+                                              '${MyTranslations().getLocale(widget._loc, 'axis_description')} (X)',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: _themeData.primaryTextTheme
+                                                    .bodyText1.color,
+                                              ),
+                                            ),
+                                          ),
+                                          _editTextField(
+                                            _controllerX,
+                                            _focusNodeX,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Text(
-                                        MyTranslations()
-                                            .getLocale(widget._loc, 'dot_type'),
-                                        style: TextStyle(
-                                          color: _themeData
-                                              .primaryTextTheme.bodyText1.color,
-                                        ),
+                                    TableCell(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 2, 0, 0),
+                                            child: Text(
+                                              '${MyTranslations().getLocale(widget._loc, 'axis_description')} (Y)',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: _themeData.primaryTextTheme
+                                                    .bodyText1.color,
+                                              ),
+                                            ),
+                                          ),
+                                          _editTextField(
+                                            _controllerY,
+                                            _focusNodeY,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Table(
-                            border: TableBorder.all(color: Color(0x55000000)),
-                            columnWidths: {
-                              0: FlexColumnWidth(50),
-                              1: FlexColumnWidth(50),
-                            },
-                            children: [
-                              TableRow(
-                                children: [
+                                TableRow(children: [
                                   TableCell(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 2, 0, 0),
-                                          child: Text(
-                                            '${MyTranslations().getLocale(widget._loc, 'axis_description')} (X)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 12.0,
-                                              color: _themeData.primaryTextTheme
-                                                  .bodyText1.color,
-                                            ),
-                                          ),
-                                        ),
-                                        _editTextField(
-                                          _controllerX,
-                                          _focusNodeX,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  TableCell(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 2, 0, 0),
-                                          child: Text(
-                                            '${MyTranslations().getLocale(widget._loc, 'axis_description')} (Y)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 12.0,
-                                              color: _themeData.primaryTextTheme
-                                                  .bodyText1.color,
-                                            ),
-                                          ),
-                                        ),
-                                        _editTextField(
-                                          _controllerY,
-                                          _focusNodeY,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              TableRow(children: [
-                                TableCell(
-                                    child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    SizedBox(
-                                      width: _buttonSize,
-                                      height: _buttonSize,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .changeLabelVis('x',
-                                                  !_labelModelX.visibility);
-                                        },
-                                        child: Center(
-                                          child: Icon(
-                                            _labelModelX.visibility
-                                                ? Icons.visibility_outlined
-                                                : Icons.visibility_off_outlined,
-                                            color: _themeData.primaryTextTheme
-                                                .bodyText1.color,
-                                            size: _iconSize,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: _buttonSize,
-                                      height: _buttonSize,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .changeLabelFlip(
-                                                  'x', !_labelModelX.flipped);
-                                        },
-                                        child: Center(
-                                          child: Transform.rotate(
-                                            angle: _labelModelX.flipped
-                                                ? pi / 2
-                                                : pi * 1.5,
+                                      child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(
+                                        width: _buttonSize,
+                                        height: _buttonSize,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            Provider.of<DataProvider>(context,
+                                                    listen: false)
+                                                .changeLabelVis('x',
+                                                    !_labelModelX.visibility);
+                                          },
+                                          child: Center(
                                             child: Icon(
-                                              Icons.flip_outlined,
+                                              _labelModelX.visibility
+                                                  ? Icons.visibility_outlined
+                                                  : Icons.visibility_off_outlined,
                                               color: _themeData.primaryTextTheme
                                                   .bodyText1.color,
                                               size: _iconSize,
@@ -399,72 +363,53 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )),
-                                TableCell(
-                                    child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    SizedBox(
-                                      width: _buttonSize,
-                                      height: _buttonSize,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .changeLabelVis('y',
-                                                  !_labelModelY.visibility);
-                                        },
-                                        child: Center(
-                                          child: Icon(
-                                            _labelModelY.visibility
-                                                ? Icons.visibility_outlined
-                                                : Icons.visibility_off_outlined,
-                                            color: _themeData.primaryTextTheme
-                                                .bodyText1.color,
-                                            size: _iconSize,
+                                      SizedBox(
+                                        width: _buttonSize,
+                                        height: _buttonSize,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            Provider.of<DataProvider>(context,
+                                                    listen: false)
+                                                .changeLabelFlip(
+                                                    'x', !_labelModelX.flipped);
+                                          },
+                                          child: Center(
+                                            child: Transform.rotate(
+                                              angle: _labelModelX.flipped
+                                                  ? pi / 2
+                                                  : pi * 1.5,
+                                              child: Icon(
+                                                Icons.flip_outlined,
+                                                color: _themeData.primaryTextTheme
+                                                    .bodyText1.color,
+                                                size: _iconSize,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: _buttonSize,
-                                      height: _buttonSize,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .changeLabelRotation('y');
-                                        },
-                                        child: Center(
-                                          child: Icon(
-                                            Icons
-                                                .rotate_90_degrees_ccw_outlined,
-                                            color: _themeData.primaryTextTheme
-                                                .bodyText1.color,
-                                            size: _iconSize,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: _buttonSize,
-                                      height: _buttonSize,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .changeLabelFlip(
-                                                  'y', !_labelModelY.flipped);
-                                        },
-                                        child: Center(
-                                          child: Transform.rotate(
-                                            angle:
-                                                _labelModelY.flipped ? pi : 0,
+                                    ],
+                                  )),
+                                  TableCell(
+                                      child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(
+                                        width: _buttonSize,
+                                        height: _buttonSize,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            Provider.of<DataProvider>(context,
+                                                    listen: false)
+                                                .changeLabelVis('y',
+                                                    !_labelModelY.visibility);
+                                          },
+                                          child: Center(
                                             child: Icon(
-                                              Icons.flip_outlined,
+                                              _labelModelY.visibility
+                                                  ? Icons.visibility_outlined
+                                                  : Icons.visibility_off_outlined,
                                               color: _themeData.primaryTextTheme
                                                   .bodyText1.color,
                                               size: _iconSize,
@@ -472,23 +417,95 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )),
-                              ]),
-                            ],
+                                      SizedBox(
+                                        width: _buttonSize,
+                                        height: _buttonSize,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            Provider.of<DataProvider>(context,
+                                                    listen: false)
+                                                .changeLabelRotation('y');
+                                          },
+                                          child: Center(
+                                            child: Icon(
+                                              Icons
+                                                  .rotate_90_degrees_ccw_outlined,
+                                              color: _themeData.primaryTextTheme
+                                                  .bodyText1.color,
+                                              size: _iconSize,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: _buttonSize,
+                                        height: _buttonSize,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            Provider.of<DataProvider>(context,
+                                                    listen: false)
+                                                .changeLabelFlip(
+                                                    'y', !_labelModelY.flipped);
+                                          },
+                                          child: Center(
+                                            child: Transform.rotate(
+                                              angle:
+                                                  _labelModelY.flipped ? 0 : pi,
+                                              child: Icon(
+                                                Icons.flip_outlined,
+                                                color: _themeData.primaryTextTheme
+                                                    .bodyText1.color,
+                                                size: _iconSize,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                                ]),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: _borderRadius,
-                        ),
-                      ],
+                          // SizedBox(
+                          //   height: _borderRadius,
+                          // ),
+                        ],
+                      ),
                     ),
-            ],
-          ),
+                  ),
+          ],
         ),
-        SizedBox(height: 4.0),
-      ],
+      ),
+    );
+  }
+
+  Widget settingsGroup(bool leading) {
+    final col = Provider.of<DataProvider>(context, listen: false)
+        .isGraphSettingCollapsed;
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          leading
+              ? Icon(col ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+              : Container(),
+          // Icon(
+          //   Icons.edit_note,
+          //   color: _themeData.primaryTextTheme.bodyText1.color,
+          // ),
+          Text(
+            MyTranslations().getLocale(widget._loc, 'customization'),
+            style: TextStyle(
+              color: _themeData.primaryTextTheme.bodyText1.color,
+            ),
+          ),
+          !leading
+              ? Icon(col ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+              : Container(),
+        ],
+      ),
     );
   }
 

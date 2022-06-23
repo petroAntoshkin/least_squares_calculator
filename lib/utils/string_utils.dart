@@ -48,7 +48,7 @@ class StringUtils {
   }
 
   static String doubleShift({double doubleBase, int powValue}) {
-    if (powValue == 0) {
+    if (powValue == 0 || doubleBase == 0) {
       return '$doubleBase';
     }
     String right, left, result;

@@ -244,7 +244,7 @@ mixin CalculateMixin {
 
   PowModel getValuePowModel(String flag, int index) {
     if (index == -1) return PowModel();
-    final sign = _allValues[flag][index] > 0 ? '' : '-';
+    final sign = _allValues[flag][index] < 0 ? '-' : '';
     String _res = _allValues[flag][index].abs().toString();
     int _pow = 0;
     List<String> _split =
@@ -274,16 +274,16 @@ mixin CalculateMixin {
     if (index < 0) {
       return '';
     }
-    final sign = _allValues[flag][index] > 0 ? '' : '-';
+    final sign = _allValues[flag][index] < 0 ? '-' : '';
     double res = _allValues[flag][index].abs();
     powMap[flag] = 0;
+    if(res == 0) {
+      return '0';
+    }
     while (res < 0.1 && powMap[flag].abs() < powMaximum) {
       res = double.parse(StringUtils.doubleShift(doubleBase: res, powValue: 1));
       powMap[flag]--;
     }
-    // if((res / 10 == res~/10 && res / 10 > 10)){
-    //   powMap[flag] = 1;
-    // }
     while ((res / 10 == res~/10 && res / 10 > 0) && powMap[flag].abs() < powMaximum) {
       res /=10;
       // res = double.parse(StringUtils.doubleShift(doubleBase: res, powValue: -1));

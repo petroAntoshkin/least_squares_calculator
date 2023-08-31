@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/subscribed_icon_button.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/models/image_pare.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/elements/subscribed_icon_button.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/models/image_pare.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 
-import 'package:wc_flutter_share/wc_flutter_share.dart';
+// import 'package:wc_flutter_share/wc_flutter_share.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 
 class ImagesPage extends StatefulWidget {
@@ -15,8 +18,8 @@ class ImagesPage extends StatefulWidget {
 }
 
 class _ImagesPageState extends State<ImagesPage> {
-  ThemeData _themeData;
-  List<ImagePair> _imageList;
+  late ThemeData _themeData;
+  late List<ImagePair> _imageList;
   String _lang = 'en';
   final imageSize = 100.0;
 
@@ -131,7 +134,7 @@ class _ImagesPageState extends State<ImagesPage> {
     );
   }
 
-  Widget graphButton({IconData iconData, Function function}) {
+  Widget graphButton({required IconData iconData, required void Function()? function}) {
     const buttonSize = 48.0;
     return SizedBox(
       width: buttonSize,
@@ -216,11 +219,14 @@ class _ImagesPageState extends State<ImagesPage> {
   void _shareImage(String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      await WcFlutterShare.share(
-          sharePopupTitle: 'share',
-          fileName: 'share.png',
-          mimeType: 'image/png',
-          bytesOfFile: bytes);
+      // final files = <XFile>[];
+      // await WcFlutterShare.share(
+      //     sharePopupTitle: 'share',
+      //     fileName: 'share.png',
+      //     mimeType: 'image/png',
+      //     bytesOfFile: bytes,
+      // );
+      await Share.shareFiles([filePath]);
     } catch (e) {
       debugPrint('error: $e');
     }

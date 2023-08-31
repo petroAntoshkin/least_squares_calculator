@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 class MyFocusButton extends StatelessWidget {
@@ -9,7 +9,7 @@ class MyFocusButton extends StatelessWidget {
   final Function callback;
   final String text;
 
-  const MyFocusButton({Key key, this.callback, this.text}) : super(key: key);
+  const MyFocusButton({Key? key, required this.callback, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

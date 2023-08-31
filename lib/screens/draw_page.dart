@@ -4,26 +4,26 @@ import 'dart:typed_data';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:least_squares/elements/axis_label.dart';
-import 'package:least_squares/elements/graph_settings_bar.dart';
-import 'package:least_squares/elements/my_focus_button.dart';
-import 'package:least_squares/elements/results_bar.dart';
-import 'package:least_squares/styles_and_presets.dart';
-import 'package:least_squares/utils/string_utils.dart';
+import 'package:least_squares_calculator/elements/axis_label.dart';
+import 'package:least_squares_calculator/elements/graph_settings_bar.dart';
+import 'package:least_squares_calculator/elements/my_focus_button.dart';
+import 'package:least_squares_calculator/elements/results_bar.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
+import 'package:least_squares_calculator/utils/string_utils.dart';
 
 // import 'package:material_dialogs/material_dialogs.dart';
 // import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 // import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 
-import 'package:least_squares/elements/graph_painter.dart';
-import 'package:least_squares/models/graphic_data.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/mocks/my_translations.dart';
+import 'package:least_squares_calculator/elements/graph_painter.dart';
+import 'package:least_squares_calculator/models/graphic_data.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
 
 // ignore: must_be_immutable
 class DrawPage extends StatefulWidget {
-  String _loc;
+  String _loc = 'en';
 
   @override
   _DrawPageState createState() => _DrawPageState();
@@ -33,19 +33,19 @@ class _DrawPageState extends State<DrawPage> {
   final double _gridIndexDisplace = 4.0;
   GlobalKey _globalKey = new GlobalKey();
 
-  double _maxSize;
+  double _maxSize = 1.0;
   final double _sizeMultiplier = 1;
   final _displaceNotifier = ValueNotifier<double>(0);
   final int _gridCount = 10;
 
-  String dragDirection;
-  double _startDXPoint, _startDYPoint, _startDisplaceX, _startDisplaceY;
-  Positioned _axisLabelX, _axisLabelY;
+  String dragDirection = '';
+  double _startDXPoint = .0, _startDYPoint = .0, _startDisplaceX = .0, _startDisplaceY = .0;
+  Positioned _axisLabelX = Positioned(child: Container()), _axisLabelY = Positioned(child: Container());
 
-  ThemeData _themeData;
-  GraphicData _newGD;
+  ThemeData _themeData = ThemeData();
+  GraphicData _newGD = GraphicData(dataDots: [], trendDots: []);
 
-  int _len;
+  int _len = 0;
 
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
@@ -56,7 +56,7 @@ class _DrawPageState extends State<DrawPage> {
   @override
   void initState() {
     super.initState();
-    FocusManager.instance.primaryFocus.unfocus();
+    FocusManager.instance.primaryFocus!.unfocus();
   }
 
   @override
@@ -84,12 +84,12 @@ class _DrawPageState extends State<DrawPage> {
     widget._loc =
         Provider.of<DataProvider>(context, listen: false).getLanguage();
     _axisLabelX = Positioned(
-      child: AxisLabel(label: 'x'),
+      child: AxisLabel(label: 'x', direction: '',),
       right: 4.0,
       top: _maxSize / 2 + _newGD.displaceY,
     );
     _axisLabelY = Positioned(
-      child: AxisLabel(label: 'y'),
+      child: AxisLabel(label: 'y', direction: '',),
       left: _maxSize / 2 + _newGD.displaceX,
       // top: _maxSize / 2 + _newGD.displaceY,
     );
@@ -300,12 +300,12 @@ class _DrawPageState extends State<DrawPage> {
         },
       );
       try {
-        RenderRepaintBoundary boundary =
-            _globalKey.currentContext.findRenderObject();
-        ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-        ByteData byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
-        var pngBytes = byteData.buffer.asUint8List();
+
+        final RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+        final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+        final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        final Uint8List pngBytes = byteData!.buffer.asUint8List();
+
         // var bs64 = base64Encode(pngBytes);
         Provider.of<DataProvider>(context, listen: false)
             .saveCurrentData(pngBytes);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/models/named_widget.dart';
-import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares_calculator/models/named_widget.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:core';
 
 typedef IntValue = void Function(int);
 
@@ -10,10 +11,10 @@ class DropDownList extends StatefulWidget {
   Map<int, NamedWidget> itemsList;
   int currentValue;
   IntValue callBack;
-  _DropDownListState listState;
+  _DropDownListState listState = _DropDownListState(itemsList: {}, currentValue: 0, callBack: (int ) {  },);
 
   DropDownList(
-      {Key key, @required this.itemsList, this.currentValue, this.callBack})
+      {Key? key, required this.itemsList, required this.currentValue, required this.callBack})
       : super(key: key);
 
   @override
@@ -34,14 +35,15 @@ class _DropDownListState extends State<DropDownList> {
   Map<int, NamedWidget> itemsList;
   IntValue callBack;
   int currentValue;
-  ThemeData _themeData;
+  ThemeData _themeData = ThemeData();
 
   _DropDownListState(
-      {@required this.itemsList, this.currentValue, this.callBack});
+      {required this.itemsList, required this.currentValue, required this.callBack});
 
+  List<DropdownMenuItem<int>> _dropdownItemsList = [];
   Map<int, NamedWidget> _dropdownItems = new Map<int, NamedWidget>();
 
-  int _selectedItem;
+  int _selectedItem = 0;
 
   void initState() {
     super.initState();
@@ -50,11 +52,11 @@ class _DropDownListState extends State<DropDownList> {
       _dropdownItems.putIfAbsent(key, () => value);
     });
     // _themeData = Provider.of<DataProvider>(context).theme;
-    _selectedItem = buildDropDownMenuItems(_dropdownItems)[currentValue].value;
+    _selectedItem = buildDropDownMenuItems(_dropdownItems)[currentValue].value!;
   }
 
-  List<DropdownMenuItem> buildDropDownMenuItems(Map<int, NamedWidget> listItems) {
-    List<DropdownMenuItem> items = [];
+  List<DropdownMenuItem<int>> buildDropDownMenuItems(Map<int, NamedWidget> listItems) {
+    List<DropdownMenuItem<int>> items = [];
     listItems.forEach((key, value) {
       items.add(DropdownMenuItem(
         child: value.widget,
@@ -71,19 +73,36 @@ class _DropDownListState extends State<DropDownList> {
     return Container(
       child: Container(
         padding: EdgeInsets.all(5.0),
-        child: DropdownButton(
-            //underline: SizedBox(child: Container(color: Colors.red,),),
-            dropdownColor: _themeData.primaryColor,
-            iconEnabledColor: _themeData.primaryTextTheme.bodyText1.color,
-            value: _selectedItem,
-            items: buildDropDownMenuItems(_dropdownItems),
-            onChanged: (value) {
-              setState(() {
-                _selectedItem = value;
-                widget.currentValue = _selectedItem;
-                widget.callBack(widget.currentValue);
-              });
-            }),
+        child: DropdownButton<int>(
+          value: _selectedItem,
+          icon: const Icon(Icons.arrow_downward),
+          elevation: 16,
+          style: const TextStyle(color: Colors.deepPurple),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
+          ),
+          onChanged: (int? value) {
+            // This is called when the user selects an item.
+            setState(() {
+              _selectedItem = value!;
+            });
+          },
+          items: buildDropDownMenuItems(_dropdownItems),
+        ),
+        // DropdownButton(
+        //     //underline: SizedBox(child: Container(color: Colors.red,),),
+        //     dropdownColor: _themeData.primaryColor,
+        //     iconEnabledColor: _themeData.primaryTextTheme.bodyText1?.color,
+        //     value: _selectedItem,
+        //     items: buildDropDownMenuItems(_dropdownItems),
+        //     onChanged: (value) {
+        //       setState(() {
+        //         _selectedItem = value as int;
+        //         widget.currentValue = _selectedItem;
+        //         widget.callBack(widget.currentValue);
+        //       });
+        //     }),
       ),
     );
   }
@@ -96,7 +115,7 @@ class _DropDownListState extends State<DropDownList> {
         _dropdownItems.putIfAbsent(key, () => value);
       });
       _selectedItem =
-          buildDropDownMenuItems(_dropdownItems)[currentValue].value;
+          buildDropDownMenuItems(_dropdownItems)[currentValue].value!;
     });
   }
 }

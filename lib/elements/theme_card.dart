@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/my_radio_button.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/elements/my_radio_button.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ThemeCard extends StatelessWidget {
-  ThemeData _themeData;
+  ThemeData _themeData = ThemeData();
   int index;
-  ThemeCard({this.index});
+  ThemeCard({required this.index});
   @override
   Widget build(BuildContext context) {
-    _themeData = Provider.of<DataProvider>(context).getThemeModelById(index).data;
+    _themeData = Provider.of<DataProvider>(context).getThemeModelById(index)!.data;
     if(_themeData == null)
       _themeData = ThemeData();
     return Container(
@@ -29,7 +29,7 @@ class ThemeCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                        Provider.of<DataProvider>(context).getThemeModelById(index).name,
+                        Provider.of<DataProvider>(context).getThemeModelById(index)!.name,
                       style: TextStyle(color: _themeData.indicatorColor),
                     ),
                   ),

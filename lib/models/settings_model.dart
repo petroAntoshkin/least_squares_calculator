@@ -4,7 +4,7 @@ class SettingsModel{
   String language;
   bool showGrid;
   int themeId;
-  SettingsModel({this.language, this.showGrid, this.themeId});
+  SettingsModel({required this.language, required this.showGrid, required this.themeId});
 
 
   String toString() {

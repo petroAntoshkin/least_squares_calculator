@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 
 // ignore: must_be_immutable
 class DotCircle extends StatelessWidget {
   Color color;
-  DotCircle({this.color : Colors.black});
+  DotCircle({this.color = Colors.black});
   @override
   Widget build(BuildContext context) {
     return Container(

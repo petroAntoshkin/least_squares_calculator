@@ -1,16 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
-import 'package:least_squares/utils/string_utils.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
+import 'package:least_squares_calculator/utils/string_utils.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class PowForm extends StatefulWidget {
   final String flag;
-  PowForm({@required this.flag});
+  PowForm({required this.flag});
   @override
   _PowFormState createState() => _PowFormState();
 }
@@ -77,7 +77,7 @@ class _PowFormState extends State<PowForm> {
           child: Text(
             'x1$_str${StringUtils.getPowSuperscript(powValue)}',
             style: TextStyle(
-              color: _themeData.primaryTextTheme.bodyText1.color,
+              color: _themeData.primaryTextTheme.bodyText1?.color,
               fontSize: 14.0,
             ),
           ),

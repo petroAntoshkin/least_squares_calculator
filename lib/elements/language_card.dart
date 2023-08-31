@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/my_radio_button.dart';
-import 'package:least_squares/models/language_model.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/elements/my_radio_button.dart';
+import 'package:least_squares_calculator/models/language_model.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class LanguageCard extends StatelessWidget {
   LanguageModel languageModel;
 
-  LanguageCard({this.languageModel});
+  LanguageCard({required this.languageModel});
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 
 class BottomNavPainter extends CustomPainter {
   Color color;
   double holeHeight = Presets.MINIMUM_TAP_SIZE;
 
-  BottomNavPainter({this.color, this.holeHeight});
+  BottomNavPainter({required this.color, required this.holeHeight});
 
   final _arcSize = Presets.ARC_SIZE;
 

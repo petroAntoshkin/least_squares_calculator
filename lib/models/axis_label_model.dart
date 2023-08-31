@@ -5,9 +5,9 @@ class AxisLabelModel {
   bool visibility;
 
   AxisLabelModel({
-    this.flipped: false,
-    this.text,
-    this.rotationTimes: 0,
-    this.visibility: true,
+    this.flipped = false,
+    this.text = '',
+    this.rotationTimes = 0,
+    this.visibility = true,
   });
 }

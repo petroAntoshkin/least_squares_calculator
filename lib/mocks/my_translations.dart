@@ -2,9 +2,8 @@ import 'dart:core';
 
 
 class MyTranslations{
-  Map<String, Map<String, String>> _allTexts;
+  Map<String, Map<String, String>> _allTexts = new Map();
   MyTranslations(){
-    _allTexts = new Map();
     Map<String, String> en = new Map();
     Map<String, String> zh = new Map();
     Map<String, String> hi = new Map();
@@ -49,6 +48,7 @@ class MyTranslations{
     en.putIfAbsent('copy_success_message', () => 'Data copied successfully');
     en.putIfAbsent('load', () => 'Load Data');
     en.putIfAbsent('warning', () => 'Warning');
+    en.putIfAbsent('shareTitle', () => 'Share');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('language', () => '语');
@@ -82,6 +82,7 @@ class MyTranslations{
     zh.putIfAbsent('copy_success_message', () => '数据复制成功');
     zh.putIfAbsent('load', () => '加载数据');
     zh.putIfAbsent('warning', () => '警告');
+    zh.putIfAbsent('shareTitle', () => '分享');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('language', () => 'भाषा');
@@ -115,6 +116,7 @@ class MyTranslations{
     hi.putIfAbsent('copy_success_message', () => 'डेटा सफलतापूर्वक कॉपी किया गया');
     hi.putIfAbsent('load', () => 'लोड डेटा');
     hi.putIfAbsent('warning', () => 'चेतावनी');
+    hi.putIfAbsent('shareTitle', () => 'शेयर करना');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('language', () => 'Idioma');
@@ -148,6 +150,7 @@ class MyTranslations{
     es.putIfAbsent('copy_success_message', () => 'Datos copiados correctamente');
     es.putIfAbsent('load', () => 'Cargar datos');
     es.putIfAbsent('warning', () => 'Advertencia');
+    es.putIfAbsent('shareTitle', () => 'Compartir');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('language', () => 'Langue');
@@ -181,6 +184,7 @@ class MyTranslations{
     fr.putIfAbsent('copy_success_message', () => 'Données copiées avec succès');
     fr.putIfAbsent('load', () => 'Charger les données');
     fr.putIfAbsent('warning', () => 'Avertissement');
+    fr.putIfAbsent('shareTitle', () => 'Partager');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('language', () => 'Sprache');
@@ -215,6 +219,7 @@ class MyTranslations{
     de.putIfAbsent('copy_success_message', () => 'Daten erfolgreich kopiert');
     de.putIfAbsent('load', () => 'Lade Daten');
     de.putIfAbsent('warning', () => 'Warnung');
+    de.putIfAbsent('shareTitle', () => 'Aktie');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('language', () => 'Linguagem');
@@ -248,6 +253,7 @@ class MyTranslations{
     pt.putIfAbsent('copy_success_message', () => 'Dados copiados com sucesso');
     pt.putIfAbsent('load', () => 'Carregar dados');
     pt.putIfAbsent('warning', () => 'Aviso');
+    pt.putIfAbsent('shareTitle', () => 'Partilhar');
     ///it
     it.putIfAbsent('title', () => 'Calcolatrice dei minimi quadrati');
     it.putIfAbsent('language', () => 'Lingua');
@@ -281,6 +287,7 @@ class MyTranslations{
     it.putIfAbsent('copy_success_message', () => 'Dati copiati con successo');
     it.putIfAbsent('load', () => 'Caricare dati');
     it.putIfAbsent('warning', () => 'Avvertimento');
+    it.putIfAbsent('shareTitle', () => 'Condividere');
     ///pl
     pl.putIfAbsent('title', () => 'Kalkulator najmniejszych kwadratów');
     pl.putIfAbsent('language', () => 'Język');
@@ -314,6 +321,7 @@ class MyTranslations{
     pl.putIfAbsent('copy_success_message', () => 'Dane skopiowane pomyślnie');
     pl.putIfAbsent('load', () => 'Załaduj dane');
     pl.putIfAbsent('warning', () => 'Ostrzeżenie');
+    pl.putIfAbsent('shareTitle', () => 'Współdzielić');
     ///ua
     uk.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     uk.putIfAbsent('language', () => 'Мова');
@@ -347,6 +355,7 @@ class MyTranslations{
     uk.putIfAbsent('copy_success_message', () => 'Дані успішно скопійовані');
     uk.putIfAbsent('load', () => 'Завантажити дані');
     uk.putIfAbsent('warning', () => 'Попередження');
+    uk.putIfAbsent('shareTitle', () => 'Поділитися');
     ///ru
     ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
     ru.putIfAbsent('language', () => 'Язык');
@@ -385,14 +394,13 @@ class MyTranslations{
     _allTexts.putIfAbsent('it', () => it);
     _allTexts.putIfAbsent('pl', () => pl);
     _allTexts.putIfAbsent('uk', () => uk);
-    // _allTexts.putIfAbsent('pl', () => pl);
   }
 
   String getLocale(String loc, String phrase){
     String _resultString = phrase;
     if(_allTexts[loc] == null)
       loc = 'en';
-    _allTexts[loc].forEach((key, value) {
+    _allTexts[loc]?.forEach((key, value) {
       int _result = key.compareTo(phrase);
       if(_result == 0)
         _resultString = value;

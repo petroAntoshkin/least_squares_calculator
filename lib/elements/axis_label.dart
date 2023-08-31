@@ -1,22 +1,22 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:least_squares/models/axis_label_model.dart';
-import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares_calculator/models/axis_label_model.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class AxisLabel extends StatelessWidget {
-  ThemeData _themeData;
+  late ThemeData _themeData;
 
-  AxisLabelModel labelModel;
+  late AxisLabelModel labelModel;
   String label;
   String direction;
-  double _rotation, _displaceX, _displaceY;
+  double _rotation = 0, _displaceX = 0.0, _displaceY = 0.0;
   final _width = 50.0;
   final _height = 20.0;
 
-  AxisLabel({this.label, this.direction});
+  AxisLabel({required this.label, required this.direction});
 
   @override
   Widget build(BuildContext context) {

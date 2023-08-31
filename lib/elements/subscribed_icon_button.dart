@@ -6,7 +6,7 @@ class SubscribedIconButton extends StatelessWidget {
   final iconColor;
 
   const SubscribedIconButton(
-      {Key key, this.text, this.iconData, this.iconColor})
+      {Key? key, this.text, this.iconData, this.iconColor})
       : super(key: key);
 
   @override

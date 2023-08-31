@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/models/theme_list_model.dart';
+import 'package:least_squares_calculator/models/theme_list_model.dart';
 
 class ThemesMock {
   // Color _hexToColor(String code) {

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/ad_helper.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/ad_helper.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
-import 'package:least_squares/elements/my_bottom_nav_bar.dart';
-import 'package:least_squares/screens/calculation_page.dart';
-import 'package:least_squares/screens/draw_page.dart';
-import 'package:least_squares/screens/images_page.dart';
-import 'package:least_squares/screens/settings_page.dart';
+import 'package:least_squares_calculator/elements/my_bottom_nav_bar.dart';
+import 'package:least_squares_calculator/screens/calculation_page.dart';
+import 'package:least_squares_calculator/screens/draw_page.dart';
+import 'package:least_squares_calculator/screens/images_page.dart';
+import 'package:least_squares_calculator/screens/settings_page.dart';
 import 'providers/data_provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
 }
 
 class LSMHomePage extends StatefulWidget {
-  LSMHomePage({Key key, this.title}) : super(key: key);
+  LSMHomePage({Key? key, this.title = ''}) : super(key: key);
 
   final String title;
 
@@ -59,10 +59,10 @@ class _LSMHomePageState extends State<LSMHomePage>
     with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
-  TabController _tabController;
+  late TabController _tabController;
 
   // Add _bannerAd
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
 
   // Add _isBannerAdReady
   bool _isBannerAdReady = false;
@@ -104,7 +104,7 @@ class _LSMHomePageState extends State<LSMHomePage>
   Widget build(BuildContext context) {
     // print('rebuild home page');
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
-    _tabController.animation.addListener(() {
+    _tabController.animation?.addListener(() {
       if (_tabController.previousIndex == 0) {
         Provider.of<DataProvider>(context, listen: false).cancelEditValue();
       }

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:least_squares/elements/blind.dart';
-import 'package:least_squares/elements/bottom_nav_painter.dart';
-import 'package:least_squares/elements/cancel_edit_button.dart';
-import 'package:least_squares/elements/my_focus_button.dart';
-import 'package:least_squares/elements/results_bar.dart';
-import 'package:least_squares/elements/subscribed_icon_button.dart';
-import 'package:least_squares/elements/pow_form.dart';
-import 'package:least_squares/elements/value_text_field.dart';
-import 'package:least_squares/elements/values_pair.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/elements/blind.dart';
+import 'package:least_squares_calculator/elements/bottom_nav_painter.dart';
+import 'package:least_squares_calculator/elements/cancel_edit_button.dart';
+import 'package:least_squares_calculator/elements/my_focus_button.dart';
+import 'package:least_squares_calculator/elements/results_bar.dart';
+import 'package:least_squares_calculator/elements/subscribed_icon_button.dart';
+import 'package:least_squares_calculator/elements/pow_form.dart';
+import 'package:least_squares_calculator/elements/value_text_field.dart';
+import 'package:least_squares_calculator/elements/values_pair.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 
-// import 'package:least_squares/utils/string_utils.dart';
+// import 'package:least_squares_calculator/utils/string_utils.dart';
 import 'package:provider/provider.dart';
 
 class CalculationPage extends StatefulWidget {
@@ -27,10 +27,10 @@ class _CalculationPageState extends State<CalculationPage> {
   final arcSize = Presets.ARC_SIZE;
   final TextEditingController _controllerX = TextEditingController(),
       _controllerY = TextEditingController();
-  ScrollController _dataScrollController;
+  late ScrollController _dataScrollController;
 
   // int _xPow = 0, _yPow = 0;
-  BuildContext _context;
+  late BuildContext _context;
 
   bool editMode = false;
 
@@ -255,7 +255,7 @@ class _CalculationPageState extends State<CalculationPage> {
   void _cancelEdit() {
     _clearControllers();
     Provider.of<DataProvider>(context, listen: false).cancelEditValue();
-    FocusManager.instance.primaryFocus.unfocus();
+    FocusManager.instance.primaryFocus!.unfocus();
   }
 
   // get keyboardIsVisible {
@@ -267,7 +267,7 @@ class _CalculationPageState extends State<CalculationPage> {
         .addMoreValues(_controllerX.text, _controllerY.text);
     if (_error == 0) {
       _clearControllers();
-      FocusManager.instance.primaryFocus.unfocus();
+      FocusManager.instance.primaryFocus!.unfocus();
       _scrollDown();
     } else {
       showDialog(

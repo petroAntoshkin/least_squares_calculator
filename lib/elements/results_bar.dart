@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:least_squares/elements/value_text.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/elements/value_text.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 class ResultBar extends StatelessWidget {
-  const ResultBar({Key key}) : super(key: key);
+  const ResultBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

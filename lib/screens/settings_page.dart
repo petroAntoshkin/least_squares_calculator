@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/language_card.dart';
-import 'package:least_squares/elements/theme_card.dart';
-import 'package:least_squares/mocks/lang_mock.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/mocks/themes_mock.dart';
-import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares_calculator/elements/language_card.dart';
+import 'package:least_squares_calculator/elements/theme_card.dart';
+import 'package:least_squares_calculator/mocks/lang_mock.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/mocks/themes_mock.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
-// import 'package:least_squares/providers/data_provider.dart';
+// import 'package:least_squares_calculator/providers/data_provider.dart';
 // import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -38,7 +38,7 @@ class SettingsPage extends StatelessWidget {
         ),
         Divider(thickness: 2.0),
         for (int i = 0; i < _langMap.languges.length; i++)
-          LanguageCard(languageModel: _langMap.languges[i]),
+          LanguageCard(languageModel: _langMap.languges[i]!),
         Padding(
           padding: const EdgeInsets.only(top: 30.0, bottom: 10, left: 10),
           child: Text(
@@ -67,6 +67,6 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget langItemBuilder(BuildContext context, int index) {
-    return LanguageCard(languageModel: _langMap.languges[index]);
+    return LanguageCard(languageModel: _langMap.languges[index]!);
   }
 }

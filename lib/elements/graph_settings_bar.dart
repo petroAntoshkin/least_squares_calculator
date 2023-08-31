@@ -1,36 +1,36 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/bottom_nav_painter.dart';
-import 'package:least_squares/elements/drop_down_list.dart';
-import 'package:least_squares/elements/list_widgets/approx_linear.dart';
-import 'package:least_squares/elements/list_widgets/approx_log.dart';
-import 'package:least_squares/elements/list_widgets/approx_parabolic.dart';
-import 'package:least_squares/elements/list_widgets/approx_pow.dart';
-import 'package:least_squares/elements/list_widgets/dot_circle.dart';
-import 'package:least_squares/elements/list_widgets/dot_rhomb.dart';
-import 'package:least_squares/elements/list_widgets/dot_square.dart';
-import 'package:least_squares/elements/list_widgets/dot_crest.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/models/axis_label_model.dart';
-import 'package:least_squares/models/graphic_data.dart';
-import 'package:least_squares/models/named_widget.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/elements/bottom_nav_painter.dart';
+import 'package:least_squares_calculator/elements/drop_down_list.dart';
+import 'package:least_squares_calculator/elements/list_widgets/approx_linear.dart';
+import 'package:least_squares_calculator/elements/list_widgets/approx_log.dart';
+import 'package:least_squares_calculator/elements/list_widgets/approx_parabolic.dart';
+import 'package:least_squares_calculator/elements/list_widgets/approx_pow.dart';
+import 'package:least_squares_calculator/elements/list_widgets/dot_circle.dart';
+import 'package:least_squares_calculator/elements/list_widgets/dot_rhomb.dart';
+import 'package:least_squares_calculator/elements/list_widgets/dot_square.dart';
+import 'package:least_squares_calculator/elements/list_widgets/dot_crest.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/models/axis_label_model.dart';
+import 'package:least_squares_calculator/models/graphic_data.dart';
+import 'package:least_squares_calculator/models/named_widget.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class GraphSettingsBar extends StatefulWidget {
-  String _loc;
+  String _loc = 'en';
 
   @override
   _GraphSettingsBarState createState() => _GraphSettingsBarState();
 }
 
 class _GraphSettingsBarState extends State<GraphSettingsBar> {
-  ThemeData _themeData;
-  GraphicData _graphicsData;
-  double _shortSideSize;
+  ThemeData _themeData = ThemeData();
+  GraphicData _graphicsData = GraphicData(dataDots: [], trendDots: []);
+  double _shortSideSize = 0.5;
 
   // final _collapsedHeight = Presets.COLLAPSED_SETTINGS_BAR_HEIGHT;
   // final _expandedHeight = 300.0;
@@ -38,7 +38,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
   Map<int, NamedWidget> _approxMap = Map();
   Map<int, NamedWidget> _dotsMap = Map();
   int /*_approximationType = 0,*/ _dotType = 0;
-  AxisLabelModel _labelModelX, _labelModelY;
+  AxisLabelModel _labelModelX = AxisLabelModel(), _labelModelY = AxisLabelModel();
   final double _buttonSize = 48.0, _iconSize = 22.0;
   final _focusNodeX = FocusNode();
   final _focusNodeY = FocusNode();
@@ -87,32 +87,32 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
         Provider.of<DataProvider>(context, listen: false).getAxisModel('x');
     _labelModelY =
         Provider.of<DataProvider>(context, listen: false).getAxisModel('y');
-    _approxMap[0].widget = ApproxLinear(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _approxMap[0]?.widget = ApproxLinear(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
-    _approxMap[1].widget = ApproxParabolic(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _approxMap[1]?.widget = ApproxParabolic(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
-    _approxMap[2].widget = ApproxPow(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _approxMap[2]?.widget = ApproxPow(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
-    _approxMap[3].widget = ApproxLog(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _approxMap[3]?.widget = ApproxLog(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
 
     // widget._appMap[4] = 'exponential';
     // widget._appMap[5] = 'hyperbolic';
-    _dotsMap[0].widget = DotCircle(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _dotsMap[0]?.widget = DotCircle(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
-    _dotsMap[1].widget = DotSquare(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _dotsMap[1]?.widget = DotSquare(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
-    _dotsMap[2].widget = DotRhomb(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _dotsMap[2]?.widget = DotRhomb(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
-    _dotsMap[3].widget = DotCrest(
-      color: _themeData.primaryTextTheme.bodyText1.color,
+    _dotsMap[3]?.widget = DotCrest(
+      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
     );
 
     _controllerX.text = _labelModelX.text;
@@ -231,7 +231,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                             onChanged: (value) {
                                               Provider.of<DataProvider>(context,
                                                       listen: false)
-                                                  .changeGridShow(value);
+                                                  .changeGridShow(value = false);
                                               setState(() {});
                                             },
                                           ),
@@ -240,7 +240,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                                 widget._loc, 'show_grid'),
                                             style: TextStyle(
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1.color,
+                                                  .bodyText1?.color,
                                             ),
                                           ),
                                         ],
@@ -269,7 +269,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               .getLocale(widget._loc, 'dot_type'),
                                           style: TextStyle(
                                             color: _themeData
-                                                .primaryTextTheme.bodyText1.color,
+                                                .primaryTextTheme.bodyText1?.color,
                                           ),
                                         ),
                                       ),
@@ -299,7 +299,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               style: TextStyle(
                                                 fontSize: 12.0,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1.color,
+                                                    .bodyText1?.color,
                                               ),
                                             ),
                                           ),
@@ -322,7 +322,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               style: TextStyle(
                                                 fontSize: 12.0,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1.color,
+                                                    .bodyText1?.color,
                                               ),
                                             ),
                                           ),
@@ -357,7 +357,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                                   ? Icons.visibility_outlined
                                                   : Icons.visibility_off_outlined,
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1.color,
+                                                  .bodyText1?.color,
                                               size: _iconSize,
                                             ),
                                           ),
@@ -381,7 +381,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               child: Icon(
                                                 Icons.flip_outlined,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1.color,
+                                                    .bodyText1?.color,
                                                 size: _iconSize,
                                               ),
                                             ),
@@ -411,7 +411,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                                   ? Icons.visibility_outlined
                                                   : Icons.visibility_off_outlined,
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1.color,
+                                                  .bodyText1?.color,
                                               size: _iconSize,
                                             ),
                                           ),
@@ -431,7 +431,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               Icons
                                                   .rotate_90_degrees_ccw_outlined,
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1.color,
+                                                  .bodyText1?.color,
                                               size: _iconSize,
                                             ),
                                           ),
@@ -454,7 +454,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               child: Icon(
                                                 Icons.flip_outlined,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1.color,
+                                                    .bodyText1?.color,
                                                 size: _iconSize,
                                               ),
                                             ),
@@ -498,7 +498,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
           Text(
             MyTranslations().getLocale(widget._loc, 'customization'),
             style: TextStyle(
-              color: _themeData.primaryTextTheme.bodyText1.color,
+              color: _themeData.primaryTextTheme.bodyText1?.color,
             ),
           ),
           !leading
@@ -519,12 +519,12 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
         onEditingComplete: () {
           Provider.of<DataProvider>(context, listen: false)
               .changeLabelsText(_controllerX.text, _controllerY.text);
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         textAlign: TextAlign.center,
-        cursorColor: _themeData.primaryTextTheme.bodyText1.color,
+        cursorColor: _themeData.primaryTextTheme.bodyText1?.color,
         style: TextStyle(
-          color: _themeData.primaryTextTheme.bodyText1.color,
+          color: _themeData.primaryTextTheme.bodyText1?.color,
         ),
         controller: controller,
       ),

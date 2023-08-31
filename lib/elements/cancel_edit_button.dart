@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 class CancelEditButton extends StatefulWidget {
 
-  final Function callback;
-  const CancelEditButton({Key key, this.callback}) : super(key: key);
+  final void Function()? callback;
+  const CancelEditButton({Key? key, required this.callback}) : super(key: key);
 
   @override
   State<CancelEditButton> createState() => _CancelEditButtonState();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/value_text.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares_calculator/elements/value_text.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../styles_and_presets.dart';
@@ -127,7 +127,7 @@ class ValuesPair extends StatelessWidget {
   }
 
   Widget edgeButton(BuildContext context,
-      {@required IconData iconData, @required Function callback}) {
+      {required IconData iconData, required void Function()? callback}) {
     final ThemeData themeData =
         Provider.of<DataProvider>(context, listen: false).theme;
     return SizedBox(

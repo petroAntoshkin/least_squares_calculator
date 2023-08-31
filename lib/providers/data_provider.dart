@@ -2,30 +2,30 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:least_squares/mixins/calculate_mixin.dart';
-import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/mocks/themes_mock.dart';
-import 'package:least_squares/models/axis_label_model.dart';
-import 'package:least_squares/models/image_pare.dart';
-import 'package:least_squares/models/settings_model.dart';
-import 'package:least_squares/models/theme_list_model.dart';
-import 'package:least_squares/utils/string_utils.dart';
+import 'package:least_squares_calculator/mixins/calculate_mixin.dart';
+import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/mocks/themes_mock.dart';
+import 'package:least_squares_calculator/models/axis_label_model.dart';
+import 'package:least_squares_calculator/models/image_pare.dart';
+import 'package:least_squares_calculator/models/settings_model.dart';
+import 'package:least_squares_calculator/models/theme_list_model.dart';
+import 'package:least_squares_calculator/utils/string_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DataProvider extends ChangeNotifier with CalculateMixin {
-  List<Function> _contextFunctions = List.generate(4, (index) => null);
+  List<Function> _contextFunctions = List.generate(4, (index) => () {});
   final String _settingsJson = '/settings.json';
   final String _dataJson = '/data_snapshot.json';
 
 
-  Directory _appDirectory;
+  late Directory _appDirectory;
 
   // int dotTypeIndex = 0;
-  ThemeData _themeData;
-  int _themeID;
-  List<ImagePair> _imagesList;
-  String _defaultLocale;
-  double _bottomNavBarHeight;
+  ThemeData _themeData = ThemeData();
+  int _themeID = 0;
+  List<ImagePair> _imagesList = [];
+  String _defaultLocale = 'en';
+  double _bottomNavBarHeight = 30;
 
   String focusOnText = '';
 
@@ -33,12 +33,12 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   final Map<String, AxisLabelModel> _labels = Map();
 
-  SettingsModel _settingsModel;
+  SettingsModel _settingsModel = SettingsModel(language: 'en', showGrid: true, themeId: 0);
 
   DataProvider() {
     _defaultLocale = _getDeviceLocale(Platform.localeName);
     _resetSettings();
-    _themeData = ThemesMock().themes[_themeID].data;
+    _themeData = ThemesMock().themes[_themeID]!.data;
     _labels['x'] = AxisLabelModel(text: 'X');
     _labels['y'] = AxisLabelModel(text: 'Y');
     _imagesList = [];
@@ -51,7 +51,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   ///bottom navBar
   // ignore: unnecessary_getters_setters
-  get navBarHe {
+  double get navBarHe {
     return _bottomNavBarHeight;
   }
 
@@ -69,28 +69,28 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   ///labels section
   AxisLabelModel getAxisModel(String axis) {
-    return _labels[axis];
+    return _labels[axis]!;
   }
 
   void changeLabelVis(String axis, bool visibility) {
-    _labels[axis].visibility = visibility;
+    _labels[axis]?.visibility = visibility;
     notifyListeners();
   }
 
   void changeLabelsText(String xText, String yText) {
-    _labels['x'].text = xText;
-    _labels['y'].text = yText;
+    _labels['x']?.text = xText;
+    _labels['y']?.text = yText;
     notifyListeners();
   }
 
   void changeLabelRotation(String axis) {
-    _labels[axis].rotationTimes++;
-    if (_labels[axis].rotationTimes > 1) _labels[axis].rotationTimes = 0;
+    _labels[axis]?.rotationTimes++;
+    if (_labels[axis]!.rotationTimes > 1) _labels[axis]!.rotationTimes = 0;
     notifyListeners();
   }
 
   void changeLabelFlip(String axis, bool flip) {
-    _labels[axis].flipped = flip;
+    _labels[axis]?.flipped = flip;
     notifyListeners();
   }
 
@@ -137,7 +137,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   void _setTheme(int id) {
     _themeID = id;
-    _themeData = ThemesMock().themes[_themeID].data;
+    _themeData = ThemesMock().themes[_themeID]!.data;
     _settingsModel.themeId = _themeID;
     // notifyListeners();
   }
@@ -150,7 +150,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
     return _themeData;
   }
 
-  ThemeListModel getThemeModelById(int index) {
+  ThemeListModel? getThemeModelById(int index) {
     return ThemesMock().themes[index];
   }
 
@@ -253,13 +253,13 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
     // FocusManager.instance.primaryFocus.unfocus();
   }
 
-  int getPowValue(String flag) => powMap[flag];
+  int getPowValue(String flag) => powMap[flag]!;
 
   int changePowValue(String flag, int value){
-    if((powMap[flag] + value).abs() <= powMaximum) {
-      return powMap[flag] += value;
+    if((powMap[flag]! + value).abs() <= powMaximum) {
+      return powMap[flag] = powMap[flag]! + value;
     } else {
-      return null;
+      return 0;
     }
   }
 
@@ -274,7 +274,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   }
 
   Future<void> _readSettingsData() async {
-    SettingsModel _result = new SettingsModel();
+    SettingsModel _result = SettingsModel(language: '', showGrid: true, themeId: 0);
     // print('call settings provider read data');
     _appDirectory = await getApplicationDocumentsDirectory();
     List<FileSystemEntity> _list = _appDirectory.listSync();
@@ -311,7 +311,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
     return file.writeAsString(getAllDataString());
   }
 
-  void readSavedData({@required String fileName}) async {
+  void readSavedData({required String fileName}) async {
     final String _name =
         '${_appDirectory.path}/${fileName.split('.png')[0]}.json';
     clearAllData();
@@ -364,7 +364,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   void saveCurrentData(var pngBytes) {
     final _fileName =
-        '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-')}';
+        '${_appDirectory.path}/graph_${StringUtils.replaceOneSymbol(StringUtils.replaceOneSymbol('${DateTime.now()}', ':', '-'), ' ', '_')}';
     final _pngPath = '$_fileName.png';
     File('$_pngPath').writeAsBytesSync(pngBytes.buffer.asInt8List());
     _saveLastData(_fileName);

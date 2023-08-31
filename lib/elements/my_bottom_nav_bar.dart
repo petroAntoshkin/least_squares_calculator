@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:least_squares/mocks/my_translations.dart';
-import 'package:least_squares/providers/data_provider.dart';
+// import 'package:least_squares_calculator/mocks/my_translations.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -12,7 +12,7 @@ class MyBottomNavBar extends StatelessWidget {
   final _gapHeight = 6.0;
   final double bannerHeight;
   final Widget banner;
-  MyBottomNavBar({this.tabIndex, this.banner, this.bannerHeight: 54});
+  MyBottomNavBar({required this.tabIndex, required this.banner, this.bannerHeight = 54});
   @override
   Widget build(BuildContext context) {
     // final _height = MediaQuery.of(context).size.height * 0.14 + bannerHeight;

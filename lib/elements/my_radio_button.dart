@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MyRadioButton extends StatefulWidget {
   bool isSelected;
 
-  MyRadioButton({this.isSelected});
+  MyRadioButton({this.isSelected = false});
 
   @override
   _MyRadioButtonState createState() => _MyRadioButtonState();
@@ -12,8 +12,8 @@ class MyRadioButton extends StatefulWidget {
 
 class _MyRadioButtonState extends State<MyRadioButton>
     with SingleTickerProviderStateMixin {
-  Animation<double> animation;
-  AnimationController controller;
+  late Animation<double> animation;
+  late AnimationController controller;
   bool _isSelected = false;
 
   @override

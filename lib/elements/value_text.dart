@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ValueText extends StatelessWidget {
   String text;
-  ThemeData _themeData;
+  ThemeData _themeData = ThemeData();
   TextStyle style;
 
-  ValueText({@required this.text, this.style});
+  ValueText({required this.text, required this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ValueText extends StatelessWidget {
               text,
               style: TextStyle(
                 fontSize: 17.0,
-                color: _themeData.primaryTextTheme.bodyText1.color,
+                color: _themeData.primaryTextTheme.bodyText1?.color,
               ),
             ),
           ),

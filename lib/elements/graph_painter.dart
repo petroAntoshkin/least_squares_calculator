@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/models/graphic_data.dart';
+import 'package:least_squares_calculator/models/graphic_data.dart';
 
 class DrawPainter extends CustomPainter {
   ThemeData themeData;
   GraphicData graphicData;
   Listenable repaint;
 
-  DrawPainter({this.repaint, this.graphicData, this.themeData});
+  DrawPainter({required this.repaint, required this.graphicData, required this.themeData});
 
   void paint(Canvas canvas, Size size) {
     final double _maxSize = size.width > size.height ? size.height : size.width;

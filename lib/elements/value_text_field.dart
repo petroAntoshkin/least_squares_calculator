@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:least_squares/providers/data_provider.dart';
-import 'package:least_squares/styles_and_presets.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
+import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:provider/provider.dart';
 
 class ValueTextField extends StatelessWidget {
   final Function callback;
   final Function(String) onChangeCallback;
   final flag;
-  ValueTextField({Key key, @required this.flag, @required this.callback, this.onChangeCallback}) : super(key: key);
+  ValueTextField({Key? key, @required this.flag, required this.callback, required this.onChangeCallback}) : super(key: key);
 /*
   @override
   State<ValueTextField> createState() => _ValueTextFieldState();

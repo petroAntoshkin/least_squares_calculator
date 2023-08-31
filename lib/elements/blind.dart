@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class Blind extends StatelessWidget {
-  const Blind({Key key}) : super(key: key);
+  const Blind({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

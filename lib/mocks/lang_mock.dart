@@ -1,4 +1,4 @@
-import 'package:least_squares/models/language_model.dart';
+import 'package:least_squares_calculator/models/language_model.dart';
 
 class LanguagesMock {
   Map<int, LanguageModel> languges = Map();

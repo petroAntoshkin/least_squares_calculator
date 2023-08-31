@@ -47,11 +47,11 @@ class StringUtils {
     return pow > 0 ? '$base$_res' : '$_res$base';
   }
 
-  static String doubleShift({double doubleBase, int powValue}) {
+  static String doubleShift({required double doubleBase, required int powValue}) {
     if (powValue == 0 || doubleBase == 0) {
       return '$doubleBase';
     }
-    String right, left, result;
+    String right, left, result = '';
     var tt = '$doubleBase'.split('.');
     left = tt[0];
     right = tt[1];

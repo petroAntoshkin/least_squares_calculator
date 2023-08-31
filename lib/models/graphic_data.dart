@@ -15,18 +15,18 @@ class GraphicData {
   bool showGrid;
 
   GraphicData({
-    this.gridCount,
-    this.dataDots,
-    this.trendDots,
-    this.zoomFactorX,
-    this.zoomFactorY,
-    this.displaceX,
-    this.displaceY,
-    this.maxSize,
-    this.axisArrowOffset: 4.0,
-    this.dotType: 'circle',
-    this.dotSize: 5.0,
-    this.showGrid,
+    this.gridCount = 5,
+    required this.dataDots,
+    required this.trendDots,
+    this.zoomFactorX = 1,
+    this.zoomFactorY = 1,
+    this.displaceX = 0,
+    this.displaceY = 0,
+    this.maxSize = 10,
+    this.axisArrowOffset = 4.0,
+    this.dotType = 'circle',
+    this.dotSize = 5.0,
+    this.showGrid = true,
   });
 
   GraphicData cloneData() {

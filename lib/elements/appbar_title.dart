@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:least_squares/elements/value_text.dart';
-import 'package:least_squares/providers/data_provider.dart';
+import 'package:least_squares_calculator/elements/value_text.dart';
+import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +10,7 @@ import '../styles_and_presets.dart';
 class AppbarTitle extends StatelessWidget {
   final ThemeData themeData;
 
-  AppbarTitle({@required this.themeData});
+  AppbarTitle({required this.themeData});
 
   @override
   Widget build(BuildContext context) {

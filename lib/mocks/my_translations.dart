@@ -2,19 +2,20 @@ import 'dart:core';
 
 
 class MyTranslations{
-  Map<String, Map<String, String>> _allTexts = new Map();
+  final Map<String, Map<String, String>> _allTexts = new Map();
+  String _currentLanguage = 'en';
   MyTranslations(){
-    Map<String, String> en = new Map();
-    Map<String, String> zh = new Map();
-    Map<String, String> hi = new Map();
-    Map<String, String> de = new Map();
-    Map<String, String> fr = new Map();
-    Map<String, String> es = new Map();
-    Map<String, String> pt = new Map();
-    Map<String, String> it = new Map();
-    Map<String, String> pl = new Map();
-    Map<String, String> uk = new Map();
-    Map<String, String> ru = new Map();
+    final Map<String, String> en = new Map();
+    final Map<String, String> zh = new Map();
+    final Map<String, String> hi = new Map();
+    final Map<String, String> de = new Map();
+    final Map<String, String> fr = new Map();
+    final Map<String, String> es = new Map();
+    final Map<String, String> pt = new Map();
+    final Map<String, String> it = new Map();
+    final Map<String, String> pl = new Map();
+    final Map<String, String> uk = new Map();
+    final Map<String, String> th = new Map();
     ///en
     en.putIfAbsent('title', () => 'Least Squares Calculator');
     en.putIfAbsent('language', () => 'Language');
@@ -49,6 +50,8 @@ class MyTranslations{
     en.putIfAbsent('load', () => 'Load Data');
     en.putIfAbsent('warning', () => 'Warning');
     en.putIfAbsent('shareTitle', () => 'Share');
+    en.putIfAbsent('misc', () => 'Misc');
+    en.putIfAbsent('sortDataOnX', () => 'Sort data by X');
     ///zh
     zh.putIfAbsent('title', () => '最小二乘');
     zh.putIfAbsent('language', () => '语');
@@ -83,6 +86,8 @@ class MyTranslations{
     zh.putIfAbsent('load', () => '加载数据');
     zh.putIfAbsent('warning', () => '警告');
     zh.putIfAbsent('shareTitle', () => '分享');
+    zh.putIfAbsent('misc', () => '雜項');
+    zh.putIfAbsent('sortDataOnX', () => '按 X 對資料排序');
     ///hi
     hi.putIfAbsent('title', () => 'कम से कम दो गुना');
     hi.putIfAbsent('language', () => 'भाषा');
@@ -117,6 +122,8 @@ class MyTranslations{
     hi.putIfAbsent('load', () => 'लोड डेटा');
     hi.putIfAbsent('warning', () => 'चेतावनी');
     hi.putIfAbsent('shareTitle', () => 'शेयर करना');
+    hi.putIfAbsent('misc', () => 'विविध');
+    hi.putIfAbsent('sortDataOnX', () => 'डेटा को X के अनुसार क्रमित करें');
     ///es
     es.putIfAbsent('title', () => 'Mínimos cuadrados');
     es.putIfAbsent('language', () => 'Idioma');
@@ -151,6 +158,8 @@ class MyTranslations{
     es.putIfAbsent('load', () => 'Cargar datos');
     es.putIfAbsent('warning', () => 'Advertencia');
     es.putIfAbsent('shareTitle', () => 'Compartir');
+    es.putIfAbsent('misc', () => 'Varios');
+    es.putIfAbsent('sortDataOnX', () => 'Ordenar datos por X');
     ///fr
     fr.putIfAbsent('title', () => 'Méthode des moindres carrés');
     fr.putIfAbsent('language', () => 'Langue');
@@ -185,6 +194,8 @@ class MyTranslations{
     fr.putIfAbsent('load', () => 'Charger les données');
     fr.putIfAbsent('warning', () => 'Avertissement');
     fr.putIfAbsent('shareTitle', () => 'Partager');
+    fr.putIfAbsent('misc', () => 'Divers');
+    fr.putIfAbsent('sortDataOnX', () => 'Trier les données par X');
     ///de
     de.putIfAbsent('title', () => 'Kleinsten Quadrate');
     de.putIfAbsent('language', () => 'Sprache');
@@ -220,6 +231,8 @@ class MyTranslations{
     de.putIfAbsent('load', () => 'Lade Daten');
     de.putIfAbsent('warning', () => 'Warnung');
     de.putIfAbsent('shareTitle', () => 'Aktie');
+    de.putIfAbsent('misc', () => 'Sonstiges');
+    de.putIfAbsent('sortDataOnX', () => 'Daten nach X sortieren');
     ///pt
     pt.putIfAbsent('title', () => 'Mínimos quadrados');
     pt.putIfAbsent('language', () => 'Linguagem');
@@ -254,6 +267,8 @@ class MyTranslations{
     pt.putIfAbsent('load', () => 'Carregar dados');
     pt.putIfAbsent('warning', () => 'Aviso');
     pt.putIfAbsent('shareTitle', () => 'Partilhar');
+    pt.putIfAbsent('misc', () => 'Diversos');
+    pt.putIfAbsent('sortDataOnX', () => 'Classificar dados por X');
     ///it
     it.putIfAbsent('title', () => 'Calcolatrice dei minimi quadrati');
     it.putIfAbsent('language', () => 'Lingua');
@@ -288,6 +303,8 @@ class MyTranslations{
     it.putIfAbsent('load', () => 'Caricare dati');
     it.putIfAbsent('warning', () => 'Avvertimento');
     it.putIfAbsent('shareTitle', () => 'Condividere');
+    it.putIfAbsent('misc', () => 'Varie');
+    it.putIfAbsent('sortDataOnX', () => 'Ordina i dati per X');
     ///pl
     pl.putIfAbsent('title', () => 'Kalkulator najmniejszych kwadratów');
     pl.putIfAbsent('language', () => 'Język');
@@ -322,6 +339,8 @@ class MyTranslations{
     pl.putIfAbsent('load', () => 'Załaduj dane');
     pl.putIfAbsent('warning', () => 'Ostrzeżenie');
     pl.putIfAbsent('shareTitle', () => 'Współdzielić');
+    pl.putIfAbsent('misc', () => 'Różne');
+    pl.putIfAbsent('sortDataOnX', () => 'Sortuj dane według X');
     ///ua
     uk.putIfAbsent('title', () => 'Обчислення найменших квадратів');
     uk.putIfAbsent('language', () => 'Мова');
@@ -356,33 +375,71 @@ class MyTranslations{
     uk.putIfAbsent('load', () => 'Завантажити дані');
     uk.putIfAbsent('warning', () => 'Попередження');
     uk.putIfAbsent('shareTitle', () => 'Поділитися');
+    uk.putIfAbsent('misc', () => 'Різне');
+    uk.putIfAbsent('sortDataOnX', () => 'Сортувати дані по Х');
+    ///th
+    th.putIfAbsent('title', () => 'เครื่องคำนวณกำลังสองน้อยที่สุด');
+    th.putIfAbsent('language', () => 'ภาษา');
+    th.putIfAbsent('theme', () => 'ธีม');
+    th.putIfAbsent('nanMessage', () => 'ข้อมูลไม่เพียงพอ');
+    th.putIfAbsent('nanData', () => 'ไม่มีข้อมูล');
+    th.putIfAbsent('data', () => 'ข้อมูล');
+    th.putIfAbsent('graph', () => 'กราฟ');
+    th.putIfAbsent('saved', () => 'บันทึกแล้ว');
+    th.putIfAbsent('pow_out_of_range', () => 'ระดับนี้จำกัดอยู่ที่ช่วงตั้งแต่ -10 ถึง 10');
+    th.putIfAbsent('settings', () => 'การตั้งค่า');
+    th.putIfAbsent('default_settings', () => 'การตั้งค่าเริ่มต้น');
+    th.putIfAbsent('reset', () => 'รีเซ็ตข้อมูล');
+    th.putIfAbsent('show_grid', () => 'แสดงตาราง');
+    th.putIfAbsent('dot_type', () => 'ประเภทจุด');
+    th.putIfAbsent('del_approve', () => 'คุณแน่ใจไหม? คุณไม่สามารถยกเลิกการกระทำนี้ได้');
+    th.putIfAbsent('confirm', () => 'ยืนยัน');
+    th.putIfAbsent('cancel', () => 'ยกเลิก');
+    th.putIfAbsent('delete', () => 'ลบ');
+    th.putIfAbsent('dots_size', () => 'ขนาดจุด');
+    th.putIfAbsent('export', () => 'ส่งออกรูปภาพและข้อมูล');
+    th.putIfAbsent('export_short', () => 'บันทึก');
+    th.putIfAbsent('no_images', () => 'ไม่มีภาพ');
+    th.putIfAbsent('no_selected_images', () => 'ไม่ได้เลือกภาพ');
+    th.putIfAbsent('delete_image', () => 'กำลังลบรูปภาพ');
+    th.putIfAbsent('copy_image_path', () => 'คัดลอกเส้นทางรูปภาพ');
+    th.putIfAbsent('customization', () => 'การปรับแต่ง');
+    th.putIfAbsent('axis_description', () => 'คำอธิบายแกน');
+    th.putIfAbsent('equal_data_error_1', () => 'ค่า Y เพียงค่าเดียวเท่านั้นจะต้องตรงกับค่า X หนึ่งค่า');
+    th.putIfAbsent('equal_data_error_2', () => 'ข้อมูลดังกล่าวมีอยู่แล้ว');
+    th.putIfAbsent('copy_success_message', () => 'คัดลอกข้อมูลเรียบร้อยแล้ว');
+    th.putIfAbsent('load', () => 'โหลดข้อมูล');
+    th.putIfAbsent('warning', () => 'คำเตือน');
+    th.putIfAbsent('shareTitle', () => 'แบ่งปัน');
+    th.putIfAbsent('misc', () => 'เบ็ดเตล็ด');
+    th.putIfAbsent('sortDataOnX', () => 'จัดเรียงข้อมูลตาม X');
     ///ru
-    ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
-    ru.putIfAbsent('language', () => 'Язык');
-    ru.putIfAbsent('theme', () => 'Theme');
-    ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
-    ru.putIfAbsent('nanData', () => 'Нет данных');
-    ru.putIfAbsent('settings', () => 'Настройки');
-    ru.putIfAbsent('default_settings', () => 'Настройки по умолчанию');
-    ru.putIfAbsent('reset', () => 'Очистить данные');
-    ru.putIfAbsent('show_grid', () => 'Показать сетку');
-    ru.putIfAbsent('dot_type', () => 'Тип точки');
-    ru.putIfAbsent('del_approve', () => 'Вы уверены?');
-    ru.putIfAbsent('cancel', () => 'Отменить');
-    ru.putIfAbsent('delete', () => 'Удалить');
-    ru.putIfAbsent('dots_size', () => 'Размер точек');
-    ru.putIfAbsent('export', () => 'Экспорт изображения и данных');
-    ru.putIfAbsent('no_images', () => 'Нет изображений');
-    ru.putIfAbsent('no_selected_images', () => 'Нет выделенных изображений');
-    ru.putIfAbsent('delete_image', () => 'Удаление изображений');
-    ru.putIfAbsent('copy_image_path', () => 'Копировать путь изображения');
-    ru.putIfAbsent('customization', () => 'Настройка');
-    ru.putIfAbsent('axis_description', () => 'Описание оси');
-    ru.putIfAbsent('equal_data_error_1', () => 'Нельзя, чтобы два или более значения Y соответствовали одному значению X.');
-    ru.putIfAbsent('equal_data_error_2', () => 'Уже есть такие данные');
-    ru.putIfAbsent('copy_success_message', () => 'Данные успешно скопированы');
-    ru.putIfAbsent('load', () => 'Загрузить данные');
-    ru.putIfAbsent('warning', () => 'Предупреждение');
+    // ru.putIfAbsent('title', () => 'Вычисление наименьших квадратов');
+    // ru.putIfAbsent('language', () => 'Язык');
+    // ru.putIfAbsent('theme', () => 'Theme');
+    // ru.putIfAbsent('nanMessage', () => 'Недостаточно данных');
+    // ru.putIfAbsent('nanData', () => 'Нет данных');
+    // ru.putIfAbsent('settings', () => 'Настройки');
+    // ru.putIfAbsent('default_settings', () => 'Настройки по умолчанию');
+    // ru.putIfAbsent('reset', () => 'Очистить данные');
+    // ru.putIfAbsent('show_grid', () => 'Показать сетку');
+    // ru.putIfAbsent('dot_type', () => 'Тип точки');
+    // ru.putIfAbsent('del_approve', () => 'Вы уверены?');
+    // ru.putIfAbsent('cancel', () => 'Отменить');
+    // ru.putIfAbsent('delete', () => 'Удалить');
+    // ru.putIfAbsent('dots_size', () => 'Размер точек');
+    // ru.putIfAbsent('export', () => 'Экспорт изображения и данных');
+    // ru.putIfAbsent('no_images', () => 'Нет изображений');
+    // ru.putIfAbsent('no_selected_images', () => 'Нет выделенных изображений');
+    // ru.putIfAbsent('delete_image', () => 'Удаление изображений');
+    // ru.putIfAbsent('copy_image_path', () => 'Копировать путь изображения');
+    // ru.putIfAbsent('customization', () => 'Настройка');
+    // ru.putIfAbsent('axis_description', () => 'Описание оси');
+    // ru.putIfAbsent('equal_data_error_1', () => 'Нельзя, чтобы два или более значения Y соответствовали одному значению X.');
+    // ru.putIfAbsent('equal_data_error_2', () => 'Уже есть такие данные');
+    // ru.putIfAbsent('copy_success_message', () => 'Данные успешно скопированы');
+    // ru.putIfAbsent('load', () => 'Загрузить данные');
+    // ru.putIfAbsent('warning', () => 'Предупреждение');
 
     _allTexts.putIfAbsent('en', () => en);
     _allTexts.putIfAbsent('zh', () => zh);
@@ -394,6 +451,7 @@ class MyTranslations{
     _allTexts.putIfAbsent('it', () => it);
     _allTexts.putIfAbsent('pl', () => pl);
     _allTexts.putIfAbsent('uk', () => uk);
+    _allTexts.putIfAbsent('th', () => th);
   }
 
   String getLocale(String loc, String phrase){
@@ -409,6 +467,10 @@ class MyTranslations{
   }
   bool isLanguageAvailable(String lang){
     return _allTexts[lang] != null;
+  }
+
+  void setLanguage(String lang){
+    _currentLanguage = _allTexts[lang] != null ? lang : _currentLanguage;
   }
 
 }

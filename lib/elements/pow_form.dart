@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:least_squares_calculator/mocks/my_translations.dart';
 import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:least_squares_calculator/styles_and_presets.dart';
 import 'package:least_squares_calculator/utils/string_utils.dart';
@@ -33,36 +32,36 @@ class _PowFormState extends State<PowForm> {
             angle: -pi / 2.0,
             child: GestureDetector(
                 onTap: () {
-                  if(Provider.of<DataProvider>(context,listen: false).changePowValue(
-                      widget.flag, -1) == null) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Text(MyTranslations().getLocale(
-                                  Provider.of<DataProvider>(context,
-                                      listen: false)
-                                      .getLanguage(),
-                                  'pow_out_of_range'),),
-                            ),
-                            OutlinedButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Icon(
-                                Icons.check,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                  else {
+                  // if(Provider.of<DataProvider>(context,listen: false).changePowValue(
+                  //     widget.flag, -1) == null) {
+                  //   showDialog(
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return SimpleDialog(
+                  //         children: [
+                  //           Padding(
+                  //             padding: const EdgeInsets.all(12.0),
+                  //             child: Text(MyTranslations().getLocale(
+                  //                 Provider.of<DataProvider>(context,
+                  //                     listen: false)
+                  //                     .getLanguage(),
+                  //                 'pow_out_of_range'),),
+                  //           ),
+                  //           OutlinedButton(
+                  //             onPressed: () => Navigator.pop(context),
+                  //             child: Icon(
+                  //               Icons.check,
+                  //               color: Colors.green,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       );
+                  //     },
+                  //   );
+                  // }
+                  // else {
                     setState(() {});
-                  }
+                  // }
                 },
               child: Icon(
                 Icons.arrow_drop_up,
@@ -77,7 +76,7 @@ class _PowFormState extends State<PowForm> {
           child: Text(
             'x1$_str${StringUtils.getPowSuperscript(powValue)}',
             style: TextStyle(
-              color: _themeData.primaryTextTheme.bodyText1?.color,
+              color: _themeData.primaryTextTheme.bodyLarge?.color,
               fontSize: 14.0,
             ),
           ),
@@ -89,36 +88,36 @@ class _PowFormState extends State<PowForm> {
             angle: pi / 2.0,
             child: GestureDetector(
               onTap: () {
-                if(Provider.of<DataProvider>(context,listen: false).changePowValue(
-                    widget.flag, 1) == null) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SimpleDialog(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text(MyTranslations().getLocale(
-                                Provider.of<DataProvider>(context,
-                                    listen: false)
-                                    .getLanguage(),
-                                'pow_out_of_range'),),
-                          ),
-                          OutlinedButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-                else {
+                // if(Provider.of<DataProvider>(context,listen: false).changePowValue(
+                //     widget.flag, 1) == null) {
+                //   showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return SimpleDialog(
+                //         children: [
+                //           Padding(
+                //             padding: const EdgeInsets.all(12.0),
+                //             child: Text(MyTranslations().getLocale(
+                //                 Provider.of<DataProvider>(context,
+                //                     listen: false)
+                //                     .getLanguage(),
+                //                 'pow_out_of_range'),),
+                //           ),
+                //           OutlinedButton(
+                //             onPressed: () => Navigator.pop(context),
+                //             child: Icon(
+                //               Icons.check,
+                //               color: Colors.green,
+                //             ),
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   );
+                // }
+                // else {
                   setState(() {});
-                }
+                // }
               },
               child: Icon(
                 Icons.arrow_drop_up,

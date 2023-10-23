@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:least_squares_calculator/models/named_widget.dart';
-import 'package:least_squares_calculator/providers/data_provider.dart';
-import 'package:provider/provider.dart';
 import 'dart:core';
 
 typedef IntValue = void Function(int);
@@ -35,19 +33,19 @@ class _DropDownListState extends State<DropDownList> {
   Map<int, NamedWidget> itemsList;
   IntValue callBack;
   int currentValue;
-  ThemeData _themeData = ThemeData();
+  // ThemeData _themeData = ThemeData();
 
   _DropDownListState(
       {required this.itemsList, required this.currentValue, required this.callBack});
 
-  List<DropdownMenuItem<int>> _dropdownItemsList = [];
+  // List<DropdownMenuItem<int>> _dropdownItemsList = [];
   Map<int, NamedWidget> _dropdownItems = new Map<int, NamedWidget>();
 
   int _selectedItem = 0;
 
   void initState() {
     super.initState();
-    if (currentValue == null) currentValue = 0;
+    // if (currentValue == null) currentValue = 0;
     itemsList.forEach((key, value) {
       _dropdownItems.putIfAbsent(key, () => value);
     });
@@ -68,14 +66,14 @@ class _DropDownListState extends State<DropDownList> {
 
   @override
   Widget build(BuildContext context) {
-    _themeData = Provider.of<DataProvider>(context).theme;
+    // _themeData = Provider.of<DataProvider>(context).theme;
     // print('build list ${this.itemsList.length}');
     return Container(
       child: Container(
         padding: EdgeInsets.all(5.0),
         child: DropdownButton<int>(
           value: _selectedItem,
-          icon: const Icon(Icons.arrow_downward),
+          icon: const Icon(Icons.arrow_drop_down, size: 30.0,),
           elevation: 16,
           style: const TextStyle(color: Colors.deepPurple),
           underline: Container(
@@ -84,6 +82,7 @@ class _DropDownListState extends State<DropDownList> {
           ),
           onChanged: (int? value) {
             // This is called when the user selects an item.
+            callBack(value!);
             setState(() {
               _selectedItem = value!;
             });
@@ -93,7 +92,7 @@ class _DropDownListState extends State<DropDownList> {
         // DropdownButton(
         //     //underline: SizedBox(child: Container(color: Colors.red,),),
         //     dropdownColor: _themeData.primaryColor,
-        //     iconEnabledColor: _themeData.primaryTextTheme.bodyText1?.color,
+        //     iconEnabledColor: _themeData.primaryTextTheme.bodyLarge?.color,
         //     value: _selectedItem,
         //     items: buildDropDownMenuItems(_dropdownItems),
         //     onChanged: (value) {

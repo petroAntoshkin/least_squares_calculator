@@ -2,9 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:least_squares_calculator/mocks/my_translations.dart';
 import 'package:least_squares_calculator/models/graphic_data.dart';
+import 'package:least_squares_calculator/models/point_model.dart';
 import 'package:least_squares_calculator/models/pow_model.dart';
 import 'package:least_squares_calculator/utils/string_utils.dart';
-import 'package:validators/sanitizers.dart';
 import 'package:validators/validators.dart';
 
 mixin CalculateMixin {
@@ -51,6 +51,7 @@ mixin CalculateMixin {
   int _editIndex = -1;
   String _approximationName = 'linear';
   Map<String, List<double>> _allValues = Map();
+  List<PointModel> _dataList = [];
   List<Offset> _sourceAproxDots = [];
   final List<String> _replaceWhat = [',', '+'];
   final List<String> _replaceTo = ['.', ''];
@@ -78,36 +79,29 @@ mixin CalculateMixin {
   bool isDataEdited(int index) => _editIndex == index;
 
   void dataClean() {
-    _allValues['x'] = [];
-    _allValues['y'] = [];
+    _dataList = [];
     _graphicData.dataDots = [];
     _graphicData.trendDots = [];
     _initSum();
   }
 
-  int dataLength() => (_allValues['x'])!.length;
-
-  // void clearAllData() {
-  //   // print('clearAllData!!!!!!!!!!!!!');
-  //   onlyDataClean();
-  //   // notifyListeners();
-  // }
+  int dataLength() => _dataList.length;
 
   String getAllDataString() {
-    String _res = '{"data": {';
-    _allValues.forEach((key, value) {
-      _res += '"' + key + '": [';
-      for (int i = 0; i < value.length; i++) {
-        if (i > 0) _res += ', ';
-        _res += '"${value[i]}"';
-      }
-      _res += '],';
-    });
-    _res += '}}';
-    _res = _res.replaceAll('],}', ']}');
+    String _res = '{"data": {"x": [';
+    for(int i = 0; i < _dataList.length; i++){
+      if(i > 0) _res += ', ';
+      _res += '"${_dataList[i].x}"';
+    }
+    _res += ']}, ';
+    _res = ' {"y": [';
+    for(int i = 0; i < _dataList.length; i++){
+      if(i > 0) _res += ', ';
+      _res += '"${_dataList[i].y}"';
+    }
+    _res += ']}}';
     return _res;
   }
-
   String _replaceLoop(String source) {
     String _res = source;
     for (int i = 0; i < _replaceWhat.length; i++) {
@@ -135,11 +129,10 @@ mixin CalculateMixin {
       if (_err == 0) {
         _err = 0;
         if (_editIndex >= 0) {
-          _allValues['x']?[_editIndex] = _xCandidate;
-          _allValues['y']?[_editIndex] = _yCandidate;
+          _dataList[_editIndex].x = _xCandidate;
+          _dataList[_editIndex].y = _yCandidate;
         } else {
-          _allValues['x']?.add(_xCandidate);
-          _allValues['y']?.add(_yCandidate);
+          _dataList.add(PointModel(x: _xCandidate, y: _yCandidate));
         }
         _editIndex = -1;
         _countAB();
@@ -151,10 +144,10 @@ mixin CalculateMixin {
 
   int _checkForDuplicate(double _x, double _y) {
     int _res = 0;
-    for (int i = 0; i < _allValues['x']!.length; i++) {
-      if (_x == _allValues['x']?[i] && _editIndex != i) {
+    for (int i = 0; i < _dataList.length; i++) {
+      if (_x == _dataList[i].x && _editIndex != i) {
         _res = 1;
-        if (_y == _allValues['y']?[i] && _editIndex == i) _res = 2;
+        if (_y == _dataList[i].y && _editIndex == i) _res = 2;
         return _res;
       }
     }
@@ -162,19 +155,17 @@ mixin CalculateMixin {
   }
 
   void removeOneValue(int index) {
-    _allValues['x']?.removeAt(index);
-    _allValues['y']?.removeAt(index);
+    _dataList.removeAt(index);
     _countAB();
     // notifyListeners();
   }
 
   int swapData(int index) {
-    final _error =
-        _checkForDuplicate(_allValues['y']![index], _allValues['x']![index]);
+    final _error = _checkForDuplicate(_dataList[index].x, _dataList[index].y);
     if (_error == 0) {
-      final _buffer = _allValues['x']?[index];
-      _allValues['x']?[index] = _allValues['y']![index];
-      _allValues['y']?[index] = _buffer!;
+      final _buffer = _dataList[index].x;
+      _dataList[index].x = _dataList[index].y;
+      _dataList[index].y = _buffer;
       _countAB();
     }
     return _error;
@@ -182,18 +173,18 @@ mixin CalculateMixin {
 
   void _countAB() {
     _initSum();
-    int? _len = _allValues['x']?.length;
+    int? _len = _dataList.length;
     double _sumX = 0,
         _sumY = 0,
         _sumXSquare = 0,
         _sumXY = 0,
         _sumFunDif = 0,
         _sumXDif = 0;
-    for (int i = 0; i < _len!; i++) {
-      _sumX += _allValues['x']![i];
-      _sumY += _allValues['y']![i];
-      _sumXY += _allValues['x']![i] * _allValues['y']![i];
-      _sumXSquare += _allValues['x']![i] * _allValues['x']![i];
+    for (int i = 0; i < _len; i++) {
+      _sumX += _dataList[i].x;
+      _sumY += _dataList[i].y;
+      _sumXY += _dataList[i].x * _dataList[i].y;
+      _sumXSquare += _dataList[i].x * _dataList[i].x;
     }
     _factorA =
         (_len * _sumXY - _sumX * _sumY) / (_len * _sumXSquare - _sumX * _sumX);
@@ -205,9 +196,9 @@ mixin CalculateMixin {
     // final double _ys = _sumY / _len;
     for (int i = 0; i < _len; i++) {
       _sumFunDif +=
-          (_allValues['y']![i] - _factorA * _allValues['x']![i] - _factorB) *
-              (_allValues['y']![i] - _factorA * _allValues['x']![i] - _factorB);
-      _sumXDif += (_allValues['x']![i] - _xs) * (_allValues['x']![i] - _xs);
+          (_dataList[i].y - _factorA * _dataList[i].x - _factorB) *
+              (_dataList[i].y - _factorA * _dataList[i].x - _factorB);
+      _sumXDif += (_dataList[i].x - _xs) * (_dataList[i].x - _xs);
     }
     // debugPrint('sumX=$_sumX xDif=$_sumXDif function dif=$_sumFunDif');
     _deviationA = sqrt(_sumFunDif / ((-2 + _len) * _sumXDif));
@@ -234,7 +225,7 @@ mixin CalculateMixin {
 
   double getBDeviation() => _deviationB;
 
-  int getValuesLength() => _allValues['x']!.length;
+  int getValuesLength() => _dataList.length;
 
   double getValue(String name, int index) {
     PowModel val = getValuePowModel(name, index);
@@ -245,11 +236,13 @@ mixin CalculateMixin {
 
   PowModel getValuePowModel(String flag, int index) {
     if (index == -1) return PowModel();
-    final sign = _allValues[flag]![index] < 0 ? '-' : '';
-    String _res = _allValues[flag]![index].abs().toString();
+    final sign = flag == 'x' ? _getSign(_dataList[index].x) : _getSign(_dataList[index].y);
+    String _res = flag == 'x' ? _dataList[index].x.abs().toString()
+        : _dataList[index].y.abs().toString();
     int _pow = 0;
     List<String> _split =
-        _allValues[flag]![index].toStringAsExponential().split('e');
+        flag == 'x' ? _dataList[index].x.toStringAsExponential().split('e')
+        : _dataList[index].y.toStringAsExponential().split('e');
     if (int.parse(_split[1]).abs() > 3) {
       _pow = int.parse(_split[1]);
       _res = _split[0];
@@ -257,26 +250,20 @@ mixin CalculateMixin {
     return PowModel(base: '$sign$_res', powIndex: _pow);
   }
 
-  Map<String, List<double>> getAllValues() {
-    Map<String, List<double>> _res = Map();
-    _allValues.forEach((key, value) {
-      _res[key] = [];
-      for (int i = 0; i < value.length; i++) _res[key]!.add(value[i]);
-    });
-    return _res;
-  }
 
   set maxSize(double value) {
     _graphicData.maxSize = value;
     _globalRecalculation();
   }
 
+  String _getSign(double value) => value < 0 ? '-' : '';
+
   String getValueString(String flag, int index) {
     if (index < 0) {
       return '';
     }
-    final sign = _allValues[flag]![index] < 0 ? '-' : '';
-    double res = _allValues[flag]![index].abs();
+    final sign = flag == 'x' ? _getSign(_dataList[index].x) : _getSign(_dataList[index].y);
+    double res = flag == 'x' ? _dataList[index].x.abs() : _dataList[index].y.abs();
     powMap[flag] = 0;
     if (res == 0) {
       return '0';
@@ -291,9 +278,15 @@ mixin CalculateMixin {
       // res = double.parse(StringUtils.doubleShift(doubleBase: res, powValue: -1));
       powMap[flag] = powMap[flag]! + 1;
     }
-    debugPrint(
-        'get $flag with value ${_allValues[flag]![index]}   pow:${powMap[flag]}');
     return '$sign$res';
+  }
+
+  bool sortData(){
+    if (_dataList.length < 2){
+      return false;
+    }
+    _dataList.sort((PointModel a, PointModel b) => a.x.compareTo(b.x));
+    return true;
   }
 
   ///graphics calculations
@@ -317,21 +310,25 @@ mixin CalculateMixin {
   }
 
   double _getMaxDisplaceByAxis(String axis) {
-    double _res = 0.0;
-    for (int i = 0; i < _allValues[axis]!.length; i++)
-      if (_allValues[axis]![i].abs() > _res) _res = _allValues[axis]![i].abs();
-    return _res;
+    PointModel max = _dataList.reduce((a, b) {
+      if (a.x > b.x)
+        return a;
+      else
+        return b;
+    }
+    );
+    return axis == 'x' ? max.x : max.y;
   }
 
   void _fillDataPoints() {
     double _x, _y;
     _graphicData.dataDots = [];
-    for (int i = 0; i < _allValues['x']!.length!; i++) {
-      _x = _allValues['x']![i] * _metamorphosisX +
+    for (int i = 0; i < _dataList.length; i++) {
+      _x = _dataList[i].x * _metamorphosisX +
           (_graphicData.maxSize) / 2 +
           _graphicData.displaceX;
       _y = (_graphicData.maxSize) / 2 -
-          _allValues['y']![i] * _metamorphosisY +
+          _dataList[i].y * _metamorphosisY +
           _graphicData.displaceY;
       _graphicData.dataDots.add(Offset(_x, _y));
     }

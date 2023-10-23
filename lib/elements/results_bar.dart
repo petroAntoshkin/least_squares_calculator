@@ -34,11 +34,9 @@ class ResultBar extends StatelessWidget {
         ),
         child: _dataCount < 2
             ? Center(
-                child: _loc != null
-                    ? ValueText(
+                child: ValueText(
                         text: MyTranslations().getLocale(_loc, _dataCount == 0 ? 'nanData' : 'nanMessage'),
-                        style: Presets.resultsValueStyle)
-                    : Container(),
+                        style: Presets.resultsValueStyle),
               )
             : Row(
                 children: [
@@ -49,21 +47,17 @@ class ResultBar extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: _valueWidth * valueSizeMultiplier,
-                          child: _loc != null
-                              ? ValueText(
+                          child: ValueText(
                                   text: _aValue,
-                                  style: Presets.resultsValueStyle)
-                              : Container(),
+                                  style: Presets.resultsValueStyle),
                         ),
                         _dataCount < 3
                             ? Container()
                             : SizedBox(
                                 width: _valueWidth * valueSizeMultiplier,
-                                child: _loc != null
-                                    ? ValueText(
+                                child: ValueText(
                                         text: _aDeviation,
-                                        style: Presets.resultsValueStyle)
-                                    : Container(),
+                                        style: Presets.resultsValueStyle),
                               ),
                       ],
                     ),
@@ -102,21 +96,17 @@ class ResultBar extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: _valueWidth * valueSizeMultiplier,
-                          child: _loc != null
-                              ? ValueText(
+                          child: ValueText(
                                   text: _bValue,
-                                  style: Presets.resultsValueStyle)
-                              : Container(),
+                                  style: Presets.resultsValueStyle),
                         ),
                         _dataCount < 3
                             ? Container()
                             : SizedBox(
                                 width: _valueWidth * valueSizeMultiplier,
-                                child: _loc != null
-                                    ? ValueText(
+                                child: ValueText(
                                         text: _bDeviation,
-                                        style: Presets.resultsValueStyle)
-                                    : Container(),
+                                        style: Presets.resultsValueStyle),
                               ),
                       ],
                     ),

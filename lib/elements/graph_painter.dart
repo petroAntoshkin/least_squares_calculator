@@ -28,7 +28,7 @@ class DrawPainter extends CustomPainter {
       ..color = Colors.green
       ..strokeWidth = 1.0;
 
-    final paintBackground = Paint()..color = themeData.backgroundColor;
+    final paintBackground = Paint()..color = themeData.colorScheme.background;
 
     canvas.drawRect(
         Rect.fromPoints(Offset.zero, Offset(_maxSize, _maxSize)), paintBackground);

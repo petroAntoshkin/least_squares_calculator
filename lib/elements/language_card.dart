@@ -14,9 +14,9 @@ class LanguageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (languageModel == null) {
-      languageModel = new LanguageModel(prefix: 'en', name: 'English');
-    }
+    // if (languageModel == null) {
+    //   languageModel = new LanguageModel(prefix: 'en', name: 'English');
+    // }
     ThemeData _themeData = Provider.of<DataProvider>(context).theme;
     bool _thisLangIsCurrent =
         Provider.of<DataProvider>(context).getLanguage() == languageModel.prefix;
@@ -36,7 +36,7 @@ class LanguageCard extends StatelessWidget {
                   SizedBox(width: 30, height: Presets.SETTINGS_CARD_HEIGHT, child: Image.asset(_name)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(languageModel.name, style: _themeData.primaryTextTheme.bodyText1,),
+                    child: Text(languageModel.name, style: _themeData.primaryTextTheme.bodyLarge,),
                   ),
                   Expanded(child: Container()),
                   SizedBox(

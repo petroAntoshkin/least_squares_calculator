@@ -7,8 +7,8 @@ import 'package:least_squares_calculator/providers/data_provider.dart';
 import 'package:least_squares_calculator/styles_and_presets.dart';
 
 // import 'package:wc_flutter_share/wc_flutter_share.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -218,7 +218,7 @@ class _ImagesPageState extends State<ImagesPage> {
 
   void _shareImage(String filePath) async {
     try {
-      final bytes = await File(filePath).readAsBytes();
+      // final bytes = await File(filePath).readAsBytes();
       // final files = <XFile>[];
       // await WcFlutterShare.share(
       //     sharePopupTitle: 'share',

@@ -34,7 +34,7 @@ class MyBottomNavBar extends StatelessWidget {
     //               child: Center(
     //                 child: Icon(
     //                   _icons[tabIndex],
-    //                   color: _themeData.primaryTextTheme.bodyText1.color,
+    //                   color: _themeData.primaryTextTheme.bodyLarge.color,
     //                 ),
     //               ),
     //             ),
@@ -49,7 +49,7 @@ class MyBottomNavBar extends StatelessWidget {
     //                   textAlign: TextAlign.center,
     //                   style: TextStyle(
     //                     color:
-    //                     _themeData.primaryTextTheme.bodyText1.color,
+    //                     _themeData.primaryTextTheme.bodyLarge.color,
     //                   ),
     //                 ),
     //               ),
@@ -60,7 +60,7 @@ class MyBottomNavBar extends StatelessWidget {
     //               child: Center(
     //                 child: Icon(
     //                   _icons[tabIndex],
-    //                   color: _themeData.primaryTextTheme.bodyText1.color,
+    //                   color: _themeData.primaryTextTheme.bodyLarge.color,
     //                 ),
     //               ),
     //             ),

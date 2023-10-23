@@ -120,7 +120,7 @@ class _LSMHomePageState extends State<LSMHomePage>
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: _themeData.backgroundColor,
+        backgroundColor: _themeData.colorScheme.background,
         appBar: AppBar(
           toolbarHeight: 6.0,
           backgroundColor: _themeData.primaryColorDark,

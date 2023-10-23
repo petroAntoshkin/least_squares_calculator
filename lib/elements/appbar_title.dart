@@ -25,7 +25,7 @@ class AppbarTitle extends StatelessWidget {
         Provider.of<DataProvider>(context).getBDeviationString();
     // final _textStyle = TextStyle(
     //   fontSize: 18,
-    //   color: themeData.primaryTextTheme.bodyText1.color,
+    //   color: themeData.primaryTextTheme.bodyLarge.color,
     // );
     return Container(
       padding: EdgeInsets.all(2.0),
@@ -35,10 +35,8 @@ class AppbarTitle extends StatelessWidget {
       ),
       child: _dataCount < 2
           ? Center(
-              child: _loc != null
-                  ? ValueText(text: MyTranslations()
-                  .getLocale(_loc, 'title'), style: Presets.resultsValueStyle)
-                  : Container(),
+              child: ValueText(text: MyTranslations()
+                  .getLocale(_loc, 'title'), style: Presets.resultsValueStyle),
             )
           : Row(
               children: [
@@ -49,20 +47,16 @@ class AppbarTitle extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: _valueWidth,
-                          child: _loc != null
-                              ? ValueText(
+                          child: ValueText(
                                   text: _aValue,
-                                  style: Presets.resultsValueStyle)
-                              : Container(),
+                                  style: Presets.resultsValueStyle),
                         ),
                         //Expanded(child: Container()),
                         SizedBox(
                           width: _valueWidth,
-                          child: _loc != null
-                              ? ValueText(
+                          child: ValueText(
                                   text: _bValue,
-                                  style: Presets.resultsValueStyle)
-                              : Container(),
+                                  style: Presets.resultsValueStyle),
                         ),
                       ],
                     ),
@@ -73,20 +67,16 @@ class AppbarTitle extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: _valueWidth,
-                                child: _loc != null
-                                    ? ValueText(
+                                child: ValueText(
                                         text: _aDeviation,
-                                        style: Presets.resultsValueStyle)
-                                    : Container(),
+                                        style: Presets.resultsValueStyle),
                               ),
                               //Expanded(child: Container()),
                               SizedBox(
                                 width: _valueWidth,
-                                child: _loc != null
-                                    ? ValueText(
+                                child: ValueText(
                                         text: _bDeviation,
-                                        style: Presets.resultsValueStyle)
-                                    : Container(),
+                                        style: Presets.resultsValueStyle),
                               ),
                             ],
                           ),

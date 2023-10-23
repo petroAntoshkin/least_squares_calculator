@@ -24,7 +24,7 @@ class ValueText extends StatelessWidget {
               text,
               style: TextStyle(
                 fontSize: 17.0,
-                color: _themeData.primaryTextTheme.bodyText1?.color,
+                color: _themeData.primaryTextTheme.bodyLarge?.color,
               ),
             ),
           ),

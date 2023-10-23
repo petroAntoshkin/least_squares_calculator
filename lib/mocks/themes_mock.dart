@@ -16,13 +16,15 @@ class ThemesMock {
           primaryColorDark: Color(0xff707070),
           primaryColorLight: Color(0xffCFCFCF),
           focusColor: Color(0xffFFD600),
-          backgroundColor: Color(0xffF0F0F0),
           indicatorColor: Colors.black,
           iconTheme: IconThemeData(
             color: Colors.black,
           ),
           colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+              ColorScheme.fromSwatch().copyWith(
+                  secondary: Colors.white,
+                background: Color(0xffF0F0F0),
+              ),
           // backgroundColor: _hexToColor('BFADA3'),
         ));
     themes[1] = ThemeListModel(
@@ -32,13 +34,13 @@ class ThemesMock {
           primaryColorDark: Color(0xff292c27),
           primaryColorLight: Color(0xff717a6e),
           focusColor: Color(0xffbaef8a),
-          backgroundColor: Color(0xff1c1c1c),
+          // backgroundColor: Color(0xff1c1c1c),
           indicatorColor: Colors.white,
           primaryTextTheme: TextTheme(
-              bodyText1: TextStyle(color: Colors.black)
+              bodyLarge: TextStyle(color: Colors.black)
           ),
-          // colorScheme:
-          //     ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(background: Color(0xff1c1c1c)),
         ));
     themes[2] = ThemeListModel(
         name: 'Dark',
@@ -47,13 +49,15 @@ class ThemesMock {
           primaryColorLight: Color(0xff707070),
           primaryColor: Color(0xffCFCFCF),
           focusColor: Color(0xffFFD600),
-          backgroundColor: Colors.black,
           indicatorColor: Colors.white,
           iconTheme: IconThemeData(
             color: Colors.black,
           ),
           colorScheme:
-          ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+          ColorScheme.fromSwatch().copyWith(
+              secondary: Colors.white,
+            background: Colors.black,
+          ),
           // backgroundColor: _hexToColor('BFADA3'),
         ));
   }

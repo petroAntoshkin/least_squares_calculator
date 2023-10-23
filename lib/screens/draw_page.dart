@@ -182,14 +182,14 @@ class _DrawPageState extends State<DrawPage> {
 
   ///axis indexes
   void _getAxisIndexes(List<Widget> _children) {
-    if (_newGD.gridCount != null) {
+    // if (_newGD.gridCount != null) {
       for (int i = -_newGD.gridCount + 1; i < _newGD.gridCount; i += 2) {
         _children.add(_getIndexX(i));
         _children.add(_getIndexY(i));
       }
       _children.add(_axisLabelX);
       _children.add(_axisLabelY);
-    }
+    // }
     // return _result;
   }
 

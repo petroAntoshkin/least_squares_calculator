@@ -62,7 +62,7 @@ class AxisLabel extends StatelessWidget {
               transform: _myMatrix,
               child: Container(
                 padding: EdgeInsets.all(2.0),
-                color: _themeData.backgroundColor,
+                color: _themeData.colorScheme.background,
                 child: FittedBox(
                   child: Text(
                     labelModel.text,

@@ -17,7 +17,6 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   final String _settingsJson = '/settings.json';
   final String _dataJson = '/data_snapshot.json';
 
-
   late Directory _appDirectory;
 
   // int dotTypeIndex = 0;
@@ -33,7 +32,8 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   final Map<String, AxisLabelModel> _labels = Map();
 
-  SettingsModel _settingsModel = SettingsModel(language: 'en', showGrid: true, themeId: 0);
+  SettingsModel _settingsModel =
+      SettingsModel(language: 'en', showGrid: true, sortByX: false, themeId: 0);
 
   DataProvider() {
     _defaultLocale = _getDeviceLocale(Platform.localeName);
@@ -98,7 +98,10 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   void _resetSettings() {
     _themeID = 0;
     _settingsModel = SettingsModel(
-        language: _defaultLocale, themeId: _themeID, showGrid: true);
+        language: _defaultLocale,
+        themeId: _themeID,
+        showGrid: true,
+        sortByX: false);
     _setTheme(_themeID);
     notifyListeners();
   }
@@ -124,6 +127,13 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   void _setLocale(String loc) {
     _settingsModel.language = loc;
     // notifyListeners();
+  }
+
+  bool get sortByX => _settingsModel.sortByX;
+
+  void toggleSorting() {
+    _settingsModel.sortByX = !_settingsModel.sortByX;
+    _saveSettings();
   }
 
   ///theme functions
@@ -200,10 +210,18 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   int addMoreValues(String xText, String yText) {
     int _err = super.addMoreValues(xText, yText);
     if (_err == 0) {
+      if (_settingsModel.sortByX) {
+        if (sortData()) notifyListeners();
+      }
       _saveLastData();
       cancelEditValue();
     }
     return _err;
+  }
+
+  @override
+  bool sortData() {
+    return super.sortData();
   }
 
   @override
@@ -255,8 +273,8 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
 
   int getPowValue(String flag) => powMap[flag]!;
 
-  int changePowValue(String flag, int value){
-    if((powMap[flag]! + value).abs() <= powMaximum) {
+  int changePowValue(String flag, int value) {
+    if ((powMap[flag]! + value).abs() <= powMaximum) {
       return powMap[flag] = powMap[flag]! + value;
     } else {
       return 0;
@@ -274,7 +292,8 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   }
 
   Future<void> _readSettingsData() async {
-    SettingsModel _result = SettingsModel(language: '', showGrid: true, themeId: 0);
+    SettingsModel _result =
+        SettingsModel(language: '', showGrid: true, sortByX: false, themeId: 0);
     // print('call settings provider read data');
     _appDirectory = await getApplicationDocumentsDirectory();
     List<FileSystemEntity> _list = _appDirectory.listSync();
@@ -298,6 +317,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
         changeTheme(_result.themeId);
         changeLocale(_result.language);
         changeGridShow(_result.showGrid);
+        _settingsModel.sortByX = _result.sortByX;
       } catch (e) {
         // If encountering an error, return 0
         debugPrint('catch $e');
@@ -319,8 +339,8 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   }
 
   Future<void> _readSavedData([String fileName = '']) async {
-    if (_appDirectory == null)
-      _appDirectory = await getApplicationDocumentsDirectory();
+    // if (_appDirectory == null)
+    //   _appDirectory = await getApplicationDocumentsDirectory();
     final String _name =
         fileName == '' ? '${_appDirectory.path}$_dataJson' : fileName;
     final file = File(_name);
@@ -388,14 +408,15 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   final expandedHeight = 300.0;
   bool _settingsBarIsCollapsed = true;
 
-  double get graphOffset => _settingsBarIsCollapsed ? _collapsedHeight : expandedHeight;
+  double get graphOffset =>
+      _settingsBarIsCollapsed ? _collapsedHeight : expandedHeight;
+
   bool get isGraphSettingCollapsed => _settingsBarIsCollapsed;
 
   void resetGraphSettingCollapsed() => _settingsBarIsCollapsed = true;
 
-  void toggleCollaps(){
+  void toggleCollaps() {
     _settingsBarIsCollapsed = !_settingsBarIsCollapsed;
     notifyListeners();
   }
-
 }

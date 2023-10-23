@@ -88,31 +88,31 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
     _labelModelY =
         Provider.of<DataProvider>(context, listen: false).getAxisModel('y');
     _approxMap[0]?.widget = ApproxLinear(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
     _approxMap[1]?.widget = ApproxParabolic(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
     _approxMap[2]?.widget = ApproxPow(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
     _approxMap[3]?.widget = ApproxLog(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
 
     // widget._appMap[4] = 'exponential';
     // widget._appMap[5] = 'hyperbolic';
     _dotsMap[0]?.widget = DotCircle(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
     _dotsMap[1]?.widget = DotSquare(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
     _dotsMap[2]?.widget = DotRhomb(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
     _dotsMap[3]?.widget = DotCrest(
-      color: _themeData.primaryTextTheme.bodyText1?.color as Color,
+      color: _themeData.primaryTextTheme.bodyLarge?.color as Color,
     );
 
     _controllerX.text = _labelModelX.text;
@@ -231,7 +231,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                             onChanged: (value) {
                                               Provider.of<DataProvider>(context,
                                                       listen: false)
-                                                  .changeGridShow(value = false);
+                                                  .changeGridShow(value!);
                                               setState(() {});
                                             },
                                           ),
@@ -240,7 +240,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                                 widget._loc, 'show_grid'),
                                             style: TextStyle(
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1?.color,
+                                                  .bodyLarge?.color,
                                             ),
                                           ),
                                         ],
@@ -248,11 +248,6 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: SizedBox(width: 15),
-                                        // child: DropDownList(
-                                        //   itemsList: _approxMap,
-                                        //   currentValue: _approximationType,
-                                        //   callBack: _changeApproximationType,
-                                        // ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -269,7 +264,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               .getLocale(widget._loc, 'dot_type'),
                                           style: TextStyle(
                                             color: _themeData
-                                                .primaryTextTheme.bodyText1?.color,
+                                                .primaryTextTheme.bodyLarge?.color,
                                           ),
                                         ),
                                       ),
@@ -299,7 +294,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               style: TextStyle(
                                                 fontSize: 12.0,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1?.color,
+                                                    .bodyLarge?.color,
                                               ),
                                             ),
                                           ),
@@ -322,7 +317,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               style: TextStyle(
                                                 fontSize: 12.0,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1?.color,
+                                                    .bodyLarge?.color,
                                               ),
                                             ),
                                           ),
@@ -357,7 +352,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                                   ? Icons.visibility_outlined
                                                   : Icons.visibility_off_outlined,
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1?.color,
+                                                  .bodyLarge?.color,
                                               size: _iconSize,
                                             ),
                                           ),
@@ -381,7 +376,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               child: Icon(
                                                 Icons.flip_outlined,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1?.color,
+                                                    .bodyLarge?.color,
                                                 size: _iconSize,
                                               ),
                                             ),
@@ -411,7 +406,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                                   ? Icons.visibility_outlined
                                                   : Icons.visibility_off_outlined,
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1?.color,
+                                                  .bodyLarge?.color,
                                               size: _iconSize,
                                             ),
                                           ),
@@ -431,7 +426,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               Icons
                                                   .rotate_90_degrees_ccw_outlined,
                                               color: _themeData.primaryTextTheme
-                                                  .bodyText1?.color,
+                                                  .bodyLarge?.color,
                                               size: _iconSize,
                                             ),
                                           ),
@@ -454,7 +449,7 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
                                               child: Icon(
                                                 Icons.flip_outlined,
                                                 color: _themeData.primaryTextTheme
-                                                    .bodyText1?.color,
+                                                    .bodyLarge?.color,
                                                 size: _iconSize,
                                               ),
                                             ),
@@ -493,12 +488,12 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
               : Container(),
           // Icon(
           //   Icons.edit_note,
-          //   color: _themeData.primaryTextTheme.bodyText1.color,
+          //   color: _themeData.primaryTextTheme.bodyLarge.color,
           // ),
           Text(
             MyTranslations().getLocale(widget._loc, 'customization'),
             style: TextStyle(
-              color: _themeData.primaryTextTheme.bodyText1?.color,
+              color: _themeData.primaryTextTheme.bodyLarge?.color,
             ),
           ),
           !leading
@@ -522,9 +517,9 @@ class _GraphSettingsBarState extends State<GraphSettingsBar> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         textAlign: TextAlign.center,
-        cursorColor: _themeData.primaryTextTheme.bodyText1?.color,
+        cursorColor: _themeData.primaryTextTheme.bodyLarge?.color,
         style: TextStyle(
-          color: _themeData.primaryTextTheme.bodyText1?.color,
+          color: _themeData.primaryTextTheme.bodyLarge?.color,
         ),
         controller: controller,
       ),

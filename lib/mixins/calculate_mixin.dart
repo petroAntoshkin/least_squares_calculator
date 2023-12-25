@@ -93,8 +93,7 @@ mixin CalculateMixin {
       if(i > 0) _res += ', ';
       _res += '"${_dataList[i].x}"';
     }
-    _res += ']}, ';
-    _res = ' {"y": [';
+    _res += '], "y": [';
     for(int i = 0; i < _dataList.length; i++){
       if(i > 0) _res += ', ';
       _res += '"${_dataList[i].y}"';

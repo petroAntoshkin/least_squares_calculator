@@ -42,13 +42,17 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
     _labels['x'] = AxisLabelModel(text: 'X');
     _labels['y'] = AxisLabelModel(text: 'Y');
     _imagesList = [];
-    dataClean();
-    _readSettingsData();
-    _readSavedData();
+    _init();
     _contextFunctions[3] = _resetSettings;
     //print('${Platform.localeName} def loacale is $_defaultLocale');
   }
 
+  Future<void> _init() async {
+    dataClean();
+    _appDirectory = await getApplicationDocumentsDirectory();
+    _readSettingsData();
+    _readSavedData();
+}
   ///bottom navBar
   // ignore: unnecessary_getters_setters
   double get navBarHe {
@@ -191,10 +195,11 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
       int _len = (data['x'] as List).length;
       if ((data['y'] as List).length < _len) _len = (data['y'] as List).length;
       for (int i = 0; i < _len; i++) {
-        _err += super.addMoreValues(data['x'][i], data['y'][i]);
+        _err += super.addMoreValues('${data['x'][i]}', '${data['y'][i]}');
       }
       if (_err == 0) {
-        // print('read data:');
+        debugPrint('---------------------- not read data:');
+      } else {
         notifyListeners();
       }
     }
@@ -294,8 +299,6 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   Future<void> _readSettingsData() async {
     SettingsModel _result =
         SettingsModel(language: '', showGrid: true, sortByX: false, themeId: 0);
-    // print('call settings provider read data');
-    _appDirectory = await getApplicationDocumentsDirectory();
     List<FileSystemEntity> _list = _appDirectory.listSync();
     _imagesList = [];
     for (int i = 0; i < _list.length; i++) {
@@ -320,7 +323,7 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
         _settingsModel.sortByX = _result.sortByX;
       } catch (e) {
         // If encountering an error, return 0
-        debugPrint('catch $e');
+        debugPrint('ERRRRRRRRROR!!!!! catch $e');
       }
   }
 
@@ -339,8 +342,6 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
   }
 
   Future<void> _readSavedData([String fileName = '']) async {
-    // if (_appDirectory == null)
-    //   _appDirectory = await getApplicationDocumentsDirectory();
     final String _name =
         fileName == '' ? '${_appDirectory.path}$_dataJson' : fileName;
     final file = File(_name);
@@ -348,13 +349,14 @@ class DataProvider extends ChangeNotifier with CalculateMixin {
       try {
         // Read the file
         String contents = await file.readAsString();
-        _restoreData(json.decode(contents)['data']);
+        var dec = json.decode(contents)['data'];
+        _restoreData(dec);
         if (fileName != '') {
           _saveLastData();
         }
       } catch (e) {
         // If encountering an error, return 0
-        debugPrint('catch $e');
+        debugPrint('DATA RESTORE ERROR catch $e');
       }
   }
 

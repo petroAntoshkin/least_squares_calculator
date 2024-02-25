@@ -50,7 +50,7 @@ mixin CalculateMixin {
   int _approximationType = 0;
   int _editIndex = -1;
   String _approximationName = 'linear';
-  Map<String, List<double>> _allValues = Map();
+  // Map<String, List<double>> _allValues = Map();
   List<PointModel> _dataList = [];
   List<Offset> _sourceAproxDots = [];
   final List<String> _replaceWhat = [',', '+'];
@@ -467,6 +467,7 @@ mixin CalculateMixin {
   }
 
   void _globalRecalculation() {
+    if(_dataList.isEmpty) return;
     _pixelsPerPoint = _graphicData.maxSize / _graphicData.gridCount;
     _graphicData.zoomFactorX =
         _getInitialZoom(_getMaxDisplaceByAxis('x'), _graphicData.gridCount);

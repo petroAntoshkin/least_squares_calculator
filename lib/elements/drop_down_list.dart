@@ -84,7 +84,7 @@ class _DropDownListState extends State<DropDownList> {
             // This is called when the user selects an item.
             callBack(value!);
             setState(() {
-              _selectedItem = value!;
+              _selectedItem = value;
             });
           },
           items: buildDropDownMenuItems(_dropdownItems),
